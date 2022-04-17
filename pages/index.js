@@ -13,7 +13,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a target="_blank" href="https://www.facebook.com/pickaza">My Heart~!</a>
+          Welcome to <a target="_blank" href="https://www.facebook.com/pickaza">Kanchanaburi~!</a>
         </h1>
 
         <p className={styles.description}>
