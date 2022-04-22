@@ -8,7 +8,7 @@ export default async function handler (req, res)
                     ,[req.body.username])
        if (result.rows.length!=1)
         {
-            res.status(404).send("Username not found")
+            res.send("Username not found")
         }
         else
         {
@@ -18,7 +18,7 @@ export default async function handler (req, res)
             }
             else
             {
-                res.status(404).send("Wrong Password")
+                res.send("Wrong Password")
             }
         }
    }
