@@ -11,7 +11,7 @@ export default () =>
 
   const onLogin = async () =>
   {
-    let result = await axios.post('http://localhost:3000/api/login', {
+    let result = await axios.post('/api/login', {
       username: username,
       password: password
     })
