@@ -56,12 +56,28 @@ export default () =>
           <InputLeftAddon>
             <Image src='/assets/image/user.png' />
           </InputLeftAddon>
-          <Input placeholder='Username' marginBottom='24px' color='#fff' focusBorderColor='#fff' onChange={(e) => setUsername(e.target.value)} />
+          <Input 
+            placeholder='Username' 
+            marginBottom='24px' 
+            color='#fff' 
+            focusBorderColor='#fff' 
+            onChange={(e) => setUsername(e.target.value)} 
+            textAlign='center'
+
+          />
         </InputGroup>
 
 
         <InputGroup>
-          <Input placeholder='Password' type='password' marginBottom='48px' color='#fff' focusBorderColor='#fff' onChange={(e) => setPassword(e.target.value)} />
+          <Input 
+            placeholder='Password' 
+            type='password' 
+            marginBottom='48px' 
+            color='#fff' 
+            focusBorderColor='#fff' 
+            onChange={(e) => setPassword(e.target.value)} 
+            textAlign='center'
+          />
           <InputRightAddon>
             <Image src='/assets/image/password.png' />
           </InputRightAddon>
