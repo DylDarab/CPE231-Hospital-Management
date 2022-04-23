@@ -21,7 +21,11 @@ export default () =>
     }
     else
     {
-      router.push('https://www.google.com/search?q=%E0%B9%84%E0%B8%AD%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A2&oq=%E0%B9%84%E0%B8%AD%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A2&aqs=edge..69i57.3145j0j1&sourceid=chrome&ie=UTF-8')
+        //   setTimeout(() => {
+        //     router.push('https://youtu.be/dQw4w9WgXcQ?t=43')
+        // }, 1000);
+        alert('Wrong username or password')
+        router.push('https://youtu.be/dQw4w9WgXcQ?t=43')
     }
   }
 
