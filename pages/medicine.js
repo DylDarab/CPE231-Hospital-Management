@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Navbar from '../component/navbar'
 import Colour from '../Colour'
 
-export default ()=>
+export default () =>
 {
     let container = {
         width: '100vw',
@@ -26,7 +26,7 @@ export default ()=>
         <div>
             <Box sx={container} >
                 <Heading>
-                    Prescription
+                    Medicine
                 </Heading>
                 <Box sx={line}></Box>
             </Box>

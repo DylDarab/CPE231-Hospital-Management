@@ -31,7 +31,7 @@ export default () =>
                         cursor='pointer'
                     >
                         <Flex gap='36px' alignItems='center'>
-                            <Image src='assets/image/home.png' />
+                            <Image src={`assets/image/${text}.png`} width='32px'/>
                             <Text color='#fff' paddingTop='6px'>
                                 {`${firstLetter}${restOfText}`}
                             </Text>
@@ -53,7 +53,7 @@ export default () =>
                         cursor='pointer'
                     >
                         <Flex gap='36px' alignItems='center'>
-                            <Image src='assets/image/home.png' />
+                            <Image src={`assets/image/${text}.png`} width='32px'/>
                             <Text color='#fff' paddingTop='6px'>
                                 {`${firstLetter}${restOfText}`}
                             </Text>
@@ -72,10 +72,8 @@ export default () =>
                     {createMenu("doctor",)}
                     {createMenu("patient")}
                     {createMenu("appointment")}
-                    {createMenu("schedule")}
                     {createMenu("prescription")}
-                    {createMenu("branch")}
-                    {createMenu("analytics")}
+                    {createMenu("medicine")}
                 </Stack>
             </VStack>
         </nav>
