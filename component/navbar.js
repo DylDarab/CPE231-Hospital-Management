@@ -65,7 +65,7 @@ export default () =>
     }
     return (
         <nav >
-            <VStack position='fixed' top='0' left='0' width='320px' height='100vh' bgColor='#305F72' fontFamily='YaroStBold'>
+            <VStack position='fixed' top='0' left='0' width='320px' height='100vh' bgColor='#305F72'>
                 <Image src='/assets/image/logo.png' position='absolute' marginTop='-64px' />
                 <Stack paddingTop='200px' width='100%' flexDirection='column'>
                     {createMenu("dashboard")}

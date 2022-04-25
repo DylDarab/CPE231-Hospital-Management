@@ -4,6 +4,7 @@ import Navbar from '../component/navbar'
 
 export default function Home(props)
 {
+    
 
     let container = {
         width: '100%',
@@ -22,6 +23,4 @@ export default function Home(props)
         </div>
     )
 }
-
-
 

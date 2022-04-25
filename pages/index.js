@@ -82,7 +82,7 @@ export default () =>
         transform={`translate(-50%, -50%)`}
       >
 
-        <Heading as='h1' marginBottom='32px' fontFamily='YaroStBold' color='#fff'>USER LOGIN</Heading>
+        <Heading as='h1' marginBottom='32px'  color='#fff'>USER LOGIN</Heading>
 
         <InputGroup>
           <InputLeftAddon>
