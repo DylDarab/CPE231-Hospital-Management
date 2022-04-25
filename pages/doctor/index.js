@@ -88,7 +88,7 @@ export default (props) =>
             {
                 setPageAmount(1)
             }        
-            // console.log(result.data)
+            console.log(result.data)
         }
         fetchDoctorData()
 
@@ -162,8 +162,8 @@ export default (props) =>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {doctor.map(d => (
-                                <Tr>
+                            {doctor.map((d,index) => (
+                                <Tr key={index}>
                                     <Td>{d.staffID}</Td>
                                     <Td>
                                         <Flex align='center' gap='8px'>
@@ -172,8 +172,7 @@ export default (props) =>
                                                 float='left'
                                                 borderRadius='full'
                                                 boxSize='40px'
-                                                src='https://bit.ly/dan-abramov'
-                                                alt='Dan Abramov'
+                                                src={d.profile_img}
                                             />
                                             <Flex h='40px' align='center'>{`${d.firstname} ${d.lastname}`}</Flex>
                                         </Flex>
