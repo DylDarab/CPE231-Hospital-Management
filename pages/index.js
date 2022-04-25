@@ -1,5 +1,5 @@
 import { Alert, AlertIcon, Image, InputRightAddon, InputGroup, InputLeftAddon, Box, Button, FormControl, Heading, Container, Input } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import axios from 'axios'
 import  {useRouter}  from 'next/router'
 import checkToken from '../functions/checkToken'
@@ -13,6 +13,10 @@ export default () =>
   const [wrongWord, setWrongWord] = useState('')
   const [countWrong, setCountWrong] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(()=>{
+    sessionStorage.removeItem('token')
+  },[])
 
   const onLogin = async () =>
   {
