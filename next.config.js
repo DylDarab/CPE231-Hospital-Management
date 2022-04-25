@@ -4,6 +4,7 @@ const nextConfig = {
   //env
   env: {
     CONNECTION_STRING: process.env.CONNECTION_STRING,
+    SECRET_KEY: process.env.SECRET_KEY,
   }
 }
 

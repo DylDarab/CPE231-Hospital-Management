@@ -2,6 +2,7 @@ import { Image, InputRightAddon, InputGroup, InputLeftAddon, Box, Button, FormCo
 import { useState } from 'react'
 import axios from 'axios'
 import  {useRouter}  from 'next/router'
+import checkToken from '../functions/checkToken'
 export default () =>
 {
   const router = useRouter()
@@ -16,6 +17,8 @@ export default () =>
     })
     if(result.data.username!=null)
     {
+      sessionStorage.setItem('token', result.data.token)
+      console.table(result.data)
       router.push('/dashboard')
     }
     else
@@ -28,6 +31,7 @@ export default () =>
     }
   }
 
+  console.log('test', checkToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjIiLCJpYXQiOjE2NTA4OTg5MTQsImV4cCI6MTY1MDkyMDUxNH0.6iZoyvSKb4E_VbxORhGxmAB57Cs9DLZJu_IlNycJYGA"))
 
   return (
     <Container

@@ -2,10 +2,18 @@ import { Text, Box, Stack, Image, VStack, Flex } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import checkToken from '../functions/checkToken'
 export default () =>
 {
     const router = useRouter()
     const linknow = router.asPath
+    useEffect(()=>{
+      if(checkToken(sessionStorage.getItem('token'))===false)
+      {
+          router.push('/')
+          alert('Please login first')
+      }
+    },[])
     const createMenu = (text) =>
     {
         let cut = linknow.substring(1)
