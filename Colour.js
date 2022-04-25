@@ -11,12 +11,12 @@ export default {
     Orange:'#F7B372',//(Submit, Confirm button)
     Red: "#FF8686", //(Edit button)
     SkyBlue: "#A8DAFD" ,//(Info button)
-    Grey: "F0F0F0", //(Previous,Next button)
+    Grey: "#F0F0F0", //(Previous,Next button)
 
     //Color for type tags
     Purple: "#CDB0D9",
-    Green:"5FB48D",
-    Yellow:"FFCB57"
+    Green:"#5FB48D",
+    Yellow:"#FFCB57"
 }
 
 // วิธีใช้งาน Import Colour from 'ที่อยู่ไฟล์นี้'
