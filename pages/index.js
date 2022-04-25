@@ -89,7 +89,7 @@ export default () =>
             <Image src='/assets/image/password.png' />
           </InputRightAddon>
         </InputGroup>
-        <Button width='320px' onClick={() => { onLogin() }}>
+        <Button type="submit" width='320px' onClick={() => { onLogin() }}>
           Login
         </Button>
       </FormControl>
