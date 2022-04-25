@@ -1,4 +1,4 @@
-import { Image, InputRightAddon, InputGroup, InputLeftAddon, Box, Button, FormControl, Heading, Container, Input } from '@chakra-ui/react'
+import { Alert, AlertIcon, Image, InputRightAddon, InputGroup, InputLeftAddon, Box, Button, FormControl, Heading, Container, Input } from '@chakra-ui/react'
 import { useState } from 'react'
 import axios from 'axios'
 import  {useRouter}  from 'next/router'
@@ -8,26 +8,50 @@ export default () =>
   const router = useRouter()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [wrong, setWrong] = useState(false)
+  const [wrongWord, setWrongWord] = useState('')
+  const [countWrong, setCountWrong] = useState(0)
 
   const onLogin = async () =>
   {
-    let result = await axios.post(`/api/login`, {
-      username: username,
-      password: password
-    })
-    if(result.data.username!=null)
+    if (username == 'Starboy98' && password == '12345678')
     {
-      sessionStorage.setItem('token', result.data.token)
-      console.table(result.data)
-      router.push('/dashboard')
+        router.push('https://youtu.be/dQw4w9WgXcQ?t=43')
     }
     else
     {
-        //   setTimeout(() => {
-        //     router.push('https://youtu.be/dQw4w9WgXcQ?t=43')
-        // }, 1000);
-        alert('Wrong username or password')
-        router.push('https://youtu.be/dQw4w9WgXcQ?t=43')
+      let result = await axios.post(`/api/login`, {
+        username: username,
+        password: password
+      })
+      if(result.data.username!=null)
+      {
+        sessionStorage.setItem('token', result.data.token)
+        console.table(result.data)
+        router.push('/dashboard')
+      }
+      else if (result.data.username == null && countWrong < 2) 
+      {
+          //   setTimeout(() => {
+          //     router.push('https://youtu.be/dQw4w9WgXcQ?t=43')
+          // }, 1000);
+          // alert('Wrong username or password')
+          // router.push('https://youtu.be/dQw4w9WgXcQ?t=43')
+          setWrong(true)
+          setWrongWord('Wrong username or password')
+          setCountWrong(countWrong + 1)
+      }
+      else if (result.data.username == null && countWrong >= 2 && countWrong < 5)
+      {
+          setWrong(true)
+          setWrongWord('You have entered wrong ' + (countWrong + 1) + ' times. Try "Starboy98" and "12345678"')
+          setCountWrong(countWrong + 1)
+      }
+      else if (result.data.username == null && countWrong >= 5)
+      {
+          alert('้เห็นแก่ความพยายาม ให้เข้าก้ได้')
+          router.push('https://youtu.be/dQw4w9WgXcQ?t=43')
+      }
     }
   }
 
@@ -38,7 +62,7 @@ export default () =>
       margin='0'
       maxWidth='480px'
       width='480px'
-      height='360px'
+      height='400px'
       bgColor='#305F72'
       overflow='hidden'
       position='absolute'
@@ -68,7 +92,7 @@ export default () =>
             marginBottom='24px' 
             color='#fff' 
             focusBorderColor='#fff' 
-            onChange={(e) => setUsername(e.target.value)} 
+            onChange={(e) => {setUsername(e.target.value); setWrong(false)}} 
             textAlign='center'
 
           />
@@ -82,16 +106,32 @@ export default () =>
             marginBottom='48px' 
             color='#fff' 
             focusBorderColor='#fff' 
-            onChange={(e) => setPassword(e.target.value)} 
+            onChange={(e) => {setPassword(e.target.value); setWrong(false)}} 
             textAlign='center'
           />
           <InputRightAddon>
             <Image src='/assets/image/password.png' />
           </InputRightAddon>
         </InputGroup>
+
         <Button type="submit" width='320px' onClick={() => { onLogin() }}>
           Login
         </Button>
+
+        {
+          (wrong) ? 
+            <Alert status='error'
+                bg='none'
+                color='red'
+                position='absolute'
+                // padding='0 12px'
+            >
+              <AlertIcon />
+              {wrongWord}
+            </Alert>
+          : null
+        }
+
       </FormControl>
     </Container>
   )
