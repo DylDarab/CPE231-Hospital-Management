@@ -3,6 +3,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import  {useRouter}  from 'next/router'
 import checkToken from '../functions/checkToken'
+import Loading from '../component/loading'
 export default () =>
 {
   const router = useRouter()
@@ -11,6 +12,7 @@ export default () =>
   const [wrong, setWrong] = useState(false)
   const [wrongWord, setWrongWord] = useState('')
   const [countWrong, setCountWrong] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
 
   const onLogin = async () =>
   {
@@ -20,10 +22,12 @@ export default () =>
     }
     else
     {
+      setIsLoading(true)
       let result = await axios.post(`/api/login`, {
         username: username,
         password: password
       })
+      setIsLoading(false)
       if(result.data.username!=null)
       {
         sessionStorage.setItem('token', result.data.token)
@@ -32,11 +36,6 @@ export default () =>
       }
       else if (result.data.username == null && countWrong < 2) 
       {
-          //   setTimeout(() => {
-          //     router.push('https://youtu.be/dQw4w9WgXcQ?t=43')
-          // }, 1000);
-          // alert('Wrong username or password')
-          // router.push('https://youtu.be/dQw4w9WgXcQ?t=43')
           setWrong(true)
           setWrongWord('Wrong username or password')
           setCountWrong(countWrong + 1)
@@ -49,7 +48,7 @@ export default () =>
       }
       else if (result.data.username == null && countWrong >= 5)
       {
-          alert('้เห็นแก่ความพยายาม ให้เข้าก้ได้')
+          alert('เห็นแก่ความพยายาม ให้เข้าก้ได้')
           router.push('https://youtu.be/dQw4w9WgXcQ?t=43')
       }
     }
@@ -58,6 +57,8 @@ export default () =>
   console.log('test', checkToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjIiLCJpYXQiOjE2NTA4OTg5MTQsImV4cCI6MTY1MDkyMDUxNH0.6iZoyvSKb4E_VbxORhGxmAB57Cs9DLZJu_IlNycJYGA"))
 
   return (
+    <div>
+      <Loading isLoading={isLoading}/>
     <Container
       margin='0'
       maxWidth='480px'
@@ -134,6 +135,7 @@ export default () =>
 
       </FormControl>
     </Container>
+    </div>
   )
 }
 
