@@ -2,7 +2,7 @@ import { Image, InputRightAddon, InputGroup, InputLeftAddon, Box, Button, FormCo
 import { useState } from 'react'
 import axios from 'axios'
 import  {useRouter}  from 'next/router'
-
+import url from '../url'
 export default () =>
 {
   const router = useRouter()
@@ -11,7 +11,7 @@ export default () =>
 
   const onLogin = async () =>
   {
-    let result = await axios.post('/api/login', {
+    let result = await axios.post(`${url}/api/login`, {
       username: username,
       password: password
     })
