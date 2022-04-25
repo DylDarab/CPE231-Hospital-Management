@@ -1,11 +1,11 @@
 import { Image, Container,Box, Heading } from '@chakra-ui/react'
 import axios from 'axios'
+import { useEffect,useState } from 'react'
 import Navbar from '../component/navbar'
 import Colour from '../Colour'
 
 export default function Home(props)
 {
-
     let container = {
         width: '100vw',
         paddingLeft: '360px',
@@ -13,7 +13,8 @@ export default function Home(props)
         bgColor: Colour.AlmostWhite,
     }
     let line = {
-        width: '78vw',
+        width: '90%',
+        marginRight: '4000px',
         paddingLeft: '360px',
         bgColor: '#000',
         marginTop: ' 12px',
