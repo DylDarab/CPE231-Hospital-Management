@@ -1,4 +1,3 @@
-import { color } from '@chakra-ui/react'
 
 export default {
     //main Color

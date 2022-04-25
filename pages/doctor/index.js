@@ -1,8 +1,8 @@
 import { Image, Container,Box, Heading } from '@chakra-ui/react'
 import axios from 'axios'
 import { useEffect,useState } from 'react'
-import Navbar from '../component/navbar'
-import Colour from '../Colour'
+import Navbar from '../../component/navbar'
+import Colour from '../../Colour'
 
 export default function Home(props)
 {

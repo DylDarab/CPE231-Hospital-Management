@@ -13,7 +13,6 @@ export default function Home(props)
 
     return (
         <div>
-            <Navbar />
             <Container sx={container}>
                 <Heading>
                     Branch

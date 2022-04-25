@@ -1,6 +1,9 @@
-import { ButtonGroup, Button, Center, Image, Input, InputRightElement, InputGroup,
-    HStack, Text,Container, Heading,
-    Table, Thead, Tbody,Tfoot,Tr,Th,Td,TableCaption,TableContainer,} from '@chakra-ui/react'
+import
+    {
+        ButtonGroup, Button, Center, Image, Input, InputRightElement, InputGroup,
+        HStack, Text, Container, Heading,
+        Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer,
+    } from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 import axios from 'axios'
 import Navbar from '../component/navbar'
@@ -16,7 +19,6 @@ export default function Home(props)
 
     return (
         <div>
-            <Navbar />
             <Container sx={container1}>
                 <Heading>
                     Patient
@@ -25,8 +27,8 @@ export default function Home(props)
                 <HStack spacing='24px'>
                     <InputGroup>
                         <InputRightElement
-                        pointerEvents='none'
-                        children={<SearchIcon />}
+                            pointerEvents='none'
+                            children={<SearchIcon />}
                         />
                         <Input type='text' placeholder='Search' />
                     </InputGroup>
@@ -38,30 +40,30 @@ export default function Home(props)
                 <TableContainer>
                     <Table variant='simple'>
                         <Thead>
-                        <Tr>
-                            <Th>ID</Th>
-                            <Th>Patient's name</Th>
-                            <Th isNumeric>Phone number</Th>
-                        </Tr>
+                            <Tr>
+                                <Th>ID</Th>
+                                <Th>Patient's name</Th>
+                                <Th isNumeric>Phone number</Th>
+                            </Tr>
                         </Thead>
                         <Tbody>
-                        <Tr>
-                            <Td>inches</Td>
-                            <Td>millimetres (mm)</Td>
-                            <Td isNumeric>25.4</Td>
-                        </Tr>
-                        <Tr>
-                            <Td>feet</Td>
-                            <Td>centimetres (cm)</Td>
-                            <Td isNumeric>30.48</Td>
-                        </Tr>
-                        <Tr>
-                            <Td>yards</Td>
-                            <Td>metres (m)</Td>
-                            <Td isNumeric>0.91444</Td>
-                        </Tr>
+                            <Tr>
+                                <Td>inches</Td>
+                                <Td>millimetres (mm)</Td>
+                                <Td isNumeric>25.4</Td>
+                            </Tr>
+                            <Tr>
+                                <Td>feet</Td>
+                                <Td>centimetres (cm)</Td>
+                                <Td isNumeric>30.48</Td>
+                            </Tr>
+                            <Tr>
+                                <Td>yards</Td>
+                                <Td>metres (m)</Td>
+                                <Td isNumeric>0.91444</Td>
+                            </Tr>
                         </Tbody>
-                
+
                     </Table>
                 </TableContainer>
 
