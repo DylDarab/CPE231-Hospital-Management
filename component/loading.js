@@ -12,6 +12,8 @@ export default ({isLoading})=>{
                 zIndex='10000'
                 position='fixed'
                 maxWidth='100vw'
+                top='0'
+                left='0'
             >
                 <Image 
                     src='/assets/loading.gif'

@@ -7,7 +7,7 @@ html {
   background-color: #F9FBFD;
 }
 
-h1, h2, h3, h4, h5, h6, p, span, label, input {
+h1, h2, h3, h4, h5, h6, p, span, label, input, select {
   font-family: Prompt  !important;
 }
 /*# sourceMappingURL=dyl.css.map */
