@@ -3,8 +3,8 @@ import { Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement
     Table, Thead, Tbody,Tfoot,Tr,Th,Td,TableCaption,TableContainer,} from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 import axios from 'axios'
-import Navbar from '../component/navbar'
-import Colour from '../Colour'
+import Navbar from '../../component/navbar'
+import Colour from '../../Colour'
 
 
 export default function Home(props)
@@ -38,7 +38,15 @@ export default function Home(props)
     let addButton = {
         bg: Colour.DarkGreen,
         color: Colour.White,
-        _hover: {filter: 'saturate(2)'},
+        _hover: {filter: 'brightness(0.9)'},
+        transition:'all 0.2s cubic-bezier(.08,.52,.52,1)'
+
+    }
+
+    let pageButton = {
+        bg: Colour.Grey,
+        _hover: {filter: 'brightness(0.9)'},
+        transition:'all 0.2s cubic-bezier(.08,.52,.52,1)'
     }
 
     return (
@@ -64,7 +72,7 @@ export default function Home(props)
                     </Button>
                 </HStack>
 
-                <TableContainer>
+                <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px'>
                     <Table variant='simple'>
                         <Thead>
                             <Tr>
@@ -75,19 +83,38 @@ export default function Home(props)
                         </Thead>
                         <Tbody>
                             <Tr>
-                                <Td>inches</Td>
-                                <Td>millimetres (mm)</Td>
-                                <Td isNumeric>25.4</Td>
+                                <Td>123456</Td>
+                                <Td>
+                                    <Flex align='center' gap='8px'>
+                                        <Image
+                                            display='inline-block'
+                                            float='left'
+                                            borderRadius='full'
+                                            boxSize='40px'
+                                            src='https://bit.ly/dan-abramov'
+                                            alt='Dan Abramov'
+                                        />
+                                        <Flex h='40px' align='center'>โทนี่ อาระยี่หว่า</Flex>
+                                    </Flex>
+                                </Td>
+                                <Td isNumeric>0988765432</Td>
                             </Tr>
                             <Tr>
-                                <Td>feet</Td>
-                                <Td>centimetres (cm)</Td>
-                                <Td isNumeric>30.48</Td>
-                            </Tr>
-                            <Tr>
-                                <Td>yards</Td>
-                                <Td>metres (m)</Td>
-                                <Td isNumeric>0.91444</Td>
+                                <Td>123456</Td>
+                                <Td>
+                                    <Flex align='center' gap='8px'>
+                                        <Image
+                                            display='inline-block'
+                                            float='left'
+                                            borderRadius='full'
+                                            boxSize='40px'
+                                            src='https://bit.ly/dan-abramov'
+                                            alt='Dan Abramov'
+                                        />
+                                        <Flex h='40px' align='center'>โทนี่ อาระยี่หว่า</Flex>
+                                    </Flex>
+                                </Td>
+                                <Td isNumeric>0988765432</Td>
                             </Tr>
                         </Tbody>
 
@@ -95,13 +122,11 @@ export default function Home(props)
                 </TableContainer>
 
                 <HStack variant='solid' justify='end'>
-                    <Button leftIcon={<ArrowBackIcon />} colorScheme='teal' variant='solid'>
+                    <Button leftIcon={<ArrowBackIcon />} sx={pageButton} variant='solid'>
                         Previous
                     </Button>
-                    <Center w='auto'>
-                        <Text>1</Text>
-                    </Center>
-                    <Button rightIcon={<ArrowForwardIcon />} colorScheme='teal' variant='solid'>
+                    <Center>1</Center>
+                    <Button rightIcon={<ArrowForwardIcon />} sx={pageButton} variant='solid'>
                         Next
                     </Button>
                 </HStack>
