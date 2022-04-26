@@ -1,14 +1,15 @@
+import {useRouter} from 'next/router'
 import { Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement, InputGroup,
     HStack, Text,Container, Heading,
     Table, Thead, Tbody,Tfoot,Tr,Th,Td,TableCaption,TableContainer,} from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 import axios from 'axios'
-import Navbar from '../../component/navbar'
 import Colour from '../../Colour'
 
 
 export default function Home(props)
 {
+    const router = useRouter()
 
     let container = {
         width: '100vw',
@@ -24,6 +25,7 @@ export default function Home(props)
         width: '100%',
         marginLeft: '360px',
         marginTop: '50px',
+        bgColor: Colour.AlmostWhite,
     }
 
     let line = {
@@ -50,8 +52,7 @@ export default function Home(props)
     }
 
     return (
-        <div>
-            <Navbar />
+        <div style={{backgroundColor: Colour.AlmostWhite}}>
             <Box sx={container}>
                 <Heading>
                     Patient
@@ -67,7 +68,9 @@ export default function Home(props)
                         />
                         <Input type='text' placeholder='Search' />
                     </InputGroup>
-                    <Button leftIcon={<PlusSquareIcon />} sx={addButton} variant='solid'>
+                    <Button leftIcon={<PlusSquareIcon />} sx={addButton} variant='solid'
+                        onClick={()=>{router.push('/patient/addPatient')}}
+                    >
                         Add patient
                     </Button>
                 </HStack>
