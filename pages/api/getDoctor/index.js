@@ -9,18 +9,21 @@ export default async (req, res) =>
     if (req.method === 'GET')
     {
         if(department){
-            let result = await db.query(`SELECT "Staff".*,"Department"."department_name","Position"."position_name",CEILING(COUNT(*) OVER()/8) as page_amount FROM "public"."Staff" LEFT JOIN "public"."Department" 
+            let result = await db.query(`SELECT "Staff".*,"Department"."department_name","Position"."position_name",CEILING(COUNT(*) OVER()/8) 
+            as page_amount FROM "public"."Staff" LEFT JOIN "public"."Department" 
                 ON "Department"."departmentID" = "Staff"."departmentID" LEFT JOIN "public"."Position" ON 
                 "Position"."positionID" = "Staff"."positionID"
-                WHERE (LOWER("firstname") LIKE '%${search}%' OR LOWER("lastname") LIKE '%$1%') 
+                WHERE (LOWER("firstname") LIKE '%${search}%' OR LOWER("lastname") LIKE '%${search}%' OR LOWER(CONCAT("firstname",' ',"lastname")) LIKE '%${search}%')
                 AND "Department"."department_name" = $1 ORDER BY "Staff"."staffID" LIMIT 8 OFFSET $2`
              , [department,(page - 1) *8])
             res.json(result.rows)
         }
         else{
-            let result = await db.query(`SELECT "Staff".*,"Department"."department_name","Position"."position_name",CEILING(COUNT(*) OVER()/8) as page_amount FROM "public"."Staff" LEFT JOIN "public"."Department" 
+            let result = await db.query(`SELECT "Staff".*,"Department"."department_name","Position"."position_name",CEILING(COUNT(*) OVER()/8) 
+            as page_amount FROM "public"."Staff" LEFT JOIN "public"."Department" 
                 ON "Department"."departmentID" = "Staff"."departmentID" LEFT JOIN "public"."Position" ON 
-                "Position"."positionID" = "Staff"."positionID" WHERE (LOWER("firstname") LIKE '%${search}%' OR LOWER("lastname") LIKE '%$1%')
+                "Position"."positionID" = "Staff"."positionID" WHERE (LOWER("firstname") LIKE '%${search}%' OR LOWER("lastname") LIKE '%${search}%' 
+                OR LOWER(CONCAT("firstname",' ',"lastname")) LIKE '%${search}%')
                 ORDER BY "staffID" LIMIT 8 OFFSET $1`, [(page - 1) * 8])
             res.json(result.rows)
         }

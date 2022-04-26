@@ -18,7 +18,7 @@ export default (props) =>
 {
 
 
-    
+
     let container = {
         width: '100vw',
         paddingLeft: '360px',
@@ -80,19 +80,19 @@ export default (props) =>
             setDoctor(result.data)
             setIsLoading(false)
             //if result.data[0].page_amount is not null, set pageAmount to result.data[0].page_amount else set to 1
-            if (result.data.length!==0)
+            if (result.data.length !== 0)
             {
                 setPageAmount(result.data[0].page_amount)
             }
             else
             {
                 setPageAmount(1)
-            }        
+            }
             console.log(result.data)
         }
         fetchDoctorData()
 
-    }, [department,search,page])
+    }, [department, search, page])
 
 
     const onDepartmentChange = (e) =>
@@ -100,7 +100,7 @@ export default (props) =>
         setDepartment(e.target.value)
         setPage(1)
     }
-    
+
     const onSearchChange = (e) =>
     {
         setSearch(e.target.value)
@@ -109,7 +109,7 @@ export default (props) =>
 
     return (
         <Box bgColor={Colour.AlmostWhite}>
-            <Loading isLoading={isLoading}/>
+            <Loading isLoading={isLoading} />
             <Navbar />
             <Box sx={container}>
                 <Heading>
@@ -162,7 +162,7 @@ export default (props) =>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {doctor.map((d,index) => (
+                            {doctor.map((d, index) => (
                                 <Tr key={index}>
                                     <Td>{d.staffID}</Td>
                                     <Td>
@@ -187,33 +187,48 @@ export default (props) =>
                 </TableContainer>
 
                 <HStack variant='solid' justify='end'>
-                    <Button 
-                        leftIcon={<ArrowBackIcon />} 
-                        sx={pageButton} 
+                    {page != 1 ?
+                        <Button
+                            leftIcon={<ArrowBackIcon />}
+                            sx={pageButton}
+                            variant='solid'
+                            onClick={() =>
+                            {
+                                setPage(page => page - 1)
+                            }}
+                        >
+                            Previous
+                        </Button> :
+                        <Button
+                            rightIcon={<ArrowBackIcon />}
+                            sx={pageButton}
+                            variant='solid'
+                            isDisabled
+                        >
+                            Previous
+                        </Button>}
+
+                    <Center>{page}</Center>
+                    {page != pageAmount ? <Button
+                        rightIcon={<ArrowForwardIcon />}
+                        sx={pageButton}
                         variant='solid'
                         onClick={() =>
                         {
-                            if (page !=1)
-                                setPage(page => page - 1)
-                        }}
-                    >
-                        Previous
-                    </Button>
-                    <Center>{page}</Center>
-                    <Button 
-                        rightIcon={<ArrowForwardIcon />} 
-                        sx={pageButton} 
-                        variant='solid' 
-                        onClick={()=>{
-                            console.log(pageAmount, page != pageAmount)
-                            if(page!=pageAmount)
-                            {
-                                setPage(page+1)
-                            }
+                            setPage(page => page + 1)
                         }}
                     >
                         Next
-                    </Button>
+                    </Button> :
+                        <Button
+                            rightIcon={<ArrowForwardIcon />}
+                            sx={pageButton}
+                            variant='solid'
+                            isDisabled
+                        >
+                            Next
+                        </Button>}
+
                 </HStack>
             </Flex>
         </Box>
