@@ -1,15 +1,52 @@
-import {useRouter} from 'next/router'
 import { Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement, InputGroup,
     HStack, Text,Container, Heading,
-    Table, Thead, Tbody,Tfoot,Tr,Th,Td,TableCaption,TableContainer,} from '@chakra-ui/react'
+    Table, Thead, Tbody,Tfoot,Tr,Th,Td,TableCaption,TableContainer, CloseButton,} from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
+
 import axios from 'axios'
 import Colour from '../../Colour'
+import Loading from '../../component/loading'
+import { encode, decode } from 'js-base64'
+import { useState, useEffect } from 'react'
+import {useRouter} from 'next/router'
+import url from '../../url'
 
-
-export default function Home(props)
+export default (props) =>
 {
     const router = useRouter()
+
+    const [department, setDepartment] = useState(null)
+    const [search, setSearch] = useState('')
+    const [patient, setPatient] = useState([])
+    const [page, setPage] = useState(1)
+    const [pageAmount, setPageAmount] = useState(1)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const fetchPatientData = async () =>
+    {
+        setIsLoading(true)
+        let result = await axios.get(`${url}/api/getPatient/${page}`, {
+            headers: {
+                page: page,
+                search: encode(search),
+                department: department,
+            }
+        })
+        setPatient(result.data)
+        setIsLoading(false)
+        //if result.data[0].page_amount is not null, set pageAmount to result.data[0].page_amount else set to 1
+        if (result.data.length !== 0)
+        {
+            setPageAmount(result.data[0].page_amount)
+        }      
+        console.log(result.data)
+        console.log(search)
+    }
+
+    useEffect(() =>
+    {
+        fetchPatientData()
+    }, [search,page])
 
     let container = {
         width: '100vw',
@@ -53,6 +90,7 @@ export default function Home(props)
 
     return (
         <div style={{backgroundColor: Colour.AlmostWhite}}>
+            <Loading isLoading={isLoading}/>
             <Box sx={container}>
                 <Heading>
                     Patient
@@ -66,7 +104,9 @@ export default function Home(props)
                             pointerEvents='none'
                             children={<SearchIcon />}
                         />
-                        <Input type='text' placeholder='Search' />
+                        <Input type='text' placeholder='Search' 
+                            onChange={(e) => {setSearch(e.target.value); setPage(1)}}
+                        />
                     </InputGroup>
                     <Button leftIcon={<PlusSquareIcon />} sx={addButton} variant='solid'
                         onClick={()=>{router.push('/patient/addPatient')}}
@@ -85,51 +125,55 @@ export default function Home(props)
                             </Tr>
                         </Thead>
                         <Tbody>
-                            <Tr>
-                                <Td>123456</Td>
-                                <Td>
-                                    <Flex align='center' gap='8px'>
-                                        <Image
-                                            display='inline-block'
-                                            float='left'
-                                            borderRadius='full'
-                                            boxSize='40px'
-                                            src='https://bit.ly/dan-abramov'
-                                            alt='Dan Abramov'
-                                        />
-                                        <Flex h='40px' align='center'>โทนี่ อาระยี่หว่า</Flex>
-                                    </Flex>
-                                </Td>
-                                <Td isNumeric>0988765432</Td>
-                            </Tr>
-                            <Tr>
-                                <Td>123456</Td>
-                                <Td>
-                                    <Flex align='center' gap='8px'>
-                                        <Image
-                                            display='inline-block'
-                                            float='left'
-                                            borderRadius='full'
-                                            boxSize='40px'
-                                            src='https://bit.ly/dan-abramov'
-                                            alt='Dan Abramov'
-                                        />
-                                        <Flex h='40px' align='center'>โทนี่ อาระยี่หว่า</Flex>
-                                    </Flex>
-                                </Td>
-                                <Td isNumeric>0988765432</Td>
-                            </Tr>
+                            {
+                                patient.map((item, index) => 
+                                {
+                                    return (
+                                        <Tr key={index}>
+                                            <Td>{item.patientID}</Td>
+                                            <Td>
+                                                <Flex align='center' gap='8px'>
+                                                    <Image
+                                                        display='inline-block'
+                                                        float='left'
+                                                        borderRadius='full'
+                                                        boxSize='40px'
+                                                        src={'https://robohash.org/'+item.patientID+'?set=set4'}
+                                                        alt={item.lastname}
+                                                    />
+                                                    <Flex h='40px' align='center'>
+                                                        {item.firstname + ' ' + item.lastname}
+                                                    </Flex>
+                                                </Flex>
+                                            </Td>
+                                            <Td isNumeric>{item.phone_number}</Td>
+                                        </Tr>
+                                    )
+                                })
+                            }
                         </Tbody>
 
                     </Table>
                 </TableContainer>
 
                 <HStack variant='solid' justify='end'>
-                    <Button leftIcon={<ArrowBackIcon />} sx={pageButton} variant='solid'>
+                    <Button leftIcon={<ArrowBackIcon />} sx={pageButton} variant='solid'
+                        onClick={()=>{
+                            if (page > 1)
+                                setPage(page - 1)
+                        }}
+                        isDisabled={page === 1}
+                    >
                         Previous
                     </Button>
-                    <Center>1</Center>
-                    <Button rightIcon={<ArrowForwardIcon />} sx={pageButton} variant='solid'>
+                    <Center>{page}</Center>
+                    <Button rightIcon={<ArrowForwardIcon />} sx={pageButton} variant='solid'
+                        onClick={()=>{
+                            if (page < pageAmount)
+                                setPage(page + 1)
+                        }}
+                        isDisabled={page === parseInt(pageAmount)}
+                    >
                         Next
                     </Button>
                 </HStack>
