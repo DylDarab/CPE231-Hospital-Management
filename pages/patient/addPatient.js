@@ -1,10 +1,21 @@
 import {useRouter} from 'next/router'
-import {Box, Button, Flex, FormControl, FormLabel, Input, InputGroup, InputLeftElement, 
-    InputRightElement, Heading, HStack, Radio, Select, SimpleGrid, Text, Textarea, Stack} from '@chakra-ui/react'
+import {Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, 
+    InputRightElement, Heading, HStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup} from '@chakra-ui/react'
 
 import Colour from '../../Colour'
+import { useState } from 'react'
 
 export default ()=>{
+
+    const [file, setFile] = useState(['Profile name', null])
+    const [allergyForm, setAllergyForm] = useState(true)
+    const [error, setError] = useState(false)
+    const [form, setForm] = useState(
+        { firstname: "", lastname: "", gender: "", birthDate: "", citizenID: "",
+        phone_number: "", address: "", insurance: "", EC_name: "", EC_Relationship: "",
+        EC_phone: "", bloodGroup: "", allergy: "", med_history: ""
+    })
+
     let container = {
         width: '100vw',
         paddingLeft: '360px',
@@ -41,6 +52,19 @@ export default ()=>{
         bgColor: Colour.LightGrey
     }
 
+    let fileButton = {
+        cursor: 'pointer',
+        display: 'flex', 
+        alignItems: 'center',
+        borderRadius: 'md', 
+        bg: Colour.Orange, 
+        // color: 'white',
+        px: 4, 
+        h: 8,
+        _hover: {filter: 'brightness(0.9)'},
+        transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
+    }
+
     let summitButton = {
         bg: Colour.Orange,
         _hover: {filter: 'brightness(0.9)'},
@@ -48,6 +72,93 @@ export default ()=>{
         width: '100px',
     }
 
+    const checkCitizen = (e) => {
+        let regExp = /[0-9]/g
+        let result = regExp.test(e.target.value)
+        let id = e.target.value
+        if (result && id.length === 13)
+        {
+            let check = parseInt(id[0]) * 13 + parseInt(id[1]) * 12 + parseInt(id[2]) * 11 + 
+                        parseInt(id[3]) * 10 + parseInt(id[4]) * 9 + parseInt(id[5]) * 8 + 
+                        parseInt(id[6]) * 7 + parseInt(id[7]) * 6 + parseInt(id[8]) * 5 + 
+                        parseInt(id[9]) * 4 + parseInt(id[10]) * 3 + parseInt(id[11]) * 2
+            let checkDigit = check % 11
+            if (11 - checkDigit === parseInt(id[12]))
+            {   
+                setForm({...form, citizenID: id})
+            }
+            else
+            {
+                setForm({...form, citizenID: ""}) 
+            }
+        }
+        else
+        {
+            setForm({...form, citizenID: ""}) 
+        }
+    }
+
+    const checkECPhone = (e) => {
+        let regExp = /[0-9]/g
+        let result = regExp.test(e.target.value)
+        let phone = e.target.value
+        if (result)
+        {
+            setForm({...form, EC_phone: phone})
+        }
+        else
+        {
+            setForm({...form, EC_phone: ""}) 
+        }
+    }
+
+    const checkPhone = (e) => {
+        let regExp = /[0-9]/g
+        let result = regExp.test(e.target.value)
+        let phone = e.target.value
+        if (result)
+        {
+            setForm({...form, phone_number: phone})
+        }
+        else
+        {
+            setForm({...form, phone_number: ""}) 
+        }
+    }
+
+    const handleAllergyForm = (e) => {
+        console.log(e)
+        if (e === 'y')
+            setAllergyForm(false)
+        else
+        {
+            setForm({...form, allergy: ""})
+            setAllergyForm(true)
+        }
+    }
+
+    const handleFile = (e) => {
+        if (e.target.files[0]) {
+            setFile([e.target.files[0].name, e.target.files[0]])
+        }
+    }
+
+    const onSummitClick = () => {
+        console.log('summit clicked!')
+        if (form.firstname && form.lastname && form.gender && form.birthDate &&
+            form.citizenID && form.phone_number && form.address && form.EC_name &&
+            form.EC_Relationship && form.EC_phone && form.bloodGroup)
+        {
+            setError(false)
+            console.log('form is valid')
+        }
+        else
+        {
+            setError(true)
+            console.log('form is not valid')
+        }
+    }
+    console.log(form)
     return (
         <div style={{backgroundColor: Colour.AlmostWhite}}>
             <Box sx={container} >
@@ -58,116 +169,148 @@ export default ()=>{
             </Box>
 
             <Flex sx={container2}>
-            <Flex sx={container3}>
-                <Heading as='h4' size='md'>Personal information</Heading>
-            
-                <HStack>
-                    <Text maxW='1000px' overflow='hidden' whiteSpace='nowrap' textOverflow='ellipsis'>Profile adadadadadaimagdadadadade</Text>
-                    <label>
-                            <Input type="file"/>
-                        <Button>
-                            Choose file
-                        </Button>
-                    </label>
-                </HStack>
-
-                <FormControl isRequired>
-                    <SimpleGrid columns={2} spacing={4}>
-                        <Box>
-                            <FormLabel htmlFor='first-name'>First name</FormLabel>
-                            <Input id='first-name'/>
-                        </Box>
-                        <Box>
-                            <FormLabel htmlFor='last-name'>Last name</FormLabel>
-                            <Input id='last-name'/>
-                        </Box>
-                        <Box>
-                            <FormLabel htmlFor='gender'>Gender</FormLabel>
-                            <Select id='gender'>
-                                <option>Male</option>
-                                <option>Female</option>
-                                <option>Other</option>
-                            </Select>
-                        </Box>
-                        <Box>
-                            <FormLabel htmlFor='birth-date'>Birth date</FormLabel>
-                            <Input id='birth-date' type='date'/>
-                        </Box>
-                        <Box>
-                            <FormLabel htmlFor='citizen-id'>Citizen ID</FormLabel>
-                            <Input id='citizen-id'/>
-                        </Box>
-                        <Box>
-                            <FormLabel htmlFor='phone'>Phone number</FormLabel>
-                            <Input id='phone'/>
-                        </Box>
-                    </SimpleGrid>
-                </FormControl>
-                <SimpleGrid columns={2} spacing={4}>
-                        <FormControl isRequired>
-                            <FormLabel htmlFor='address'>Address</FormLabel>
-                            <Input id='address'/>
-                        </FormControl>
-                        <Box>
-                            <FormLabel htmlFor='insurance'>Insurance</FormLabel>
-                            <Input id='insurance'/>
-                        </Box>
-                </SimpleGrid>
-            </Flex>
-
-            <Flex sx={container3}>
-                <Heading as='h4' size='md'>Emergency contact</Heading>
-                <FormControl isRequired>
-                    <HStack spacing={4}>
-                        <Box w='50%'>
-                            <FormLabel htmlFor='ec-name'>Name</FormLabel>
-                            <Input id='ec-name'/>
-                        </Box>
-                        <Box w='20%'>
-                            <FormLabel htmlFor='ec-relationship'>Relationship</FormLabel>
-                            <Input id='ec-relationship'/>
-                        </Box>
-                        <Box w='30%'>
-                            <FormLabel htmlFor='ec-phone'>Phone number</FormLabel>
-                            <Input id='ec-phone'/>
-                        </Box>
+                <Flex sx={container3}>
+                    <Heading as='h4' size='md'>Personal information</Heading>
+                
+                    <HStack>
+                        <Text maxW='400px' overflow='hidden' whiteSpace='nowrap' textOverflow='ellipsis'>
+                            {file[0]}
+                        </Text>
+                        <FormLabel display='flex'>
+                            <input type="file" hidden accept="image/*" onChange={handleFile}/>
+                            <Box sx={fileButton}>
+                                Choose file
+                            </Box>
+                        </FormLabel>
                     </HStack>
-                </FormControl>  
-            </Flex>
 
-            <Flex sx={container3}>
-                <Heading as='h4' size='md'>Medical information</Heading>
-                <HStack spacing={8}>
                     <Box>
-                        <FormLabel htmlFor='blood'>Blood</FormLabel>
-                        <Select id='blood'>
-                                <option>O</option>
-                                <option>A</option>
-                                <option>B</option>
-                                <option>AB</option>
-                            </Select>
+                        <SimpleGrid columns={2} spacing={4}>
+                            <FormControl isRequired isInvalid={error && !form.firstname}>
+                                <FormLabel htmlFor='first-name'>First name</FormLabel>
+                                <Input id='first-name' value={form.firstname}
+                                    onChange={(e)=>{setForm({...form, firstname: e.target.value})}}
+                                />
+                                {/* <FormErrorMessage>First name is required.</FormErrorMessage> */}
+                            </FormControl>
+                            <FormControl isRequired isInvalid={error && !form.lastname}>
+                                <FormLabel htmlFor='last-name'>Last name</FormLabel>
+                                <Input id='last-name'  value={form.lastname}
+                                    onChange={(e)=>{setForm({...form, lastname: e.target.value})}}
+                                />
+                            </FormControl>
+                            <FormControl isRequired isInvalid={error && !form.gender}>
+                                <FormLabel htmlFor='gender'>Gender</FormLabel>
+                                <Select id='gender' placeholder='Select gender'
+                                    onChange={(e)=>{setForm({...form, gender: e.target.value})}}
+                                >
+                                    <option value='Male'>Male</option>
+                                    <option value='Female'>Female</option>
+                                    <option value='Other'>Other</option>
+                                </Select>
+                            </FormControl>
+                            <FormControl isRequired isInvalid={error && !form.birthDate}>
+                                <FormLabel htmlFor='birth-date'>Birth date</FormLabel>
+                                <Input id='birth-date' type='datetime-local'
+                                    onChange={(e)=>{setForm({...form, birthDate: e.target.value.replace('T', ' ')})}}
+                                />
+                            </FormControl>
+                            <FormControl isRequired isInvalid={error && !form.citizenID}>
+                                <FormLabel htmlFor='citizen-id'>Citizen ID</FormLabel>
+                                <Input id='citizen-id' maxLength={13}
+                                    onChange={(e) => checkCitizen(e)}
+                                />
+                            </FormControl>
+                            <FormControl isRequired isInvalid={error && !form.phone_number}>
+                                <FormLabel htmlFor='phone'>Phone number</FormLabel>
+                                <Input id='phone'
+                                    onChange={(e)=> checkPhone(e)}
+                                />
+                            </FormControl>
+                            <FormControl isRequired isInvalid={error && !form.address}>
+                                <FormLabel htmlFor='address'>Address</FormLabel>
+                                <Input id='address' value={form.address}
+                                    onChange={(e)=>{setForm({...form, address: e.target.value})}}
+                                />
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel htmlFor='insurance'>Insurance</FormLabel>
+                                <Input id='insurance' value={form.insurance}
+                                    onChange={(e)=>{setForm({...form, insurance: e.target.value})}}
+                                />
+                            </FormControl>
+                        </SimpleGrid>
                     </Box>
+                </Flex>
+
+                <Flex sx={container3}>
+                    <Heading as='h4' size='md'>Emergency contact</Heading>
                     <Box>
-                        <FormLabel htmlFor='allergy'>Allergy</FormLabel>
-                        <HStack id='allergy'>
-                            <Radio value='1'>No</Radio>
-                            <Radio value='2'>Yes</Radio>
+                        <HStack spacing={4}>
+                            <FormControl isRequired isInvalid={error && !form.EC_name} w='50%'>
+                                <FormLabel htmlFor='ec-name'>Name</FormLabel>
+                                <Input id='ec-name' value={form.EC_name}
+                                    onChange={(e)=>{setForm({...form, EC_name: e.target.value})}}
+                                />
+                            </FormControl>
+                            <FormControl isRequired isInvalid={error && !form.EC_Relationship} w='20%'>
+                                <FormLabel htmlFor='ec-relationship'>Relationship</FormLabel>
+                                <Input id='ec-relationship' value={form.EC_Relationship}
+                                    onChange={(e)=>{setForm({...form, EC_Relationship: e.target.value})}}
+                                />
+                            </FormControl>
+                            <FormControl isRequired isInvalid={error && !form.EC_phone} w='30%'>
+                                <FormLabel htmlFor='ec-phone'>Phone number</FormLabel>
+                                <Input id='ec-phone'
+                                    onChange={(e)=> checkECPhone(e)}
+                                />
+                            </FormControl>
                         </HStack>
+                    </Box>  
+                </Flex>
+
+                <Flex sx={container3}>
+                    <Heading as='h4' size='md'>Medical information</Heading>
+                    <HStack spacing={8}>
+                        <FormControl w='296px' isRequired isInvalid={error && !form.bloodGroup}>
+                            <FormLabel htmlFor='blood'>Blood</FormLabel>
+                            <Select id='blood' placeholder='Select blood type'
+                                onChange={(e)=>{setForm({...form, bloodGroup: e.target.value})}}
+                            >
+                                    <option>O</option>
+                                    <option>A</option>
+                                    <option>B</option>
+                                    <option>AB</option>
+                                </Select>
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel htmlFor='allergy'>Allergy</FormLabel>
+                            <RadioGroup defaultValue='n' onChange={(e) => handleAllergyForm(e)}>
+                                <HStack id='allergy'>
+                                    <Radio value='n'>No</Radio>
+                                    <Radio value='y'>Yes</Radio>
+                                    <Input id='allergy' value={form.allergy} isDisabled={allergyForm}
+                                        onChange={(e)=>{setForm({...form, allergy: e.target.value})}}
+                                    />
+                                </HStack>
+                            </RadioGroup>
+                        </FormControl>
+                    </HStack>
+                    <Box>
+                        <FormLabel htmlFor='medical-history'>Medical history</FormLabel>
+                        <Textarea
+                            size='sm'
+                            resize='none'
+                            value={form.med_history}
+                            onChange={(e)=>{setForm({...form, med_history: e.target.value})}}
+                        />
                     </Box>
+                </Flex>
+                <HStack justify='end'>
+                    <Button sx={summitButton} onClick={() => onSummitClick()}>
+                        Summit
+                    </Button>
                 </HStack>
-                <Box>
-                    <FormLabel htmlFor='medical-history'>Medical history</FormLabel>
-                    <Textarea
-                        size='sm'
-                        resize='none'
-                    />
-                </Box>
-            </Flex>
-            <HStack justify='end'>
-                <Button sx={summitButton}>
-                    Summit
-                </Button>
-            </HStack>
             </Flex>
         </div>
     )
