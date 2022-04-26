@@ -13,7 +13,7 @@ export default async (req, res) =>
     {
         let result = await db.query(`SELECT "Patient".*,CEILING(COUNT(*) OVER()/10) as page_amount FROM "public"."Patient"
                     WHERE (LOWER(CONCAT("firstname",' ',"lastname")) LIKE '%${search}%')
-                    ORDER BY "patientID" ASC LIMIT 10 OFFSET $1 `, [(page - 1) * 10])
+                    ORDER BY "patientID" ASC LIMIT 8 OFFSET $1 `, [(page - 1) * 8])
         res.json(result.rows)
     }
 }

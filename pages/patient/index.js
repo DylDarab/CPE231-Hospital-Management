@@ -2,6 +2,8 @@ import { Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement
     HStack, Text,Container, Heading,
     Table, Thead, Tbody,Tfoot,Tr,Th,Td,TableCaption,TableContainer, CloseButton,} from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
+import phoneFormatter from 'phone-formatter'
+
 
 import axios from 'axios'
 import Colour from '../../Colour'
@@ -39,8 +41,8 @@ export default (props) =>
         {
             setPageAmount(result.data[0].page_amount)
         }      
-        console.log(result.data)
-        console.log(search)
+        // console.log(result.data)
+        // console.log(search)
     }
 
     useEffect(() =>
@@ -146,7 +148,7 @@ export default (props) =>
                                                     </Flex>
                                                 </Flex>
                                             </Td>
-                                            <Td isNumeric>{item.phone_number}</Td>
+                                            <Td isNumeric>{phoneFormatter.format(item.phone_number,'NNN-NNN-NNNN')}</Td>
                                         </Tr>
                                     )
                                 })
