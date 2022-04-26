@@ -46,7 +46,7 @@ export const patientInDepartment = {
   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
   datasets: [
     {
-      label: "Number of patients",
+      label: "Number of patients in hospital",
       data: [33, 53, 85, 41, 44, 65],
       fill: true,
       backgroundColor: "rgba(75,192,192,0.2)",
