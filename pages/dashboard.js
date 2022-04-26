@@ -11,18 +11,16 @@ import {
   StatHelpText,
   StatArrow,
   Center,
-  Stack
+  Stack,
 } from "@chakra-ui/react";
 import React from "react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
+import Chart from "chart.js/auto";
+import { Doughnut, Line } from "react-chartjs-2";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Colour from "../Colour";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
-
-export const data = {
+export const disease = {
   labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
   datasets: [
     {
@@ -37,6 +35,22 @@ export const data = {
         "rgba(255, 159, 64, 0.6)",
       ],
       hoverOffset: 8,
+    },
+  ],
+  options: {
+    responsive: true,
+  },
+};
+
+export const patientInDepartment = {
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+  datasets: [
+    {
+      label: "Number of patients",
+      data: [33, 53, 85, 41, 44, 65],
+      fill: true,
+      backgroundColor: "rgba(75,192,192,0.2)",
+      borderColor: "rgba(75,192,192,1)",
     },
   ],
 };
@@ -71,11 +85,11 @@ export default () => {
   let borderStyle = {
     border: "1px solid #d3d3d3",
     borderRadius: "8px",
-    padding: "16px",
+    padding: "40px",
   };
   let contentBox = {
     width: "90%",
-    maxWidth: "1920px",
+    maxWidth: "1024px",
     bgColor: "white",
     marginTop: "16px",
     border: "1px solid #d3d3d3",
@@ -168,18 +182,25 @@ export default () => {
         </Box>
         <Box sx={contentBox}>
           <Text fontSize="20px" fontWeight="bold" margin="8px 0 16px">
-            Analytics
+            Patient Statistics
           </Text>
-          <Stack width='100%' direction='row' spacing='16px'>
-            <Box sx={borderStyle} width='90%'>
-              <Doughnut data={data}/>
-              <Center marginTop='16px'>Proportion of disease in last 30 days</Center>
+          <Stack width="100%" direction="row" spacing="16px">
+            <Box sx={borderStyle} width="90%">
+              <Doughnut data={disease} />
+              <Center marginTop="16px" textAlign='center'>
+                Proportion of disease in last 30 days
+              </Center>
             </Box>
-            <Box sx={borderStyle} width='90%'>
-              <Doughnut data={data} />
-              <Center marginTop='16px'>Number of patients in each department</Center>
+            <Box sx={borderStyle} width="90%">
+              <Doughnut data={disease} />
+              <Center marginTop="16px" textAlign='center'>
+                Number of patients in each department
+              </Center>
             </Box>
           </Stack>
+          <Box sx={borderStyle} marginTop='16px' >
+            <Line data={patientInDepartment} />
+          </Box>
         </Box>
       </Box>
     </div>
