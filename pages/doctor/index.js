@@ -94,6 +94,10 @@ export default (props) =>
 
     }, [department, search, page])
 
+    const onClickStaff = (staffID) =>{
+        router.push(`/doctor/${staffID}`)
+    }
+
     const onAddDoctor = () =>{
         router.push('/doctor/addDoctor')
     }
@@ -166,7 +170,7 @@ export default (props) =>
                         </Thead>
                         <Tbody>
                             {doctor.map((d, index) => (
-                                <Tr key={index}>
+                                <Tr key={index} cursor='pointer' _hover={{ bgColor: Colour.AlmostWhite }} onClick={() => onClickStaff(d.staffID)}>
                                     <Td>{d.staffID}</Td>
                                     <Td>
                                         <Flex align='center' gap='8px'>
