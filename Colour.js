@@ -4,6 +4,7 @@ export default {
     DarkGreen:'#305F72',
     GreyGreen:'#668998',
     AlmostWhite: '#F9FBFD', //background color ของ body
+    Black: '#000000', //text color ของ body
     White: '#FFFFFF', //(bg color กรอบต่าง ๆ)
     LightGrey: '#d3d3d3',//(border กรอบ กับ input: 1px solid #d3d3d3)
 

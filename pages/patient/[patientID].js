@@ -1,17 +1,25 @@
 import {useRouter} from 'next/router'
 import {Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, 
-    InputRightElement, Heading, HStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup} from '@chakra-ui/react'
+    InputRightElement, Heading, HStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup, ButtonGroup} from '@chakra-ui/react'
+import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 
 import Colour from '../../Colour'
 import { useState } from 'react'
 
 export default ()=>{
 
+    const router = useRouter()
+
+    const patientID = router.query.patientID
+    console.log(patientID)
+
+    const [isEdit, setIsEdit] = useState(false)
+    const [infoActive, setInfoActive] = useState(true)
     const [file, setFile] = useState(['Profile name', null])
     const [allergyForm, setAllergyForm] = useState(true)
     const [error, setError] = useState(false)
     const [form, setForm] = useState(
-        { firstname: "", lastname: "", gender: "", birthDate: "", citizenID: "",
+        { firstname: "test", lastname: "", gender: "", birthDate: "", citizenID: "",
         phone_number: "", address: "", insurance: "", EC_name: "", EC_Relationship: "",
         EC_phone: "", bloodGroup: "", allergy: "", med_history: ""
     })
@@ -64,12 +72,19 @@ export default ()=>{
         _hover: {filter: 'brightness(0.9)'},
         transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
     }
-
-    let summitButton = {
-        bg: Colour.Orange,
+    
+    let infoButton = {
         _hover: {filter: 'brightness(0.9)'},
         transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
-        width: '100px',
+    }
+
+    const buttonStyle = (bgColor, textColor='#000000') => {
+        return {
+            bg: bgColor,
+            color: textColor,
+            _hover: {filter: 'brightness(0.9)'},
+            transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
+        }
     }
 
     const checkCitizen = (e) => {
@@ -163,15 +178,37 @@ export default ()=>{
         <div style={{backgroundColor: Colour.AlmostWhite}}>
             <Box sx={container} >
                 <Heading>
-                    Add Patient
+                    Patient's profile
                 </Heading>
                 <Box sx={line}></Box>
             </Box>
 
             <Flex sx={container2}>
-                <Flex sx={container3}>
-                    <Heading as='h4' size='md'>Personal information</Heading>
-                
+                <HStack justify='space-between'>
+                    <ButtonGroup>
+                        <Button sx={infoButton}
+                            variant={infoActive ? 'solid' : 'outline'}
+                            bg={infoActive ? Colour.SkyBlue : Colour.White}
+                            borderColor={infoActive ? 'none' : Colour.SkyBlue}
+                        >
+                            Personal information
+                        </Button>
+                        <Button sx={infoButton}
+                            variant={!infoActive ? 'solid' : 'outline'}
+                            bg={!infoActive ? Colour.SkyBlue : Colour.White}
+                            borderColor={!infoActive ? 'none' : Colour.SkyBlue}
+                        >
+                            Appointment history
+                        </Button>
+                    </ButtonGroup>
+                    <Button leftIcon={<PlusSquareIcon />} sx={buttonStyle(Colour.DarkGreen, Colour.White)} variant='solid'
+                        onClick={()=>{router.push('/patient/addPatient')}}
+                    >
+                        Add appointment
+                    </Button>
+                </HStack>
+
+                <Flex sx={container3}>                
                     <Avatar size='2xl' src='https://bit.ly/broken-link' />
 
                     <HStack>
@@ -190,20 +227,21 @@ export default ()=>{
                         <SimpleGrid columns={2} spacing={4}>
                             <FormControl isRequired isInvalid={error && !form.firstname}>
                                 <FormLabel htmlFor='first-name'>First name</FormLabel>
-                                <Input id='first-name' value={form.firstname}
+                                <Input id='first-name' value={form.firstname} isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                     onChange={(e)=>{setForm({...form, firstname: e.target.value})}}
                                 />
                                 {/* <FormErrorMessage>First name is required.</FormErrorMessage> */}
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.lastname}>
                                 <FormLabel htmlFor='last-name'>Last name</FormLabel>
-                                <Input id='last-name'  value={form.lastname}
+                                <Input id='last-name'  value={form.lastname} isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                     onChange={(e)=>{setForm({...form, lastname: e.target.value})}}
                                 />
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.gender}>
                                 <FormLabel htmlFor='gender'>Gender</FormLabel>
-                                <Select id='gender' placeholder='Select gender'
+                                <Select id='gender' placeholder='Select gender' defaultValue={form.gender}
+                                    isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                     onChange={(e)=>{setForm({...form, gender: e.target.value})}}
                                 >
                                     <option value='Male'>Male</option>
@@ -213,31 +251,34 @@ export default ()=>{
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.birthDate}>
                                 <FormLabel htmlFor='birth-date'>Birth date</FormLabel>
-                                <Input id='birth-date' type='datetime-local'
+                                <Input id='birth-date' type='datetime-local' isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                     onChange={(e)=>{setForm({...form, birthDate: e.target.value.replace('T', ' ')})}}
                                 />
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.citizenID}>
                                 <FormLabel htmlFor='citizen-id'>Citizen ID</FormLabel>
                                 <Input id='citizen-id' maxLength={13}
+                                    isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                     onChange={(e) => checkCitizen(e)}
                                 />
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.phone_number}>
                                 <FormLabel htmlFor='phone'>Phone number</FormLabel>
-                                <Input id='phone'
+                                <Input id='phone' isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                     onChange={(e)=> checkPhone(e)}
                                 />
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.address}>
                                 <FormLabel htmlFor='address'>Address</FormLabel>
                                 <Input id='address' value={form.address}
+                                    isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                     onChange={(e)=>{setForm({...form, address: e.target.value})}}
                                 />
                             </FormControl>
                             <FormControl>
                                 <FormLabel htmlFor='insurance'>Insurance</FormLabel>
                                 <Input id='insurance' value={form.insurance}
+                                    isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                     onChange={(e)=>{setForm({...form, insurance: e.target.value})}}
                                 />
                             </FormControl>
@@ -252,18 +293,21 @@ export default ()=>{
                             <FormControl isRequired isInvalid={error && !form.EC_name} w='50%'>
                                 <FormLabel htmlFor='ec-name'>Name</FormLabel>
                                 <Input id='ec-name' value={form.EC_name}
+                                    isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                     onChange={(e)=>{setForm({...form, EC_name: e.target.value})}}
                                 />
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.EC_Relationship} w='20%'>
                                 <FormLabel htmlFor='ec-relationship'>Relationship</FormLabel>
                                 <Input id='ec-relationship' value={form.EC_Relationship}
+                                    isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                     onChange={(e)=>{setForm({...form, EC_Relationship: e.target.value})}}
                                 />
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.EC_phone} w='30%'>
                                 <FormLabel htmlFor='ec-phone'>Phone number</FormLabel>
                                 <Input id='ec-phone'
+                                    isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                     onChange={(e)=> checkECPhone(e)}
                                 />
                             </FormControl>
@@ -276,7 +320,8 @@ export default ()=>{
                     <HStack spacing={8}>
                         <FormControl w='296px' isRequired isInvalid={error && !form.bloodGroup}>
                             <FormLabel htmlFor='blood'>Blood</FormLabel>
-                            <Select id='blood' placeholder='Select blood type'
+                            <Select id='blood' placeholder='Select blood type' defaultValue={form.bloodGroup}
+                                isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                 onChange={(e)=>{setForm({...form, bloodGroup: e.target.value})}}
                             >
                                     <option>O</option>
@@ -287,11 +332,14 @@ export default ()=>{
                         </FormControl>
                         <FormControl>
                             <FormLabel htmlFor='allergy'>Allergy</FormLabel>
-                            <RadioGroup defaultValue='n' onChange={(e) => handleAllergyForm(e)}>
+                            <RadioGroup defaultValue={form.allergy ? 'y' : 'n'} 
+                                isDisabled={!isEdit} _disabled={{opacity: 0.8}}
+                                onChange={(e) => handleAllergyForm(e)}
+                            >
                                 <HStack id='allergy'>
                                     <Radio value='n'>No</Radio>
                                     <Radio value='y'>Yes</Radio>
-                                    <Input id='allergy' value={form.allergy} isDisabled={allergyForm}
+                                    <Input id='allergy' value={form.allergy} isDisabled={allergyForm || !isEdit} _disabled={{opacity: 0.8}}
                                         onChange={(e)=>{setForm({...form, allergy: e.target.value})}}
                                     />
                                 </HStack>
@@ -309,9 +357,21 @@ export default ()=>{
                     </Box>
                 </Flex>
                 <HStack justify='end'>
-                    <Button sx={summitButton} onClick={() => onSummitClick()}>
-                        Summit
-                    </Button>
+                    {
+                        !isEdit ?
+                            <Button sx={buttonStyle(Colour.Red)} onClick={() => setIsEdit(true)}>
+                                Edit
+                            </Button>
+                        :
+                            <ButtonGroup>
+                                <Button sx={buttonStyle(Colour.Orange)} onClick={() => onSummitClick()}>
+                                    Summit
+                                </Button>
+                                <Button sx={buttonStyle(Colour.Red)} onClick={() => setIsEdit(false)}>
+                                    Cancel
+                                </Button>
+                            </ButtonGroup>
+                    }
                 </HStack>
             </Flex>
         </div>
