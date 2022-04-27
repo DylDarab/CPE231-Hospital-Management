@@ -251,7 +251,7 @@ export default (props) =>
                         <VStack spacing={4}>
                             <HStack spacing={4} w='100%'>
                                 <FormControl  isInvalid={error && !form.EC_name} w='50%'>
-                                    <FormLabel htmlFor='ec-name'>Name</FormLabel>
+                                    <FormLabel htmlFor='ec-name'>Department</FormLabel>
                                     <Input
                                         value={props.staffData.department_name}
                                         isReadOnly   
@@ -259,7 +259,7 @@ export default (props) =>
                                        
                                 </FormControl>
                                 <FormControl  isInvalid={error && !form.EC_Relationship} w='50%'>
-                                    <FormLabel htmlFor='ec-relationship'>Relationship</FormLabel>
+                                    <FormLabel htmlFor='ec-relationship'>Position</FormLabel>
 
                                     <Input
                                         value={props.staffData.position_name}
@@ -279,7 +279,7 @@ export default (props) =>
                 </Flex>
 
                 <Flex sx={container3}>
-                    <Heading as='h4' size='md'>Medical information</Heading>
+                    <Heading as='h4' size='md'>Authentication information</Heading>
                     <HStack spacing={4}>
                         <FormControl isReadOnly isInvalid={error && !form.username} w='50%'>
                             <FormLabel htmlFor='username'>Username</FormLabel>
@@ -308,7 +308,7 @@ export default (props) =>
 
 export const getServerSideProps = async (context)=>{
     let staffID = context.params.staffID
-    const staffData = await axios.get(`${url}/api/getDoctorData/${staffID}`)
+    const staffData = await axios.get(`${url}/api/getDoctor/${staffID}`)
     const department = await axios.get(`${url}/api/getDepartment`)
     const position = await axios.get(`${url}/api/getPosition`)
     return {
