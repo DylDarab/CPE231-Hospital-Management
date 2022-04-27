@@ -1,10 +1,14 @@
-import {useRouter} from 'next/router'
 import {Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, 
     InputRightElement, Heading, HStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup, ButtonGroup} from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 
-import Colour from '../../Colour'
-import { useState } from 'react'
+import axios from 'axios'
+import Colour from '../../../Colour'
+import Loading from '../../../component/loading'
+import { encode, decode } from 'js-base64'
+import { useState, useEffect } from 'react'
+import {useRouter} from 'next/router'
+import url from '../../../url'
 
 export default ()=>{
 
@@ -173,7 +177,8 @@ export default ()=>{
             console.log('form is not valid')
         }
     }
-    console.log(form)
+    // console.log(form)
+    console.log('path: ' + router.asPath)
     return (
         <div style={{backgroundColor: Colour.AlmostWhite}}>
             <Box sx={container} >
@@ -190,6 +195,8 @@ export default ()=>{
                             variant={infoActive ? 'solid' : 'outline'}
                             bg={infoActive ? Colour.SkyBlue : Colour.White}
                             borderColor={infoActive ? 'none' : Colour.SkyBlue}
+                            onClick={() => router.push(`/patient/212`)}
+
                         >
                             Personal information
                         </Button>
@@ -197,6 +204,8 @@ export default ()=>{
                             variant={!infoActive ? 'solid' : 'outline'}
                             bg={!infoActive ? Colour.SkyBlue : Colour.White}
                             borderColor={!infoActive ? 'none' : Colour.SkyBlue}
+                            onClick={() => router.push(`/patient/212/history`)}
+
                         >
                             Appointment history
                         </Button>
