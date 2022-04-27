@@ -17,7 +17,7 @@ import Loading from '../../component/loading'
 export default (props) =>
 {
 
-
+    const router = useRouter()
 
     let container = {
         width: '100vw',
@@ -94,6 +94,9 @@ export default (props) =>
 
     }, [department, search, page])
 
+    const onAddDoctor = () =>{
+        router.push('/doctor/addDoctor')
+    }
 
     const onDepartmentChange = (e) =>
     {
@@ -146,7 +149,7 @@ export default (props) =>
                         </InputGroup>
 
                     </HStack>
-                    <Button leftIcon={<PlusSquareIcon />} sx={addButton} variant='solid'>
+                    <Button leftIcon={<PlusSquareIcon />} sx={addButton} variant='solid' onClick={()=>onAddDoctor()}>
                         Add Doctor
                     </Button>
                 </HStack>
@@ -236,12 +239,13 @@ export default (props) =>
 }
 
 
-export const getServerSideProps = async () =>
+export const getStaticProps = async () =>
 {
     const result = await axios.get(`${url}/api/getDepartment`)
     return {
         props: {
             department: result.data
-        }
+        },
+        revalidate: 60
     }
 }

@@ -27,11 +27,10 @@ export default (props) =>
     const fetchPatientData = async () =>
     {
         setIsLoading(true)
-        let result = await axios.get(`${url}/api/getPatient/${page}`, {
+        let result = await axios.get(`${url}/api/getPatient`, {
             headers: {
                 page: page,
                 search: encode(search),
-                department: department,
             }
         })
         setPatient(result.data)
