@@ -74,6 +74,7 @@ export default () =>
                     {createMenu("appointment")}
                     {createMenu("prescription")}
                     {createMenu("medicine")}
+                    {createMenu("order")}
                 </Stack>
             </VStack>
         </nav>
