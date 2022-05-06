@@ -2,6 +2,7 @@ import { Image, Container, Box, Heading, Button, ButtonGroup, Input, InputRightE
 import { Tabs, TabList, TabPanels, Tab, TabPanel, HStack, } from '@chakra-ui/react'
 import {SearchIcon} from '@chakra-ui/icons'
 import axios from 'axios'
+import  {useRouter}  from 'next/router'
 import { useEffect, useState } from 'react'
 import Navbar from '../../component/navbar'
 import Colour from '../../Colour'
@@ -9,6 +10,8 @@ import {Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer} fr
 
 export default () =>
 {
+    const router = useRouter()
+
     let container = {
         width: '100vw',
         paddingLeft: '360px',
@@ -54,7 +57,7 @@ export default () =>
                 <Tabs variant='soft-rounded' colorScheme='telegram'>
                 <TabList>
                     <Tab>Medicine</Tab>
-                    <Tab>Device</Tab>
+                    <Tab onClick={() => router.push('https://youtu.be/dQw4w9WgXcQ?t=43')}>Device</Tab>
                 </TabList>
                 <TabPanels>
 
