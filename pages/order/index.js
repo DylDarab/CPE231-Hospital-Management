@@ -1,14 +1,47 @@
-import { Image, Container, Box, Heading, Button, ButtonGroup, Input, InputRightElement, InputGroup} from '@chakra-ui/react'
+import { Image, Container,Center, Box, Heading, Button, ButtonGroup, Input, InputRightElement, InputGroup} from '@chakra-ui/react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, HStack, } from '@chakra-ui/react'
-import {SearchIcon,PlusSquareIcon} from '@chakra-ui/icons'
+import {SearchIcon,PlusSquareIcon, ArrowBackIcon, ArrowForwardIcon} from '@chakra-ui/icons'
 import axios from 'axios'
+import { encode, decode } from 'js-base64'
 import { useEffect, useState } from 'react'
+import  {useRouter}  from 'next/router'
 import Navbar from '../../component/navbar'
 import Colour from '../../Colour'
 import {Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer} from '@chakra-ui/react'
+import url from '../../url'
 
 export default () =>
 {
+    const router = useRouter()
+    const [search, setSearch] = useState('')
+    const [order, setOrder] = useState([])
+    const [page, setPage] = useState(1)
+    const [pageAmount, setPageAmount] = useState(1)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const fetchOrderData = async () =>
+    {
+        setIsLoading(true)
+        let result = await axios.get(`${url}/api/getOrder`, {
+            headers: {
+                page: page,
+                search: encode(search),
+            }
+        })
+        setOrder(result.data)
+        setIsLoading(false)
+        //if result.data[0].page_amount is not null, set pageAmount to result.data[0].page_amount else set to 1
+        if (result.data.length !== 0)
+        {
+            setPageAmount(result.data[0].page_amount)
+        }      
+    }
+
+    useEffect(() =>
+    {
+        fetchOrderData()
+    }, [search,page])
+
     let container = {
         width: '100vw',
         paddingLeft: '360px',
@@ -27,6 +60,11 @@ export default () =>
         marginTop: '48px',
         bgColor: Colour.AlmostWhite,
     }
+    let pagebox = {
+        width: '80%',
+        marginTop: '24px',
+        bgColor: Colour.AlmostWhite,
+    }
     let line = {
         width: '78vw',
         marginRight: '4000px',
@@ -41,6 +79,11 @@ export default () =>
         color: Colour.White,
         _hover: { filter: 'brightness(0.9)' },
         transition: 'all 0.2s cubic-bezier(.08,.52,.52,1)'
+    }
+    let pageButton = {
+        bg: Colour.Grey,
+        _hover: {filter: 'brightness(0.9)'},
+        transition:'all 0.2s cubic-bezier(.08,.52,.52,1)'
     }
 
     return (
@@ -61,17 +104,17 @@ export default () =>
                             />
                             <Input
                                 type='text'
-                                placeholder='Search Order'
+                                placeholder='Search Organization'
                                 bgColor={Colour.White}
-                                onChange={(e) => onSearchChange(e)}>
+                                onChange={(e) => {setSearch(e.target.value); setPage(1)}}>
                             </Input>
                         </InputGroup>
                     </HStack>
-                        <Button leftIcon={<PlusSquareIcon/>} sx={addButton} variant='solid' onClick={()=>onAddDoctor()}>
+                        <Button leftIcon={<PlusSquareIcon/>} sx={addButton} variant='solid' onClick={()=>onAddOrder()}>
                             Add Order
                         </Button>
-                </HStack>
-                </Box>
+                    </HStack>
+                    </Box>
                         <Box sx={container1}>
                         <TableContainer >
                             <Table variant='simple'>
@@ -84,22 +127,46 @@ export default () =>
                                 </Tr>
                                 </Thead>
                                 <Tbody>
-                                <Tr>
-                                    <Td>100001</Td>
-                                    <Td>2022-04-10 10:46:51</Td>
-                                    <Td>1005</Td>
-                                    <Td>2022-04-12 10:11:34</Td>
-                                </Tr>
-                                <Tr>
-                                    <Td>100002</Td>
-                                    <Td>2022-04-12 17:12:34</Td>
-                                    <Td>1003</Td>
-                                    <Td>2022-04-12 10:11:34</Td>
-                                </Tr>
+                                {
+                                order.map((item, index) => 
+                                {
+                                    return (
+                                        <Tr key={index}>
+                                            <Td>{item.orderID}</Td>
+                                            <Td>{item.dateOrder}</Td>
+                                            <Td>{item.organization_name}</Td>
+                                            <Td>{item.dateInStock}</Td>
+                                        </Tr>
+                                    )
+                                })
+                                }   
                                 </Tbody>
                             </Table>
                             </TableContainer>
                         </Box>
+                        <Box sx = {pagebox}>
+                            <HStack variant='solid' justify='end'>
+                                <Button leftIcon={<ArrowBackIcon />} sx={pageButton} variant='solid'
+                                    onClick={()=>{
+                                        if (page > 1)
+                                            setPage(page - 1)
+                                    }}
+                                    isDisabled={page === 1}
+                                >
+                                    Previous
+                                </Button>
+                                <Center>{page}</Center>
+                                <Button rightIcon={<ArrowForwardIcon />} sx={pageButton} variant='solid'
+                                    onClick={()=>{
+                                        if (page < pageAmount)
+                                            setPage(page + 1)
+                                    }}
+                                    isDisabled={page === parseInt(pageAmount)}
+                                >
+                                    Next
+                                </Button>
+                            </HStack>
+                            </Box>
             </Box>
         </div>
     )

@@ -1,16 +1,70 @@
-import { Image, Container, Box, Heading, Button, ButtonGroup, Input, InputRightElement, InputGroup} from '@chakra-ui/react'
+import { Image, Container, Center, Box, Heading, Button, ButtonGroup, Input, InputRightElement, InputGroup} from '@chakra-ui/react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, HStack, } from '@chakra-ui/react'
-import {SearchIcon} from '@chakra-ui/icons'
+import {SearchIcon, ArrowBackIcon, ArrowForwardIcon} from '@chakra-ui/icons'
 import axios from 'axios'
+import { encode, decode } from 'js-base64'
 import  {useRouter}  from 'next/router'
 import { useEffect, useState } from 'react'
 import Navbar from '../../component/navbar'
 import Colour from '../../Colour'
 import {Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer} from '@chakra-ui/react'
+import url from '../../url'
 
 export default () =>
 {
     const router = useRouter()
+    const [search, setSearch] = useState('')
+    const [medicine, setMedicine] = useState([])
+    const [device, setDevice] = useState([])
+    const [page, setPage] = useState(1)
+    const [pageAmount, setPageAmount] = useState(1)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const fetchMedicineData = async () =>
+    {
+        setIsLoading(true)
+        let result = await axios.get(`${url}/api/getMedicine`, {
+            headers: {
+                page: page,
+                search: encode(search),
+            }
+        })
+        setMedicine(result.data)
+        setIsLoading(false)
+        //if result.data[0].page_amount is not null, set pageAmount to result.data[0].page_amount else set to 1
+        if (result.data.length !== 0)
+        {
+            setPageAmount(result.data[0].page_amount)
+        }      
+    }
+
+    const fetchDeviceData = async () =>
+    {
+        setIsLoading(true)
+        let result = await axios.get(`${url}/api/getDevice`, {
+            headers: {
+                page: page,
+                search: encode(search),
+            }
+        })
+        setDevice(result.data)
+        setIsLoading(false)
+        //if result.data[0].page_amount is not null, set pageAmount to result.data[0].page_amount else set to 1
+        if (result.data.length !== 0)
+        {
+            setPageAmount(result.data[0].page_amount)
+        }      
+    }
+
+    useEffect(() =>
+    {
+        fetchMedicineData()
+    }, [search,page])
+
+    useEffect(() =>
+    {
+        fetchDeviceData()
+    }, [search,page])
 
     let container = {
         width: '100vw',
@@ -29,6 +83,11 @@ export default () =>
         marginTop: '24px',
         bgColor: Colour.AlmostWhite,
     }
+    let pagebox = {
+        width: '80%',
+        marginTop: '24px',
+        bgColor: Colour.AlmostWhite,
+    }
     let line = {
         width: '78vw',
         marginRight: '4000px',
@@ -38,11 +97,10 @@ export default () =>
         height: '2px',
         bgColor: Colour.LightGrey
     }
-    const [search, setSearch] = useState('')
-
-    const onSearchChange = (e) =>
-    {
-        setSearch(e.target.value)
+    let pageButton = {
+        bg: Colour.Grey,
+        _hover: {filter: 'brightness(0.9)'},
+        transition:'all 0.2s cubic-bezier(.08,.52,.52,1)'
     }
 
     return (
@@ -57,7 +115,7 @@ export default () =>
                 <Tabs variant='soft-rounded' colorScheme='telegram'>
                 <TabList>
                     <Tab>Medicine</Tab>
-                    <Tab onClick={() => router.push('https://youtu.be/dQw4w9WgXcQ?t=43')}>Device</Tab>
+                    <Tab>Device</Tab>
                 </TabList>
                 <TabPanels>
 
@@ -72,10 +130,10 @@ export default () =>
                                 type='text'
                                 placeholder='Search Medicine'
                                 bgColor={Colour.White}
-                                onChange={(e) => onSearchChange(e)}>
-                            </Input>
+                                onChange={(e) => {setSearch(e.target.value); setPage(1)}}></Input>
                         </InputGroup>
                         </Box>
+
                         <Box sx={container1}>
                         <TableContainer >
                             <Table variant='simple'>
@@ -85,31 +143,51 @@ export default () =>
                                     <Th>Name</Th>
                                     <Th>Description</Th>
                                     <Th>Price</Th>
-                                    <Th>Note</Th>
-                                    <Th isNumeric>Amount</Th>
+                                    <Th>Amount</Th>
                                 </Tr>
                                 </Thead>
                                 <Tbody>
-                                <Tr>
-                                    <Td>1000001</Td>
-                                    <Td>Paracetamol</Td>
-                                    <Td>Paracetamol</Td>
-                                    <Td>2</Td>
-                                    <Td></Td>
-                                    <Td isNumeric>3000</Td>
-                                </Tr>
-                                <Tr>
-                                    <Td>1000002</Td>
-                                    <Td>Ibuprofen</Td>
-                                    <Td>Ibuprofen</Td>
-                                    <Td>5</Td>
-                                    <Td></Td>
-                                    <Td isNumeric>1500</Td>
-                                </Tr>
+                                {
+                                medicine.map((item, index) => 
+                                {
+                                    return (
+                                        <Tr key={index}>
+                                            <Td>{item.medicineID}</Td>
+                                            <Td>{item.medicine_name}</Td>
+                                            <Td>{item.description}</Td>
+                                            <Td>{item.price_per_unit}</Td>
+                                            <Td>{item.amount}</Td>
+                                        </Tr>
+                                    )
+                                })
+                            }   
                                 </Tbody>
                             </Table>
                             </TableContainer>
-                        </Box>
+                            </Box>
+                            <Box sx = {pagebox}>
+                            <HStack variant='solid' justify='end'>
+                                <Button leftIcon={<ArrowBackIcon />} sx={pageButton} variant='solid'
+                                    onClick={()=>{
+                                        if (page > 1)
+                                            setPage(page - 1)
+                                    }}
+                                    isDisabled={page === 1}
+                                >
+                                    Previous
+                                </Button>
+                                <Center>{page}</Center>
+                                <Button rightIcon={<ArrowForwardIcon />} sx={pageButton} variant='solid'
+                                    onClick={()=>{
+                                        if (page < pageAmount)
+                                            setPage(page + 1)
+                                    }}
+                                    isDisabled={page === parseInt(pageAmount)}
+                                >
+                                    Next
+                                </Button>
+                            </HStack>
+                            </Box>
                     </TabPanel>
 
                     <TabPanel>
@@ -123,7 +201,7 @@ export default () =>
                                 type='text'
                                 placeholder='Search Device'
                                 bgColor={Colour.White}
-                                onChange={(e) => onSearchChange(e)}>
+                                onChange={(e) => {setSearch(e.target.value); setPage(1)}}>
                             </Input>
                         </InputGroup>
                     </Box>
@@ -136,31 +214,51 @@ export default () =>
                                     <Th>Name</Th>
                                     <Th>Description</Th>
                                     <Th>Price</Th>
-                                    <Th>Note</Th>
-                                    <Th isNumeric>Amount</Th>
+                                    <Th>Amount</Th>
                                 </Tr>
                                 </Thead>
                                 <Tbody>
-                                <Tr>
-                                    <Td>10001</Td>
-                                    <Td>Stethoscope</Td>
-                                    <Td>Stethoscope</Td>
-                                    <Td>0</Td>
-                                    <Td></Td>
-                                    <Td isNumeric>200</Td>
-                                </Tr>
-                                <Tr>
-                                <Td>10001</Td>
-                                    <Td>Syringe</Td>
-                                    <Td>Syringe</Td>
-                                    <Td>0</Td>
-                                    <Td></Td>
-                                    <Td isNumeric>1500</Td>
-                                </Tr>
+                                {
+                                device.map((item, index) => 
+                                {
+                                    return (
+                                        <Tr key={index}>
+                                            <Td>{item.deviceID}</Td>
+                                            <Td>{item.device_name}</Td>
+                                            <Td>{item.description}</Td>
+                                            <Td>{item.price_per_unit}</Td>
+                                            <Td>{item.amount}</Td>
+                                        </Tr>
+                                    )
+                                })
+                            }   
                                 </Tbody>
                             </Table>
                             </TableContainer>
                         </Box>
+                        <Box sx = {pagebox}>
+                            <HStack variant='solid' justify='end'>
+                                <Button leftIcon={<ArrowBackIcon />} sx={pageButton} variant='solid'
+                                    onClick={()=>{
+                                        if (page > 1)
+                                            setPage(page - 1)
+                                    }}
+                                    isDisabled={page === 1}
+                                >
+                                    Previous
+                                </Button>
+                                <Center>{page}</Center>
+                                <Button rightIcon={<ArrowForwardIcon />} sx={pageButton} variant='solid'
+                                    onClick={()=>{
+                                        if (page < pageAmount)
+                                            setPage(page + 1)
+                                    }}
+                                    isDisabled={page === parseInt(pageAmount)}
+                                >
+                                    Next
+                                </Button>
+                            </HStack>
+                            </Box>
                     </TabPanel>
                 </TabPanels>
                 </Tabs>
