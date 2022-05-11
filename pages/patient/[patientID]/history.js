@@ -17,6 +17,8 @@ export default (props) =>
 {
     const router = useRouter()
 
+    const patientID = router.query.patientID
+
     const [infoActive, setInfoActive] = useState(false)
     const [department, setDepartment] = useState(null)
     const [search, setSearch] = useState('')
@@ -89,7 +91,7 @@ export default (props) =>
                             bg={infoActive ? Colour.SkyBlue : Colour.White}
                             borderColor={infoActive ? 'none' : Colour.SkyBlue}
                             // onClick={() => router.push(`/patient/${props.patientID}/info`)}
-                            onClick={() => router.push(`/patient/212`)}
+                            onClick={() => router.push(`/patient/${patientID}`)}
                         >
                             Personal information
                         </Button>

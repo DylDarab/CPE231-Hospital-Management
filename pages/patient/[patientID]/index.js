@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react'
 import {useRouter} from 'next/router'
 import url from '../../../url'
 
-export default ()=>{
+export default (props) => {
 
     const router = useRouter()
 
@@ -18,14 +18,20 @@ export default ()=>{
     console.log(patientID)
 
     const [isEdit, setIsEdit] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const [infoActive, setInfoActive] = useState(true)
     const [file, setFile] = useState(['Profile name', null])
     const [allergyForm, setAllergyForm] = useState(true)
     const [error, setError] = useState(false)
-    const [form, setForm] = useState(
-        { firstname: "test", lastname: "", gender: "", birthDate: "", citizenID: "",
-        phone_number: "", address: "", insurance: "", EC_name: "", EC_Relationship: "",
-        EC_phone: "", bloodGroup: "", allergy: "", med_history: ""
+    const [form, setForm] = useState({
+        firstname: props.data.firstname, lastname: props.data.lastname, 
+        gender: props.data.gender, birthDate: props.data.birthDate.split('T')[0], 
+        citizenID: props.data.citizenID, phone_number: props.data.phone_number, 
+        address: props.data.address, insurance: props.data.insurance, 
+        EC_name: props.data.EC_name, EC_Relationship: props.data.EC_Relationship,
+        EC_phone: props.data.EC_phone, bloodGroup: props.data.bloodGroup, 
+        allergy: props.data.allergy, med_history: props.data.med_history,
+        profile_img: props.data.profile_img
     })
 
     let container = {
@@ -81,6 +87,20 @@ export default ()=>{
         _hover: {filter: 'brightness(0.9)'},
         transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
     }
+
+    // useEffect(() =>
+    // {
+    //     const fetchPatientData = async () =>
+    //     {
+    //         setIsLoading(true)
+    //         let result = await axios.get(`${url}/api/getPatient/${patientID}`)
+    //         console.log('fetch' + result.data)
+    //         //setForm(result.data)
+    //         setIsLoading(false)         
+    //     }
+    //     fetchPatientData()
+    //     console.log(form)
+    // }, [])
 
     const buttonStyle = (bgColor, textColor='#000000') => {
         return {
@@ -179,8 +199,10 @@ export default ()=>{
     }
     // console.log(form)
     console.log('path: ' + router.asPath)
+    console.log(form.birthDate)
     return (
         <div style={{backgroundColor: Colour.AlmostWhite}}>
+            <Loading isLoading={isLoading}/>
             <Box sx={container} >
                 <Heading>
                     Patient's profile
@@ -195,8 +217,7 @@ export default ()=>{
                             variant={infoActive ? 'solid' : 'outline'}
                             bg={infoActive ? Colour.SkyBlue : Colour.White}
                             borderColor={infoActive ? 'none' : Colour.SkyBlue}
-                            onClick={() => router.push(`/patient/212`)}
-
+                            onClick={() => router.push(`/patient/${patientID}`)}
                         >
                             Personal information
                         </Button>
@@ -204,7 +225,7 @@ export default ()=>{
                             variant={!infoActive ? 'solid' : 'outline'}
                             bg={!infoActive ? Colour.SkyBlue : Colour.White}
                             borderColor={!infoActive ? 'none' : Colour.SkyBlue}
-                            onClick={() => router.push(`/patient/212/history`)}
+                            onClick={() => router.push(`/patient/${patientID}/history`)}
 
                         >
                             Appointment history
@@ -218,19 +239,21 @@ export default ()=>{
                 </HStack>
 
                 <Flex sx={container3}>                
-                    <Avatar size='2xl' src='https://bit.ly/broken-link' />
+                    <Avatar size='2xl' src={form.profile_img} />
 
-                    <HStack>
-                        <Text maxW='400px' overflow='hidden' whiteSpace='nowrap' textOverflow='ellipsis'>
-                            {file[0]}
-                        </Text>
-                        <FormLabel display='flex'>
-                            <input type="file" hidden accept="image/*" onChange={handleFile}/>
-                            <Box sx={fileButton}>
-                                Choose file
-                            </Box>
-                        </FormLabel>
-                    </HStack>
+                    { isEdit &&
+                        <HStack>
+                            <Text maxW='400px' overflow='hidden' whiteSpace='nowrap' textOverflow='ellipsis'>
+                                {file[0]}
+                            </Text>
+                                <FormLabel display='flex'>
+                                    <input type="file" hidden accept="image/*" onChange={handleFile}/>
+                                    <Box sx={fileButton}>
+                                        Choose file
+                                    </Box>
+                                </FormLabel>
+                        </HStack>
+                    }
 
                     <Box>
                         <SimpleGrid columns={2} spacing={4}>
@@ -260,13 +283,15 @@ export default ()=>{
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.birthDate}>
                                 <FormLabel htmlFor='birth-date'>Birth date</FormLabel>
-                                <Input id='birth-date' type='datetime-local' isDisabled={!isEdit} _disabled={{opacity: 0.8}}
+                                <Input id='birth-date' type='date' isDisabled={!isEdit} _disabled={{opacity: 0.8}}
+                                    defaultValue={form.birthDate}
                                     onChange={(e)=>{setForm({...form, birthDate: e.target.value.replace('T', ' ')})}}
                                 />
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.citizenID}>
                                 <FormLabel htmlFor='citizen-id'>Citizen ID</FormLabel>
                                 <Input id='citizen-id' maxLength={13}
+                                    defaultValue={form.citizenID}
                                     isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                                     onChange={(e) => checkCitizen(e)}
                                 />
@@ -274,6 +299,7 @@ export default ()=>{
                             <FormControl isRequired isInvalid={error && !form.phone_number}>
                                 <FormLabel htmlFor='phone'>Phone number</FormLabel>
                                 <Input id='phone' isDisabled={!isEdit} _disabled={{opacity: 0.8}}
+                                    defaultValue={form.phone_number}
                                     onChange={(e)=> checkPhone(e)}
                                 />
                             </FormControl>
@@ -358,6 +384,7 @@ export default ()=>{
                     <Box>
                         <FormLabel htmlFor='medical-history'>Medical history</FormLabel>
                         <Textarea
+                            isDisabled={!isEdit} _disabled={{opacity: 0.8}}
                             size='sm'
                             resize='none'
                             value={form.med_history}
@@ -385,4 +412,14 @@ export default ()=>{
             </Flex>
         </div>
     )
+}
+
+export const getServerSideProps = async (context)=>{
+    let patientID = context.params.patientID
+    const data = await axios.get(`${url}/api/getPatient/${patientID}`)
+    return {
+        props: {
+            data: data.data
+        }
+    }
 }
