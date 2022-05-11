@@ -42,6 +42,10 @@ export default () =>
         fetchOrderData()
     }, [search,page])
 
+    const onAddOrder = () =>{
+        router.push('/order/addOrder')
+    }
+
     let container = {
         width: '100vw',
         paddingLeft: '360px',
