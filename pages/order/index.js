@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import  {useRouter}  from 'next/router'
 import Navbar from '../../component/navbar'
 import Colour from '../../Colour'
+import Loading from '../../component/loading'
 import {Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer} from '@chakra-ui/react'
 import url from '../../url'
 
@@ -90,8 +91,13 @@ export default () =>
         transition:'all 0.2s cubic-bezier(.08,.52,.52,1)'
     }
 
+    const onClickOrder = (id) => {
+        router.push(`/order/${id}`)
+    }
+
     return (
-        <div>
+        <div style={{backgroundColor: Colour.AlmostWhite}}>
+            <Loading isLoading={isLoading}/>
             <Navbar />
             <Box sx={container} >
                 <Heading>
@@ -120,7 +126,7 @@ export default () =>
                     </HStack>
                     </Box>
                         <Box sx={container1}>
-                        <TableContainer >
+                        <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px' bgColor={Colour.White}>
                             <Table variant='simple'>
                                 <Thead>
                                 <Tr>
@@ -135,7 +141,9 @@ export default () =>
                                 order.map((item, index) => 
                                 {
                                     return (
-                                        <Tr key={index}>
+                                        <Tr key={index} cursor='pointer' 
+                                        _hover={{ bgColor: Colour.AlmostWhite }} 
+                                        onClick={() => onClickOrder(item.orderID)}>
                                             <Td>{item.orderID}</Td>
                                             <Td>{item.dateOrder}</Td>
                                             <Td>{item.organization_name}</Td>

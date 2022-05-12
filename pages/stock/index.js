@@ -135,7 +135,7 @@ export default () =>
                         </Box>
 
                         <Box sx={container1}>
-                        <TableContainer >
+                        <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px' bgColor={Colour.White}>
                             <Table variant='simple'>
                                 <Thead>
                                 <Tr>
@@ -206,7 +206,7 @@ export default () =>
                         </InputGroup>
                     </Box>
                     <Box sx={container1}>
-                        <TableContainer >
+                        <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px' bgColor={Colour.White} >
                             <Table variant='simple'>
                                 <Thead>
                                 <Tr>
