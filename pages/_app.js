@@ -1,6 +1,7 @@
 import '../styles/dyl.css'
 import { ChakraProvider } from '@chakra-ui/react'
 import Navbar from '../component/navbar'
+import Account from '../component/account'
 import checkToken from '../functions/checkToken'
 import { useState, useEffect } from 'react'
 function MyApp({ Component, pageProps })
@@ -18,6 +19,7 @@ function MyApp({ Component, pageProps })
   return (
     <ChakraProvider>
       {checkToken(token) === false ? null : <Navbar />}
+      <Account />
       <Component {...pageProps} />
 
     </ChakraProvider>)
