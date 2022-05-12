@@ -8,6 +8,7 @@ import phoneFormatter from 'phone-formatter'
 import axios from 'axios'
 import { useEffect, useState, useRef } from 'react'
 import Colour from '../../Colour'
+import AppointmentInfo from '../../component/appointmentInfo'
 
 export default () =>
 {
@@ -17,7 +18,7 @@ export default () =>
     const [isLoading, setIsLoading] = useState(false)
     const [search, setSearch] = useState('')
 
-    // const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen, onOpen, onClose } = useDisclosure()
     // const finalRef = useRef()
 
     let container = {
@@ -65,29 +66,6 @@ export default () =>
             transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
         }
     }
-
-    const appointmentModal = () => {
-        return (
-            <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Modal Title</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <Lorem count={2} />
-                    </ModalBody>
-
-                    <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={onClose}>
-                        Close
-                        </Button>
-                        <Button variant='ghost'>Secondary Action</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        )
-    }
-
 
     return (
         <div style={{backgroundColor: Colour.AlmostWhite}}>
@@ -190,10 +168,11 @@ export default () =>
                                 </Td>
                                 <Td>
                                     <Button leftIcon={<EditIcon />} sx={buttonStyle(Colour.Red)}
+                                        onClick={onOpen}
                                     >
                                         Edit
-                                    </Button>
-                            
+                                    </Button>                       
+                                    
                                 </Td>
                             </Tr>
                             
@@ -225,6 +204,7 @@ export default () =>
                 </HStack>
 
             </Flex>
+            <AppointmentInfo isOpen={isOpen} onClose={onClose} />
         </div>
         
     )
