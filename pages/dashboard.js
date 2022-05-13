@@ -19,6 +19,7 @@ import { Doughnut, Line } from "react-chartjs-2";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Colour from "../Colour";
+import url from '../url';
 
 export const disease = {
   labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -42,6 +43,7 @@ export const disease = {
   },
 };
 
+
 export const patientInDepartment = {
   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
   datasets: [
@@ -55,7 +57,7 @@ export const patientInDepartment = {
   ],
 };
 
-export default () => {
+export default (props) => {
   let container = {
     width: "100vw",
     paddingLeft: "360px",
@@ -123,7 +125,7 @@ export default () => {
                 />
                 <Flex flexDirection="column">
                   <StatLabel>Today's appointment</StatLabel>
-                  <StatNumber>100</StatNumber>
+                  <StatNumber>{props.data.todayAppointment}</StatNumber>
                 </Flex>
               </Flex>
             </Stat>
@@ -137,7 +139,7 @@ export default () => {
                 />
                 <Flex flexDirection="column">
                   <StatLabel>Today's patient</StatLabel>
-                  <StatNumber>100</StatNumber>
+                  <StatNumber></StatNumber>
                 </Flex>
               </Flex>
             </Stat>
@@ -150,13 +152,13 @@ export default () => {
                 />
                 <Flex flexDirection="column">
                   <StatLabel>Today's prescription</StatLabel>
-                  <StatNumber>100</StatNumber>
+                  <StatNumber></StatNumber>
                 </Flex>
               </Flex>
             </Stat>
             <Stat sx={statStyle}>
               <StatLabel>Total Doctors</StatLabel>
-              <StatNumber>200</StatNumber>
+              <StatNumber>{props.data.totalDoctor}</StatNumber>
               <StatHelpText>
                 <StatArrow type="increase" />
                 1.05%
@@ -164,7 +166,7 @@ export default () => {
             </Stat>
             <Stat sx={statStyle}>
               <StatLabel>Total Patients</StatLabel>
-              <StatNumber>2345</StatNumber>
+              <StatNumber>{props.data.totalPatient}</StatNumber>
               <StatHelpText>
                 <StatArrow type="decrease" />
                 2.05%
@@ -172,7 +174,7 @@ export default () => {
             </Stat>
             <Stat sx={statStyle}>
               <StatLabel>Patients per doctor</StatLabel>
-              <StatNumber>16</StatNumber>
+              <StatNumber></StatNumber>
               <StatHelpText>
                 <StatArrow type="increase" />
                 1.05%
@@ -204,5 +206,14 @@ export default () => {
         </Box>
       </Box>
     </div>
-  );
-};
+  )
+}
+
+export const getServerSideProps = async ()=>{
+  const data = await axios.get(`${url}/api/getDashboardStat`)
+  return {
+      props: {
+          data: data.data
+      }
+  }
+}

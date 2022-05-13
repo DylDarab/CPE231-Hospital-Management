@@ -16,8 +16,8 @@ export default () => {
       <MenuButton position="absolute" right="16px" top="-40px">
         <HStack spacing="16px" padding="8px">
           <Box textAlign="right">
-            <Text>Tony Arayeewa</Text>
-            <Text>Admin</Text>
+            <Text fontWeight='bold'>Tony Arayeewa</Text>
+            <Text fontSize='14px'>Admin</Text>
           </Box>
           <Avatar />
         </HStack>
