@@ -15,34 +15,11 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import Chart from "chart.js/auto";
-import { Doughnut, Line } from "react-chartjs-2";
+import { Doughnut, Pie, Line } from "react-chartjs-2";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Colour from "../Colour";
-import url from '../url';
-
-export const disease = {
-  labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-  datasets: [
-    {
-      label: "",
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.6)",
-        "rgba(54, 162, 235, 0.6)",
-        "rgba(255, 206, 86, 0.6)",
-        "rgba(75, 192, 192, 0.6)",
-        "rgba(153, 102, 255, 0.6)",
-        "rgba(255, 159, 64, 0.6)",
-      ],
-      hoverOffset: 8,
-    },
-  ],
-  options: {
-    responsive: true,
-  },
-};
-
+import url from "../url";
 
 export const patientInDepartment = {
   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -58,6 +35,71 @@ export const patientInDepartment = {
 };
 
 export default (props) => {
+  const [disease, setDisease] = useState({
+    datasets: [{}],
+  });
+  const [patient, setPatient] = useState({
+    datasets: [{}],
+  });
+
+  useEffect(() => {
+    const label = [];
+    const data = [];
+    for (var i of props.data.numberDiseaseEach) {
+      label.push(i.diseaseName);
+      data.push(i.total);
+    }
+    const fetchData = () => {
+      setDisease({
+        datasets: [
+          {
+            data: data,
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.6)",
+              "rgba(54, 162, 235, 0.6)",
+              "rgba(255, 206, 86, 0.6)",
+              "rgba(75, 192, 192, 0.6)",
+              "rgba(153, 102, 255, 0.6)",
+              "rgba(255, 159, 64, 0.6)",
+            ],
+            hoverOffset: 8,
+          },
+        ],
+        labels: label,
+      });
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const label = [];
+    const data = [];
+    for (var i of props.data.patientInDepartment) {
+      label.push(i.department_name);
+      data.push(i.patientsperdepartment);
+    }
+    const fetchData = () => {
+      setPatient({
+        datasets: [
+          {
+            data: data,
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.6)",
+              "rgba(54, 162, 235, 0.6)",
+              "rgba(255, 206, 86, 0.6)",
+              "rgba(75, 192, 192, 0.6)",
+              "rgba(153, 102, 255, 0.6)",
+              "rgba(255, 159, 64, 0.6)",
+            ],
+            hoverOffset: 8,
+          },
+        ],
+        labels: label,
+      });
+    };
+    fetchData();
+  }, []);
+
   let container = {
     width: "100vw",
     paddingLeft: "360px",
@@ -107,15 +149,10 @@ export default (props) => {
       </Box>
       <Box sx={layout}>
         <Box sx={contentBox}>
-          <Text fontSize="20px" fontWeight="bold" marginBottom="8px">
+          <Text fontSize="20px" fontWeight="bold" marginBottom="16px">
             Hospitality Status
           </Text>
-          <Grid
-            templateColumns="repeat(3, 1fr)"
-            templateRows="repeat(2, 1fr)"
-            gap="16px"
-            margin="0px"
-          >
+          <Grid templateColumns="repeat(4, 1fr)" gap="16px" margin="0px">
             <Stat sx={statStyle}>
               <Flex alignItems="center" columnGap="8px">
                 <Image
@@ -130,20 +167,6 @@ export default (props) => {
               </Flex>
             </Stat>
             <Stat sx={statStyle}>
-              <Flex alignItems="center" columnGap="12px">
-                <Image
-                  src="/assets/image/patient.png"
-                  filter="opacity(0.5) drop-shadow(0 0 0 green)"
-                  boxSize="48px"
-                  marginLeft="4px"
-                />
-                <Flex flexDirection="column">
-                  <StatLabel>Today's patient</StatLabel>
-                  <StatNumber></StatNumber>
-                </Flex>
-              </Flex>
-            </Stat>
-            <Stat sx={statStyle}>
               <Flex alignItems="center" columnGap="8px">
                 <Image
                   src="/assets/image/prescription.png"
@@ -152,17 +175,9 @@ export default (props) => {
                 />
                 <Flex flexDirection="column">
                   <StatLabel>Today's prescription</StatLabel>
-                  <StatNumber></StatNumber>
+                  <StatNumber>{props.data.todayPrescription}</StatNumber>
                 </Flex>
               </Flex>
-            </Stat>
-            <Stat sx={statStyle}>
-              <StatLabel>Total Doctors</StatLabel>
-              <StatNumber>{props.data.totalDoctor}</StatNumber>
-              <StatHelpText>
-                <StatArrow type="increase" />
-                1.05%
-              </StatHelpText>
             </Stat>
             <Stat sx={statStyle}>
               <StatLabel>Total Patients</StatLabel>
@@ -174,7 +189,7 @@ export default (props) => {
             </Stat>
             <Stat sx={statStyle}>
               <StatLabel>Patients per doctor</StatLabel>
-              <StatNumber></StatNumber>
+              <StatNumber>{props.data.patientsPerDoctor}</StatNumber>
               <StatHelpText>
                 <StatArrow type="increase" />
                 1.05%
@@ -188,32 +203,32 @@ export default (props) => {
           </Text>
           <Stack width="100%" direction="row" spacing="16px">
             <Box sx={borderStyle} width="90%">
-              <Doughnut data={disease} />
-              <Center marginTop="16px" textAlign='center'>
+              <Pie data={disease} />
+              <Center marginTop="16px" textAlign="center">
                 Proportion of disease in last 30 days
               </Center>
             </Box>
             <Box sx={borderStyle} width="90%">
-              <Doughnut data={disease} />
-              <Center marginTop="16px" textAlign='center'>
+              <Doughnut data={patient} />
+              <Center marginTop="16px" textAlign="center">
                 Number of patients in each department
               </Center>
             </Box>
           </Stack>
-          <Box sx={borderStyle} marginTop='16px' >
+          <Box sx={borderStyle} marginTop="16px">
             <Line data={patientInDepartment} />
           </Box>
         </Box>
       </Box>
     </div>
-  )
-}
+  );
+};
 
-export const getServerSideProps = async ()=>{
-  const data = await axios.get(`${url}/api/getDashboardStat`)
+export const getServerSideProps = async () => {
+  const data = await axios.get(`${url}/api/getDashboardStat`);
   return {
-      props: {
-          data: data.data
-      }
-  }
-}
+    props: {
+      data: data.data,
+    },
+  };
+};

@@ -16,14 +16,23 @@ export default async (req, res) => {
     //     , [today, tomorrow])
     let todayAppointment = await db.query(`
         SELECT COUNT(*) AS todayAppointment FROM "public"."Appointment" WHERE CAST(start_time AS DATE) = CAST(NOW() AS DATE)
-        `);
+    `);
 
-    let totalDoctor = await db.query(`
-        SELECT COUNT(*) OVER() AS totalDoctor FROM "public"."Staff" WHERE "positionID" = 100`);
+    let todayPrescription = await db.query(`
+        SELECT COUNT(*) AS todayPrescription FROM "public"."MedicineWithdraw"
+        LEFT JOIN "public"."Appointment" ON "MedicineWithdraw"."appointmentID" = "Appointment"."appointmentID"
+        WHERE CAST(start_time AS DATE) = CAST(NOW() AS DATE)
+    `);
 
     let totalPatient = await db.query(`
         SELECT COUNT(*) AS totalPatient FROM "public"."Patient"
         `);
+
+    let patientsPerDoctor = await db.query(`
+        SELECT AVG("Count") AS PatientsPerDoctor FROM (SELECT DISTINCT COUNT("patientID") AS "Count"
+        FROM "public"."Appointment" LEFT JOIN "public"."Staff" ON "Staff"."staffID" = "Appointment"."staffID"
+        WHERE "positionID" = 100 GROUP BY "Appointment"."staffID")
+    `);
 
     let numberDiseaseEach = await db.query(`
         SELECT "diseaseName", COUNT("diseaseID") AS total
@@ -32,23 +41,25 @@ export default async (req, res) => {
         LEFT JOIN "public"."Disease" ON "PatientDisease"."diseaseID" = "Disease"."DiseaseID"
         WHERE CAST(start_time AS DATE) >= CAST(NOW() AS DATE) -30
         GROUP BY "diseaseID", "diseaseName"
-        `);
+    `);
 
     let patientInDepartment = await db.query(`
-    SELECT "department_name", COUNT(DISTINCT "Patient"."patientID") AS patientPerDepartment
-    FROM "public"."Appointment" LEFT JOIN "public"."Staff" ON "Appointment"."staffID" = "Staff"."staffID"
-    LEFT JOIN "public"."Department" ON "Staff"."departmentID" = "Department"."departmentID"
-    LEFT JOIN "public"."Patient" ON "Patient"."patientID" = "Appointment"."patientID"
-    GROUP BY "department_name"
+        SELECT "department_name", COUNT(DISTINCT "Appointment"."patientID") AS patientsPerDepartment
+        FROM "public"."Appointment" LEFT JOIN "public"."Staff" ON "Appointment"."staffID" = "Staff"."staffID"
+        LEFT JOIN "public"."Department" ON "Staff"."departmentID" = "Department"."departmentID"
+        GROUP BY "department_name"
     `);
 
     res.json({
       // todayAppointment: todayAll.rows[0].todayappointment,
       todayAppointment: todayAppointment.rows[0].todayappointment,
-      totalDoctor: totalDoctor.rows[0].totaldoctor,
+      todayPrescription: todayPrescription.rows[0].todayprescription,
       totalPatient: totalPatient.rows[0].totalpatient,
+      patientsPerDoctor: patientsPerDoctor.rows[0].patientsperdoctor,
       numberDiseaseEach: numberDiseaseEach.rows,
-      patientInDepartment: patientInDepartment.rows
+      patientInDepartment: patientInDepartment.rows,
     });
   }
 };
+
+// WHERE EXTRACT(MONTH FROM "start_time") >= EXTRACT(MONTH FROM CURRENT_TIMESTAMP) -6
