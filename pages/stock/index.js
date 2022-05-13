@@ -1,5 +1,7 @@
-import { Image, Container, Center, Box, Heading, Button, ButtonGroup, Input, InputRightElement, InputGroup} from '@chakra-ui/react'
-import { Tabs, TabList, TabPanels, Tab, TabPanel, HStack, } from '@chakra-ui/react'
+import { Image, Container, Text, Center, Box, Heading, Button, ButtonGroup, 
+        Input, InputRightElement, InputGroup, Grid, Stat, StatLabel,
+        StatNumber, StatHelpText, StatArrow, StatGroup,} from '@chakra-ui/react'
+import { Tabs, TabList, TabPanels, Tab, TabPanel, HStack, Flex } from '@chakra-ui/react'
 import {SearchIcon, ArrowBackIcon, ArrowForwardIcon} from '@chakra-ui/icons'
 import axios from 'axios'
 import { encode, decode } from 'js-base64'
@@ -71,22 +73,48 @@ export default () =>
         paddingLeft: '360px',
         marginTop: '64px',
         bgColor: Colour.AlmostWhite,
+        marginBottom: '32px'
     }
     let container1 = {
-        width: '80%',
-        marginTop: '24px',
+        marginTop: '12px',
         bgColor: Colour.AlmostWhite,
+    }
+    let container2 = {
+        width: '80%',
+        marginTop: '48px',
+        bgColor: "white",
         border: "1px solid #d3d3d3",
         borderRadius: "8px",
+        padding: "24px",
     }
     let searchbox = {
-        marginTop: '24px',
-        bgColor: Colour.AlmostWhite,
+        bgColor: "white",
+        marginRight: '16px',
+        marginTop: '6px',
+        marginLeft: '28px',
     }
-    let pagebox = {
+    let statStyle = {
+        border: "1px solid #d3d3d3",
+        borderRadius: "8px",
+        bgColor: "white",
+        padding: "20px 10px 10px 10px",
+    }
+    let tab = {
         width: '80%',
         marginTop: '24px',
-        bgColor: Colour.AlmostWhite,
+        bgColor: "white",
+        border: "1px solid #d3d3d3",
+        borderRadius: "8px",
+        padding: "24px",
+    }
+    let pagebox = {
+        marginTop: '24px',
+        bgColor: "white",
+    }
+    let menubox = {
+        marginTop: '12px',
+        marginRight: '20px',
+        bgColor: "white",
     }
     let line = {
         width: '78vw',
@@ -112,28 +140,108 @@ export default () =>
                 </Heading>
                 <Box sx={line}></Box>
 
+                <Box sx={container2}>
+                    <Text fontSize="20px" fontWeight="bold" marginBottom="8px">
+                     Medicine-Device Status
+                    </Text>
+                    <Grid
+                        templateColumns="repeat(2, 1fr)"
+                        templateRows="repeat(2, 1fr)"
+                        gap="20px"
+                        margin="0px"
+                    >
+                        <Stat sx={statStyle}>
+                            <Flex alignItems="center" columnGap="12px">
+                            <Box>
+                            <Image
+                                src="/assets/image/import.png"
+                                filter="opacity(0.5) drop-shadow(0 0 0 white)"
+                                boxSize="78px"/>
+                            </Box>
+                            <Box>
+                                <StatLabel>Total amount of medicines ordered</StatLabel>
+                                <StatNumber>200</StatNumber>
+                                <StatHelpText> <StatArrow type="increase" /> 1.05% </StatHelpText>   
+                            </Box>
+                            </Flex>
+                        </Stat>
+                        <Stat sx={statStyle}>
+                            <Flex alignItems="center" columnGap="12px">
+                            <Box>
+                            <Image
+                                src="/assets/image/upload.png"
+                                filter="opacity(0.5) drop-shadow(0 0 0 white)"
+                                boxSize="78px"/>
+                            </Box>
+                            <Box>
+                                <StatLabel>Total amount of medicines dispensed</StatLabel>
+                                <StatNumber>200</StatNumber>
+                                <StatHelpText> <StatArrow type="increase" /> 1.05% </StatHelpText>   
+                            </Box>
+                            </Flex>
+                        </Stat>
+                        <Stat sx={statStyle}>
+                            <Flex alignItems="center" columnGap="12px">
+                            <Box>
+                            <Image
+                                src="/assets/image/office.png"
+                                filter="opacity(0.5) drop-shadow(0 0 0 white)"
+                                boxSize="78px"/>
+                            </Box>
+                            <Box>
+                                <StatLabel>The company with the most orders</StatLabel>
+                                <StatHelpText> SSBC </StatHelpText> 
+                                <StatNumber>200</StatNumber>  
+                            </Box>
+                            </Flex>
+                        </Stat>
+                        <Stat sx={statStyle}>
+                            <Flex alignItems="center" columnGap="12px">
+                            <Box>
+                            <Image
+                                src="/assets/image/pills.png"
+                                filter="opacity(0.5) drop-shadow(0 0 0 white)"
+                                boxSize="78px"/>
+                            </Box>
+                            <Box>
+                                <StatLabel>The most commonly used drugs</StatLabel>
+                                <StatHelpText> Para </StatHelpText>   
+                                <StatNumber>200</StatNumber>
+                            </Box>
+                            </Flex>
+                        </Stat>   
+                    </Grid>
+                </Box>
+
+                <Box sx={tab}>
                 <Tabs variant='soft-rounded' colorScheme='telegram'>
-                <TabList>
-                    <Tab>Medicine</Tab>
-                    <Tab>Device</Tab>
-                </TabList>
-                <TabPanels>
-
-                    <TabPanel>
-                        <Box sx={searchbox}>
-                        <InputGroup maxWidth='250px' >
-                            <InputRightElement
-                                pointerEvents='none'
-                                children={<SearchIcon />}
-                            />
-                            <Input
-                                type='text'
-                                placeholder='Search Medicine'
-                                bgColor={Colour.White}
-                                onChange={(e) => {setSearch(e.target.value); setPage(1)}}></Input>
-                        </InputGroup>
+                        
+                        <TabList>
+                        <Box sx={menubox}>
+                        <Text fontSize="20px" fontWeight="bold" marginBottom="8px">
+                            Stock
+                        </Text>
                         </Box>
-
+                            <Tab>Medicine</Tab>
+                            <Tab>Device</Tab>
+                            <Box sx={searchbox}>
+                            <HStack variant='solid' justify='end'>
+                            <InputGroup maxWidth='250px' >
+                                <InputRightElement
+                                    pointerEvents='none'
+                                    children={<SearchIcon />}
+                                />
+                                <Input
+                                    type='text'
+                                    placeholder='Search Name'
+                                    bgColor={Colour.White}
+                                    onChange={(e) => {setSearch(e.target.value); setPage(1)}}></Input>
+                            </InputGroup>
+                            </HStack>
+                            </Box>
+                        </TabList>
+                <TabPanels>
+                    <TabPanel>
                         <Box sx={container1}>
                         <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px' bgColor={Colour.White}>
                             <Table variant='simple'>
@@ -189,22 +297,9 @@ export default () =>
                             </HStack>
                             </Box>
                     </TabPanel>
+                    
 
                     <TabPanel>
-                    <Box sx={searchbox}>
-                        <InputGroup maxWidth='250px' >
-                            <InputRightElement
-                                pointerEvents='none'
-                                children={<SearchIcon />}
-                            />
-                            <Input
-                                type='text'
-                                placeholder='Search Device'
-                                bgColor={Colour.White}
-                                onChange={(e) => {setSearch(e.target.value); setPage(1)}}>
-                            </Input>
-                        </InputGroup>
-                    </Box>
                     <Box sx={container1}>
                         <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px' bgColor={Colour.White} >
                             <Table variant='simple'>
@@ -258,10 +353,11 @@ export default () =>
                                     Next
                                 </Button>
                             </HStack>
-                            </Box>
+                        </Box>
                     </TabPanel>
                 </TabPanels>
                 </Tabs>
+                </Box>
             </Box>
         </div>
     )
