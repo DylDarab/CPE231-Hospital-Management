@@ -11,13 +11,17 @@ export default async (req, res) =>
     // set tomorrow time to 23:59:59
     tomorrow.setHours(23, 59, 59, 999)
 
-
+    console.log(tomorrow)
 
     if (req.method === 'GET')
     {
-        let todayAll = await db.query(`
-        SELECT COUNT(*) OVER() AS todayAppointment FROM "public"."Appointment" WHERE "start_time" between $1 and $2`
-            , [today, tomorrow])
+        let totalAppointment = await db.query(`
+        SELECT COUNT(*) OVER() AS totalAppointment FROM "public"."Appointment"`
+        , [])
+        
+        let todayAppointment = await db.query(`
+        SELECT COUNT("appointmentID") AS todayAppointment FROM "public"."Appointment" WHERE "start_time" BETWEEN $1 AND $2` 
+        , [today,tomorrow])
 
         let totalDoctor = await db.query(`
         SELECT COUNT(*) OVER() AS totalDoctor FROM "public"."Staff" WHERE "positionID" = 100`
@@ -29,7 +33,8 @@ export default async (req, res) =>
 
 
         res.json({
-            todayAppointment: todayAll.rows[0].todayappointment,
+            totalAppointment: totalAppointment.rows[0].totalappointment,
+            todayAppointment: todayAppointment.rows[0].todayappointment,
             totalDoctor: totalDoctor.rows[0].totaldoctor,
             totalPatient: totalPatient.rows[0].totalpatient
         })
