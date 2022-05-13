@@ -1,6 +1,7 @@
 import { Button, Box, Flex, Stack, HStack, Input, Text, FormControl, FormLabel,
     Modal,ModalOverlay,ModalContent,ModalHeader,ModalFooter,ModalBody,ModalCloseButton, Textarea,
   } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import Colour from '../Colour'
 
 export default (props) => {
@@ -13,6 +14,10 @@ export default (props) => {
         height: '2px',
         bgColor: Colour.LightGrey
     }
+
+    useEffect(()=>{
+        console.log(props)
+    },[])
 
     return(
         <Modal isOpen={isOpen} onClose={onClose}>

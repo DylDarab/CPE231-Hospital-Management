@@ -1,7 +1,10 @@
-import { Avatar, Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement, InputGroup,
-    HStack, Text,Container, Heading, Lorem, Stack, useDisclosure,
-    Modal,ModalOverlay,ModalContent,ModalHeader,ModalFooter,ModalBody,ModalCloseButton,
-    Table, Thead, Tbody,Tfoot,Tr,Th,Td,TableCaption,TableContainer, CloseButton,} from '@chakra-ui/react'
+import
+{
+    Avatar, Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement, InputGroup,
+    HStack, Text, Container, Heading, Lorem, Stack, useDisclosure,
+    Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
+    Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, CloseButton,
+} from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, EditIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 
 import url from '../../url'
@@ -23,6 +26,7 @@ export default () =>
     const [search, setSearch] = useState('')
     const [data, setData] = useState([])
     const [appointmentID, setAppointmentID] = useState('-')
+    const [selected, setSelected] = useState(null)
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     // const finalRef = useRef()
@@ -54,14 +58,14 @@ export default () =>
     }
 
     let infoButton = {
-        _hover: {filter: 'brightness(0.9)'},
-        transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
+        _hover: { filter: 'brightness(0.9)' },
+        transition: 'all 0.2s cubic-bezier(.08,.52,.52,1)',
     }
 
     let pageButton = {
         bg: Colour.Grey,
-        _hover: {filter: 'brightness(0.9)'},
-        transition:'all 0.2s cubic-bezier(.08,.52,.52,1)'
+        _hover: { filter: 'brightness(0.9)' },
+        transition: 'all 0.2s cubic-bezier(.08,.52,.52,1)'
     }
 
     useEffect(() =>
@@ -75,30 +79,32 @@ export default () =>
                     search: encode(search),
                 }
             })
+            console.log(result.data)
             setData(result.data)
             setIsLoading(false)
             //if result.data[0].page_amount is not null, set pageAmount to result.data[0].page_amount else set to 1
             if (result.data.length !== 0)
             {
                 setPageAmount(result.data[0].page_amount)
-            }      
+            }
             // console.log(result.data)
             // console.log(search)
         }
         fetchData()
-    }, [search,page])
+    }, [search, page])
 
-    const buttonStyle = (bgColor, textColor='#000000') => {
+    const buttonStyle = (bgColor, textColor = '#000000') =>
+    {
         return {
             bg: bgColor,
             color: textColor,
-            _hover: {filter: 'brightness(0.9)'},
-            transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
+            _hover: { filter: 'brightness(0.9)' },
+            transition: 'all 0.2s cubic-bezier(.08,.52,.52,1)',
         }
     }
 
     return (
-        <div style={{backgroundColor: Colour.AlmostWhite}}>
+        <div style={{ backgroundColor: Colour.AlmostWhite }}>
             <Box sx={container} >
                 <Heading>
                     Appointment
@@ -114,8 +120,8 @@ export default () =>
                             pointerEvents='none'
                             children={<SearchIcon />}
                         />
-                        <Input type='text' placeholder='Search' 
-                            onChange={(e) => {setSearch(e.target.value); setPage(1)}}
+                        <Input type='text' placeholder='Search'
+                            onChange={(e) => { setSearch(e.target.value); setPage(1) }}
                         />
                     </InputGroup>
                 </HStack>
@@ -136,56 +142,56 @@ export default () =>
                                 data.map((item, index) => 
                                 {
                                     return (
-                                    <>
-                                        <Tr key={index}>
-                                            <Td>{item.patientID}</Td>
-                                            <Td>
-                                                <Flex align='center' gap='8px'>
-                                                    <Avatar
-                                                        display='inline-block'
-                                                        float='left'
-                                                        borderRadius='full'
-                                                        boxSize='40px'
-                                                        src={item.patient_img}
-                                                        alt={item.lname_p}
-                                                    />
-                                                    <Flex h='40px' align='center'>
-                                                        {item.fname_p + ' ' + item.lname_p}
+                                        <>
+                                            <Tr key={index}>
+                                                <Td>{item.patientID}</Td>
+                                                <Td>
+                                                    <Flex align='center' gap='8px'>
+                                                        <Avatar
+                                                            display='inline-block'
+                                                            float='left'
+                                                            borderRadius='full'
+                                                            boxSize='40px'
+                                                            src={item.patient_img}
+                                                            alt={item.lname_p}
+                                                        />
+                                                        <Flex h='40px' align='center'>
+                                                            {item.fname_p + ' ' + item.lname_p}
+                                                        </Flex>
                                                     </Flex>
-                                                </Flex>
-                                            </Td>
-                                            <Td>
-                                                <Flex align='center' gap='8px'>
-                                                    <Avatar
-                                                        display='inline-block'
-                                                        float='left'
-                                                        borderRadius='full'
-                                                        boxSize='40px'
-                                                        src={item.profile_img}
-                                                        alt={item.lname_s}
-                                                    />
-                                                    <Flex h='40px' align='center'>
-                                                        {item.fname_s + ' ' + item.lname_s}
+                                                </Td>
+                                                <Td>
+                                                    <Flex align='center' gap='8px'>
+                                                        <Avatar
+                                                            display='inline-block'
+                                                            float='left'
+                                                            borderRadius='full'
+                                                            boxSize='40px'
+                                                            src={item.profile_img}
+                                                            alt={item.lname_s}
+                                                        />
+                                                        <Flex h='40px' align='center'>
+                                                            {item.fname_s + ' ' + item.lname_s}
+                                                        </Flex>
                                                     </Flex>
-                                                </Flex>
-                                            </Td>
-                                            <Td>
-                                                Maybe RoomUse?
-                                            </Td>
-                                            <Td>
-                                                {item.start_time.substring(0,10) + ' ' + item.start_time.substring(11,16)}
-                                            </Td>
-                                            <Td>
-                                                <Button leftIcon={<EditIcon />} sx={buttonStyle(Colour.Red)}
-                                                    onClick={onOpen} 
-                                                >
-                                                    Edit
-                                                </Button>                       
-                                                <AppointmentEdit appointmentID={index} isOpen={isOpen} onClose={onClose} />
-                                                
-                                            </Td>
-                                        </Tr>
-                                    </>
+                                                </Td>
+                                                <Td>
+                                                    Maybe RoomUse?
+                                                </Td>
+                                                <Td>
+                                                    {item.start_time.substring(0, 10) + ' ' + item.start_time.substring(11, 16)}
+                                                </Td>
+                                                <Td>
+                                                    <Button leftIcon={<EditIcon />} sx={buttonStyle(Colour.Red)} onClick={() => setSelected(index)}
+                                                    >
+                                                        {/* Edit */}
+                                                        {item.appointmentID}
+                                                    </Button>
+                                                    <AppointmentEdit appointmentID={item.appointmentID} isOpen={selected === index ? true : false} onClose={()=>setSelected(null)} />
+
+                                                </Td>
+                                            </Tr>
+                                        </>
                                     )
                                 })
                             }
@@ -232,11 +238,11 @@ export default () =>
                                         onClick={onOpen}
                                     >
                                         Edit
-                                    </Button>                       
-                                    
+                                    </Button>
+
                                 </Td>
                             </Tr>
-                            
+
                         </Tbody>
 
                     </Table>
@@ -244,7 +250,8 @@ export default () =>
 
                 <HStack variant='solid' justify='end'>
                     <Button leftIcon={<ArrowBackIcon />} sx={pageButton} variant='solid'
-                        onClick={()=>{
+                        onClick={() =>
+                        {
                             if (page > 1)
                                 setPage(page - 1)
                         }}
@@ -254,7 +261,8 @@ export default () =>
                     </Button>
                     <Center>{page}</Center>
                     <Button rightIcon={<ArrowForwardIcon />} sx={pageButton} variant='solid'
-                        onClick={()=>{
+                        onClick={() =>
+                        {
                             if (page < pageAmount)
                                 setPage(page + 1)
                         }}
@@ -267,7 +275,7 @@ export default () =>
             </Flex>
             {/* <AppointmentEdit id={appointmentID} isOpen={isOpen} onClose={onClose} /> */}
         </div>
-        
+
     )
 }
 
