@@ -10,8 +10,13 @@ export default async (req, res) =>
 
     if (req.method === 'GET')
     {
-        let result = await db.query(`SELECT "Appointment".*,CEILING(COUNT(*) OVER()/10) as page_amount FROM "public"."Appointment"
-                    WHERE (LOWER(CONCAT("firstname",' ',"lastname")) LIKE '%${search}%')
+        let result = await db.query(`SELECT "Appointment".*, "Patient".firstname AS fname_p, 
+                    "Patient".lastname AS lname_p, "Staff".firstname AS fname_s, 
+                    "Staff".lastname AS lname_s, CEILING(COUNT(*) OVER()/10) as page_amount FROM "Appointment"
+                    LEFT JOIN "Patient" ON "Patient"."patientID" = "Appointment"."patientID"
+                    LEFT JOIN "Staff" ON "Staff"."staffID" = "Appointment"."staffID"
+                    WHERE (LOWER(CONCAT("Patient".firstname,' ',"Patient".lastname)) LIKE '%${search}%') AND
+                    start_time BETWEEN CURRENT_DATE + INTERVAL '0 hour' AND CURRENT_DATE + INTERVAL '1 day' 
                     ORDER BY "appointmentID" ASC LIMIT 10 OFFSET $1 `, [(page - 1) * 10])
         res.json(result.rows)
     }

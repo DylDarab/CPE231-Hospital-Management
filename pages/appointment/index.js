@@ -1,14 +1,18 @@
-import { Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement, InputGroup,
+import { Avatar, Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement, InputGroup,
     HStack, Text,Container, Heading, Lorem, Stack, useDisclosure,
     Modal,ModalOverlay,ModalContent,ModalHeader,ModalFooter,ModalBody,ModalCloseButton,
     Table, Thead, Tbody,Tfoot,Tr,Th,Td,TableCaption,TableContainer, CloseButton,} from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, EditIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
+
+import url from '../../url'
+import { encode, decode } from 'js-base64'
 
 import phoneFormatter from 'phone-formatter'
 import axios from 'axios'
 import { useEffect, useState, useRef } from 'react'
 import Colour from '../../Colour'
 import AppointmentInfo from '../../component/appointmentInfo'
+import AppointmentEdit from '../../component/appointmentEdit'
 
 export default () =>
 {
@@ -17,6 +21,8 @@ export default () =>
     const [pageAmount, setPageAmount] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
     const [search, setSearch] = useState('')
+    const [data, setData] = useState([])
+    const [appointmentID, setAppointmentID] = useState('-')
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     // const finalRef = useRef()
@@ -57,6 +63,30 @@ export default () =>
         _hover: {filter: 'brightness(0.9)'},
         transition:'all 0.2s cubic-bezier(.08,.52,.52,1)'
     }
+
+    useEffect(() =>
+    {
+        const fetchData = async () =>
+        {
+            setIsLoading(true)
+            let result = await axios.get(`${url}/api/getAppointment`, {
+                headers: {
+                    page: page,
+                    search: encode(search),
+                }
+            })
+            setData(result.data)
+            setIsLoading(false)
+            //if result.data[0].page_amount is not null, set pageAmount to result.data[0].page_amount else set to 1
+            if (result.data.length !== 0)
+            {
+                setPageAmount(result.data[0].page_amount)
+            }      
+            // console.log(result.data)
+            // console.log(search)
+        }
+        fetchData()
+    }, [search,page])
 
     const buttonStyle = (bgColor, textColor='#000000') => {
         return {
@@ -102,32 +132,63 @@ export default () =>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {/* {
-                                patient.map((item, index) => 
+                            {
+                                data.map((item, index) => 
                                 {
                                     return (
+                                    <>
                                         <Tr key={index}>
                                             <Td>{item.patientID}</Td>
                                             <Td>
                                                 <Flex align='center' gap='8px'>
-                                                    <Image
+                                                    <Avatar
                                                         display='inline-block'
                                                         float='left'
                                                         borderRadius='full'
                                                         boxSize='40px'
-                                                        src={'https://robohash.org/'+item.patientID+'?set=set4'}
-                                                        alt={item.lastname}
+                                                        src={item.patient_img}
+                                                        alt={item.lname_p}
                                                     />
                                                     <Flex h='40px' align='center'>
-                                                        {item.firstname + ' ' + item.lastname}
+                                                        {item.fname_p + ' ' + item.lname_p}
                                                     </Flex>
                                                 </Flex>
                                             </Td>
-                                            <Td isNumeric>{phoneFormatter.format(item.phone_number,'NNN-NNN-NNNN')}</Td>
+                                            <Td>
+                                                <Flex align='center' gap='8px'>
+                                                    <Avatar
+                                                        display='inline-block'
+                                                        float='left'
+                                                        borderRadius='full'
+                                                        boxSize='40px'
+                                                        src={item.profile_img}
+                                                        alt={item.lname_s}
+                                                    />
+                                                    <Flex h='40px' align='center'>
+                                                        {item.fname_s + ' ' + item.lname_s}
+                                                    </Flex>
+                                                </Flex>
+                                            </Td>
+                                            <Td>
+                                                Maybe RoomUse?
+                                            </Td>
+                                            <Td>
+                                                {item.start_time.substring(0,10) + ' ' + item.start_time.substring(11,16)}
+                                            </Td>
+                                            <Td>
+                                                <Button leftIcon={<EditIcon />} sx={buttonStyle(Colour.Red)}
+                                                    onClick={onOpen} 
+                                                >
+                                                    Edit
+                                                </Button>                       
+                                                <AppointmentEdit appointmentID={index} isOpen={isOpen} onClose={onClose} />
+                                                
+                                            </Td>
                                         </Tr>
+                                    </>
                                     )
                                 })
-                            } */}
+                            }
                             <Tr key='TEST'>
                                 <Td>123</Td>
                                 <Td>
@@ -204,7 +265,7 @@ export default () =>
                 </HStack>
 
             </Flex>
-            <AppointmentInfo isOpen={isOpen} onClose={onClose} />
+            {/* <AppointmentEdit id={appointmentID} isOpen={isOpen} onClose={onClose} /> */}
         </div>
         
     )
