@@ -155,8 +155,8 @@ export default () =>
                                             <Td>{item.medicineID}</Td>
                                             <Td>{item.medicine_name}</Td>
                                             <Td>{item.description}</Td>
-                                            <Td>{item.price_per_unit}</Td>
-                                            <Td>{item.amount}</Td>
+                                            <Td>{item.m_priceperunit}</Td>
+                                            <Td>{item.m_amount}</Td>
                                         </Tr>
                                     )
                                 })
@@ -226,8 +226,8 @@ export default () =>
                                             <Td>{item.deviceID}</Td>
                                             <Td>{item.device_name}</Td>
                                             <Td>{item.description}</Td>
-                                            <Td>{item.price_per_unit}</Td>
-                                            <Td>{item.amount}</Td>
+                                            <Td>{item.d_priceperunit}</Td>
+                                            <Td>{item.d_amount}</Td>
                                         </Tr>
                                     )
                                 })

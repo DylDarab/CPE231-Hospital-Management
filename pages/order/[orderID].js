@@ -77,13 +77,13 @@ export default (props) =>
     const [error, setError] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [form, setForm] = useState({
-        // organization: props.orderData.organization_name,
-        // medicine: props.orderData.medicine_name,
-        // pricemedicine: props.orderData.price_per_unit,
-        // amountmedicine: props.orderData.amount,
-        // device: props.orderData.device_name,
-        // pricedevice: props.orderData.price_per_unit,
-        // amountdevice: props.orderData.amount
+        organization: props.orderData.organization_name,
+        medicine: props.orderData.medicine_name,
+        pricemedicine: props.orderData.o_priceperunit,
+        amountmedicine: props.orderData.amount,
+        device: props.orderData.device_name,
+        pricedevice: props.orderData.o_priceperunit,
+        amountdevice: props.orderData.amount
     })
 
     console.log(form)
