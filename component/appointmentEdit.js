@@ -1,11 +1,16 @@
-import { Button, Box, Flex, Stack, HStack, Input, Text, FormControl, FormLabel,
+import { Button, Box, Flex, Stack, HStack, VStack, Input, Text, FormControl, FormLabel,
     Modal,ModalOverlay,ModalContent,ModalHeader,ModalFooter,ModalBody,ModalCloseButton, Textarea,
   } from '@chakra-ui/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Colour from '../Colour'
 
 export default (props) => {
-    const { appointmentID, isEdit, isOpen, onClose } = props
+    const { item, isEdit, isOpen, onClose } = props
+    const [form, setForm] = useState(
+        { date: item.start_time.split('T')[0], time: item.start_time.split('T')[1].replace('Z',''), department: "TEST", 
+            doctor: item.staffID, reason: item.summary, note: item.note }
+    )
+
     let line = {
         width: '100%',
         bgColor: '#000',
@@ -20,61 +25,68 @@ export default (props) => {
     },[])
 
     return(
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>
-                    Appointment ID: {appointmentID}
+                    Appointment ID: {item.appointmentID}
                     <Box sx={line}></Box>
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody mb='16px'>
-                    <Stack>
-                        <HStack>
-                            <Text w='200px'>Patient's name</Text>
-                            <Input id='name'  /*value={form.lastname}*/ isDisabled={!isEdit} _disabled={{opacity: 0.8}}
-                                // onChange={(e)=>{setForm({...form, lastname: e.target.value})}}
-                            />
-                        </HStack>
-                        <HStack>
-                            <Text w='200px'>Date</Text>
-                            <Input id='date'  /*value={form.lastname} */isDisabled={!isEdit} _disabled={{opacity: 0.8}}
-                                // onChange={(e)=>{setForm({...form, lastname: e.target.value})}}
-                            />
-                        </HStack>
-                        <HStack>
-                            <Text w='200px'>Doctor</Text>
-                            <Input id='date'  /*value={form.lastname} */isDisabled={!isEdit} _disabled={{opacity: 0.8}}
-                                // onChange={(e)=>{setForm({...form, lastname: e.target.value})}}
-                            />
-                        </HStack>
-                        <HStack>
-                            <Text w='200px'>Symptom</Text>
-                            <Textarea id='symptom' resize='none' /*value={form.lastname}*/ isDisabled={!isEdit} _disabled={{opacity: 0.8}}
-                                // onChange={(e)=>{setForm({...form, lastname: e.target.value})}}
-                            />
-                        </HStack>
-                        <HStack>
-                            <Text w='200px'>Summary</Text>
-                            <Textarea id='summary' resize='none' /*value={form.lastname}*/ isDisabled={!isEdit} _disabled={{opacity: 0.8}}
-                                // onChange={(e)=>{setForm({...form, lastname: e.target.value})}}
-                            />
-                        </HStack>
-                        <HStack>
-                            <Text w='200px'>Note</Text>
-                            <Textarea id='note' resize='none' /*value={form.lastname}*/ isDisabled={!isEdit} _disabled={{opacity: 0.8}}
-                                // onChange={(e)=>{setForm({...form, lastname: e.target.value})}}
-                            />
-                        </HStack>
-                    </Stack>
+                    <HStack>
+                        <VStack>
+                            <FormControl isRequired /* isInvalid={error && !form.lastname}*/>
+                                <FormLabel>Date</FormLabel>
+                                <Input type='date' value={form.date}
+                                    onChange={(e)=>{setForm({...form, date: e.target.value})}}
+                                />
+                            </FormControl>
+                            <FormControl isRequired /* isInvalid={error && !form.lastname}*/>
+                                <FormLabel>Department</FormLabel>
+                                <Input value={form.department}
+                                    // onChange={(e)=>{setForm({...form, department: e.target.value})}}
+                                />
+                            </FormControl>
+                            <FormControl isRequired /* isInvalid={error && !form.lastname}*/>
+                                <FormLabel>Reason</FormLabel>
+                                <Textarea resize='none' value={form.reason}
+                                    // onChange={(e)=>{setForm({...form, lastname: e.target.value})}}
+                                />
+                            </FormControl>
+                        </VStack>
+                        <VStack>
+                            <FormControl isRequired /* isInvalid={error && !form.lastname}*/>
+                                <FormLabel>Time</FormLabel>
+                                <Input  type='time' value={form.time}
+                                    // onChange={(e)=>{setForm({...form, lastname: e.target.value})}}
+                                />
+                            </FormControl>
+                            <FormControl isRequired /* isInvalid={error && !form.lastname}*/>
+                                <FormLabel>Doctor</FormLabel>
+                                <Input value={form.doctor}
+                                    // onChange={(e)=>{setForm({...form, lastname: e.target.value})}}
+                                />
+                            </FormControl>
+                            <FormControl isRequired /* isInvalid={error && !form.lastname}*/>
+                                <FormLabel>Note</FormLabel>
+                                <Textarea resize='none' value={form.note}
+                                    // onChange={(e)=>{setForm({...form, lastname: e.target.value})}}
+                                />
+                            </FormControl>
+                        </VStack>
+                    </HStack>
                 </ModalBody>
-                {
-                    isEdit &&
-                    <ModalFooter gap={4}>
-                        <Button variantColor='green' onClick={onClose}>Summit</Button>
-                        <Button variantColor='green' onClick={onClose}>Cancel</Button>
-                    </ModalFooter>
-                }
+                <ModalFooter gap={4}>
+                    <Button onClick={onClose}>Summit</Button>
+                    <Button onClick={() => {
+                        onClose();
+                        setForm({date: item.start_time.split('T')[0], time: item.start_time.split('T')[1].replace('Z',''), department: "TEST"
+                            , doctor: item.staffID, reason: item.summary, note: item.note})
+                    }}>
+                        Cancel
+                    </Button>
+                </ModalFooter>
             </ModalContent>
         </Modal>
     )

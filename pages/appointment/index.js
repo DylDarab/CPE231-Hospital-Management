@@ -14,12 +14,12 @@ import phoneFormatter from 'phone-formatter'
 import axios from 'axios'
 import { useEffect, useState, useRef } from 'react'
 import Colour from '../../Colour'
+import Loading from '../../component/loading'
 import AppointmentInfo from '../../component/appointmentInfo'
 import AppointmentEdit from '../../component/appointmentEdit'
 
 export default () =>
 {
-
     const [page, setPage] = useState(1)
     const [pageAmount, setPageAmount] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
@@ -28,7 +28,7 @@ export default () =>
     const [appointmentID, setAppointmentID] = useState('-')
     const [selected, setSelected] = useState(null)
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    // const { isOpen, onOpen, onClose } = useDisclosure()
     // const finalRef = useRef()
 
     let container = {
@@ -105,6 +105,7 @@ export default () =>
 
     return (
         <div style={{ backgroundColor: Colour.AlmostWhite }}>
+            <Loading isLoading={isLoading}/>
             <Box sx={container} >
                 <Heading>
                     Appointment
@@ -142,7 +143,6 @@ export default () =>
                                 data.map((item, index) => 
                                 {
                                     return (
-                                        <>
                                             <Tr key={index}>
                                                 <Td>{item.patientID}</Td>
                                                 <Td>
@@ -184,64 +184,16 @@ export default () =>
                                                 <Td>
                                                     <Button leftIcon={<EditIcon />} sx={buttonStyle(Colour.Red)} onClick={() => setSelected(index)}
                                                     >
-                                                        {/* Edit */}
-                                                        {item.appointmentID}
+                                                        Edit
                                                     </Button>
-                                                    <AppointmentEdit appointmentID={item.appointmentID} isOpen={selected === index ? true : false} onClose={()=>setSelected(null)} />
+                                                    <AppointmentEdit item={item} isOpen={selected === index ? true : false} onClose={()=>setSelected(null)} />
 
                                                 </Td>
                                             </Tr>
-                                        </>
                                     )
                                 })
                             }
-                            <Tr key='TEST'>
-                                <Td>123</Td>
-                                <Td>
-                                    <Flex align='center' gap='8px'>
-                                        <Image
-                                            display='inline-block'
-                                            float='left'
-                                            borderRadius='full'
-                                            boxSize='40px'
-                                            src={'https://robohash.org/123?set=set4'}
-                                            alt='test'
-                                        />
-                                        <Flex h='40px' align='center'>
-                                            Test Tester
-                                        </Flex>
-                                    </Flex>
-                                </Td>
-                                <Td>
-                                    <Flex align='center' gap='8px'>
-                                        <Image
-                                            display='inline-block'
-                                            float='left'
-                                            borderRadius='full'
-                                            boxSize='40px'
-                                            src={'https://robohash.org/123?set=set4'}
-                                            alt='test'
-                                        />
-                                        <Flex h='40px' align='center'>
-                                            Test Tester
-                                        </Flex>
-                                    </Flex>
-                                </Td>
-                                <Td>
-                                    TESTTEST
-                                </Td>
-                                <Td>
-                                    00/00/2000 12:00
-                                </Td>
-                                <Td>
-                                    <Button leftIcon={<EditIcon />} sx={buttonStyle(Colour.Red)}
-                                        onClick={onOpen}
-                                    >
-                                        Edit
-                                    </Button>
-
-                                </Td>
-                            </Tr>
+                            
 
                         </Tbody>
 
