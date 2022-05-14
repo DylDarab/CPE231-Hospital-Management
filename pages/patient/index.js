@@ -145,7 +145,7 @@ export default (props) =>
                                                         float='left'
                                                         borderRadius='full'
                                                         boxSize='40px'
-                                                        src={item.patient_img}
+                                                        src={item.profile_img}
                                                         alt={item.lastname}
                                                     />
                                                     <Flex h='40px' align='center'>
