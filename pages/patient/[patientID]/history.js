@@ -4,6 +4,7 @@ import { Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement
 import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 import phoneFormatter from 'phone-formatter'
 
+import AppointmentInfo from '../../../component/appointmentInfo'
 
 import axios from 'axios'
 import Colour from '../../../Colour'
@@ -194,6 +195,7 @@ export default (props) =>
                                     <Stack>
                                         <Button size='xs' sx={buttonStyle(Colour.SkyBlue)}>Info</Button>
                                         <Button size='xs' sx={buttonStyle(Colour.SkyBlue)}>Invoice</Button>
+                                        
                                     </Stack>
                                 </Td>
                             </Tr>
