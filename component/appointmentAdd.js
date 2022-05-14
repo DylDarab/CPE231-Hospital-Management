@@ -26,6 +26,7 @@ export default ({ rooms, isOpen, onClose, doctors }) => {
   const router = useRouter();
   //   console.log(doctors);
   //   const { isOpen, onClose } = props;
+  const [error, setError] = useState(false)
   const [form, setForm] = useState({
       start_time: "",
       end_time: "",
@@ -47,6 +48,21 @@ export default ({ rooms, isOpen, onClose, doctors }) => {
   //   useEffect(() => {
   //     console.log(props);
   //   }, []);
+  const onSubmitClick = () =>
+    {
+        console.log('submit clicked!')
+        if (form.start_time && form.end_time && form.doctor && form.room &&
+            form.symptoms)
+        {
+            setError(false)
+            console.log('form is valid')
+        }
+        else
+        {
+            setError(true)
+            console.log('form is not valid')
+        }
+    }
 
   console.log(form);
   return (
@@ -60,7 +76,7 @@ export default ({ rooms, isOpen, onClose, doctors }) => {
         <ModalCloseButton />
         <ModalBody mb="16px">
           <VStack>
-            <FormControl isRequired /* isInvalid={error && !form.lastname}*/>
+            <FormControl isRequired isInvalid={error && !form.start_time}>
               <FormLabel>Start time</FormLabel>
               <Input
                 type="datetime-local"
@@ -70,7 +86,7 @@ export default ({ rooms, isOpen, onClose, doctors }) => {
                 }}
               />
             </FormControl>
-            <FormControl isRequired /* isInvalid={error && !form.lastname}*/>
+            <FormControl isRequired isInvalid={error && !form.end_time}>
               <FormLabel>End time</FormLabel>
               <Input
                 type="datetime-local"
@@ -80,7 +96,7 @@ export default ({ rooms, isOpen, onClose, doctors }) => {
                 }}
               />
             </FormControl>
-            <FormControl isRequired /* isInvalid={error && !form.lastname}*/>
+            <FormControl isRequired isInvalid={error && !form.doctor}>
               <FormLabel>Doctor</FormLabel>
               <Select
                 icon={<ChevronDownIcon />}
@@ -100,7 +116,7 @@ export default ({ rooms, isOpen, onClose, doctors }) => {
                 ))}
               </Select>
             </FormControl>
-            <FormControl isRequired /* isInvalid={error && !form.lastname}*/>
+            <FormControl isRequired isInvalid={error && !form.room}>
               <FormLabel>Room</FormLabel>
               <Select
                 icon={<ChevronDownIcon />}
@@ -120,7 +136,7 @@ export default ({ rooms, isOpen, onClose, doctors }) => {
                 ))}
               </Select>
             </FormControl>
-            <FormControl isRequired /* isInvalid={error && !form.lastname}*/>
+            <FormControl isRequired isInvalid={error && !form.symptoms}>
               <FormLabel>Symptom</FormLabel>
               <Textarea
                 resize="none"
@@ -139,13 +155,13 @@ export default ({ rooms, isOpen, onClose, doctors }) => {
           </VStack>
         </ModalBody>
         <ModalFooter gap={4}>
-          <Button colorScheme='teal' onClick={onClose}>Submit</Button>
+          <Button colorScheme='teal' onClick={() => onSubmitClick()}>Submit</Button>
           <Button
             colorScheme='red'
             onClick={() => {
               onClose();
-              setForm({start_time: item.start_time, end_time: item.end_time, room: "TEST"
-                  , doctor: item.staffID, symptoms: item.symptoms, note: item.note})
+            //   setForm({start_time: item.start_time, end_time: item.end_time, room: "TEST"
+            //       , doctor: item.staffID, symptoms: item.symptoms, note: item.note})
             }}
           >
             Cancel

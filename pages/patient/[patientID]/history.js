@@ -113,7 +113,7 @@ export default (props) =>
                     >
                         Add appointment
                     </Button>
-                    <AppointmentAdd isOpen={selected} onClose={()=>setSelected(false)} />
+                    <AppointmentAdd isOpen={selected} onClose={()=>setSelected(false)} rooms={props.rooms} doctors={props.doctors} />
                 </HStack>
 
                 <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px'>
@@ -199,9 +199,13 @@ export default (props) =>
 export const getServerSideProps = async (context)=>{
     let patientID = context.params.patientID
     const data = await axios.get(`${url}/api/getAppointmentHistory/${patientID}`)
+    const rooms = await axios.get(`${url}/api/getRoom`)
+    const doctors = await axios.get(`${url}/api/getDoctorList`)
     return {
         props: {
-            patient: data.data
+            patient: data.data,
+            rooms: rooms.data,
+            doctors: doctors.data
         }
     }
 }
