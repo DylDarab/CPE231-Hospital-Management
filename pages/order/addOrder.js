@@ -206,7 +206,7 @@ export default (props) =>
                                 </NumberInput>
                             </FormControl>
                             <IconButton aria-label='Add' icon={<CopyIcon />} onClick={() => addForm1Fields()}/>
-                            <IconButton aria-label='Delete' icon={<DeleteIcon />} disabled={form1s.length === 1} onClick={() => Remove1Fields(form1s.index)}/>
+                            <IconButton aria-label='Delete' icon={<DeleteIcon />} disabled={form1.length === 1} onClick={() => Remove1Fields(form1s.index)}/>
                             </HStack>))}
 
                         { form2.map(form2s => (
@@ -242,7 +242,7 @@ export default (props) =>
                                 </NumberInput>
                             </FormControl>
                             <IconButton aria-label='Add' icon={<CopyIcon />} onClick={() => addForm2Fields()}/>
-                            <IconButton aria-label='Delete' icon={<DeleteIcon />} disabled={form2s.length === 1} onClick={() => Remove2Fields(form2s.index)}/>
+                            <IconButton aria-label='Delete' icon={<DeleteIcon />} disabled={form2.length === 1} onClick={() => Remove2Fields(form2s.index)}/>
                             </HStack>))}
                         </VStack>
                     </Box>
