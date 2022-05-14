@@ -206,7 +206,6 @@ export default (props) => {
   //       <Td>{i.patients / i.doctors}</Td>
   //     </Tr>
   // );
-
   for (var i = 0; i < props.data.departmentStat.length; i++) {
     table.push(
       <Tr>
