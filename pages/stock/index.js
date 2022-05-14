@@ -162,7 +162,10 @@ export default (props) =>
                             <Box>
                                 <StatLabel>Total amount of medicines ordered</StatLabel>
                                 <StatNumber>{props.statmedData.totalimportC}</StatNumber>
-                                <StatHelpText> <StatArrow type="increase" /> 1.05% </StatHelpText>   
+                                <StatHelpText> <StatArrow type =
+                                    {(props.statmedData.totalimportC - (props.statmedData.totalimportL - props.statmedData.totalimportC))>=0?"increase":"decrease"}/>
+                                    {props.statmedData.totalimportC - (props.statmedData.totalimportL - props.statmedData.totalimportC)}
+                                </StatHelpText>
                             </Box>
                             </Flex>
                         </Stat>
@@ -176,8 +179,15 @@ export default (props) =>
                             </Box>
                             <Box>
                                 <StatLabel>Total amount of medicines dispensed</StatLabel>
-                                <StatNumber>200</StatNumber>
-                                <StatHelpText> <StatArrow type="increase" /> 1.05% </StatHelpText>   
+                                <StatNumber>{props.statmedData.totalexportMC + props.statmedData.totalexportDC}</StatNumber>
+                                <StatHelpText> <StatArrow type =
+                                    {((props.statmedData.totalexportMC + props.statmedData.totalexportDC) -
+                                    ((props.statmedData.totalexportML + props.statmedData.totalexportDL) - 
+                                    (props.statmedData.totalexportMC + props.statmedData.totalexportDC)))>=0?"increase":"decrease"}/>
+                                    {((props.statmedData.totalexportMC + props.statmedData.totalexportDC) -
+                                    ((props.statmedData.totalexportML + props.statmedData.totalexportDL) - 
+                                    (props.statmedData.totalexportMC + props.statmedData.totalexportDC)))}
+                                </StatHelpText>   
                             </Box>
                             </Flex>
                         </Stat>
@@ -191,8 +201,8 @@ export default (props) =>
                             </Box>
                             <Box>
                                 <StatLabel>The company with the most orders</StatLabel>
-                                <StatHelpText> SSBC </StatHelpText> 
-                                <StatNumber>200</StatNumber>  
+                                <StatNumber> {props.statmedData.toporganName} </StatNumber> 
+                                <StatHelpText>{props.statmedData.toporgan} Orders</StatHelpText>  
                             </Box>
                             </Flex>
                         </Stat>
@@ -206,8 +216,8 @@ export default (props) =>
                             </Box>
                             <Box>
                                 <StatLabel>The most commonly used drugs</StatLabel>
-                                <StatHelpText> Para </StatHelpText>   
-                                <StatNumber>200</StatNumber>
+                                <StatNumber> {props.statmedData.topmedicineName} </StatNumber> 
+                                <StatHelpText>{props.statmedData.topmedicine} Pills</StatHelpText> 
                             </Box>
                             </Flex>
                         </Stat>   
