@@ -4,6 +4,7 @@ import { Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement
 import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 import phoneFormatter from 'phone-formatter'
 
+import AppointmentAdd from '../../../component/appointmentAdd'
 import AppointmentInfo from '../../../component/appointmentInfo'
 
 import axios from 'axios'
@@ -16,14 +17,16 @@ import url from '../../../url'
 
 export default (props) =>
 {
+    const { patient } = props
     const router = useRouter()
-
     const patientID = router.query.patientID
 
+    const [selected, setSelected] = useState(false)
+    const [selectedInfo, setSelectedInfo] = useState(null)
     const [infoActive, setInfoActive] = useState(false)
     const [department, setDepartment] = useState(null)
     const [search, setSearch] = useState('')
-    const [patient, setPatient] = useState([])
+    // const [patient, setPatient] = useState([])
     const [page, setPage] = useState(1)
     const [pageAmount, setPageAmount] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
@@ -106,10 +109,11 @@ export default (props) =>
                         </Button>
                     </ButtonGroup>
                     <Button leftIcon={<PlusSquareIcon />} sx={buttonStyle(Colour.DarkGreen, Colour.White)} variant='solid'
-                        onClick={()=>{router.push('/patient/addPatient')}}
+                        onClick={()=>setSelected(true)}
                     >
                         Add appointment
                     </Button>
+                    <AppointmentAdd isOpen={selected} onClose={()=>setSelected(false)} />
                 </HStack>
 
                 <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px'>
@@ -122,12 +126,13 @@ export default (props) =>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {/* {
+                            {
                                 patient.map((item, index) => 
                                 {
+                                    let date = new Date(item.end_time).toLocaleString()
                                     return (
                                         <Tr key={index}>
-                                            <Td>{item.patientID}</Td>
+                                            <Td>{date}</Td>
                                             <Td>
                                                 <Flex align='center' gap='8px'>
                                                     <Image
@@ -135,69 +140,31 @@ export default (props) =>
                                                         float='left'
                                                         borderRadius='full'
                                                         boxSize='40px'
-                                                        src={'https://robohash.org/'+item.patientID+'?set=set4'}
-                                                        alt={item.lastname}
+                                                        src={'https://robohash.org/123?set=set4'}
+                                                        alt='test'
                                                     />
                                                     <Flex h='40px' align='center'>
                                                         {item.firstname + ' ' + item.lastname}
                                                     </Flex>
                                                 </Flex>
                                             </Td>
-                                            <Td isNumeric>{phoneFormatter.format(item.phone_number,'NNN-NNN-NNNN')}</Td>
+                                            <Td>{item.symptoms}</Td>
+                                            <Td>
+                                                <Stack>
+                                                    <Button size='xs' sx={buttonStyle(Colour.LightGrey)}
+                                                        onClick={()=>setSelectedInfo(index)}
+                                                    >
+                                                        Info</Button>
+                                                    <Button size='xs' sx={buttonStyle(Colour.LightGrey)}>Invoice</Button>
+                                                </Stack>
+                                                <AppointmentInfo item={item} isOpen={selectedInfo === index ? true : false} onClose={()=>setSelectedInfo(null)} />
+
+                                            </Td>
                                         </Tr>
                                     )
                                 })
-                            } */}
-                            <Tr key='TEST'>
-                                <Td>123</Td>
-                                <Td>
-                                    <Flex align='center' gap='8px'>
-                                        <Image
-                                            display='inline-block'
-                                            float='left'
-                                            borderRadius='full'
-                                            boxSize='40px'
-                                            src={'https://robohash.org/123?set=set4'}
-                                            alt='test'
-                                        />
-                                        <Flex h='40px' align='center'>
-                                            Test Tester
-                                        </Flex>
-                                    </Flex>
-                                </Td>
-                                <Td>TESTTESTTEST</Td>
-                                <Td>
-                                    <Stack>
-                                        <Button size='xs' sx={buttonStyle(Colour.LightGrey)}>Info</Button>
-                                        <Button size='xs' sx={buttonStyle(Colour.LightGrey)}>Invoice</Button>
-                                    </Stack>
-                                </Td>
-                            </Tr>
-                            <Tr key='TEST'>
-                                <Td>123</Td>
-                                <Td>
-                                    <Flex align='center' gap='8px'>
-                                        <Image
-                                            display='inline-block'
-                                            float='left'
-                                            borderRadius='full'
-                                            boxSize='40px'
-                                            src={'https://robohash.org/123?set=set4'}
-                                            alt='test'
-                                        />
-                                        <Flex h='40px' align='center'>
-                                            Test Tester
-                                        </Flex>
-                                    </Flex>
-                                </Td>
-                                <Td>TESTTESTTEST</Td>
-                                <Td>
-                                    <Stack>
-                                        <Button size='xs' sx={buttonStyle(Colour.LightGrey)}>Info</Button>
-                                        <Button size='xs' sx={buttonStyle(Colour.LightGrey)}>Invoice</Button>
-                                    </Stack>
-                                </Td>
-                            </Tr>
+                            }
+                            
                         </Tbody>
 
                     </Table>
@@ -229,5 +196,14 @@ export default (props) =>
     )
 }
 
+export const getServerSideProps = async (context)=>{
+    let patientID = context.params.patientID
+    const data = await axios.get(`${url}/api/getAppointmentHistory/${patientID}`)
+    return {
+        props: {
+            patient: data.data
+        }
+    }
+}
 
 
