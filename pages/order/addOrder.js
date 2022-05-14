@@ -6,7 +6,7 @@ import
         NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, 
     } from '@chakra-ui/react'
 
-import { ChevronDownIcon, AddIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon, CopyIcon, DeleteIcon,AddIcon } from '@chakra-ui/icons'
 import axios from 'axios'
 import Colour from '../../Colour'
 import { useState } from 'react'
@@ -75,13 +75,57 @@ export default (props) =>
     }
 
     const [error, setError] = useState(false)
-    const [form, setForm] = useState({})
+    const [form, setForm] = useState ({organization: ""})
+
+    const [form1, setForm1] = useState(
+            [{ medicine: "", pricemedicine: "" , amountmedicine: "" }]
+            )
+    const [form2, setForm2] = useState(
+            [{ device: "", pricedevice: "" , amountdevice: "" }]
+            )
+
+    const addForm1Fields = () => {
+            setForm1([...form1, { medicine: "", pricemedicine: "" , amountmedicine: "" }])
+          } 
+    const addForm2Fields = () => {
+            setForm2([...form2, { device: "", pricedevice: "" , amountdevice: "" }])
+          }        
+
+    const Remove1Fields = index => {
+            const values  = [...form1];
+            values.splice(values.findIndex(value => value.index === index), 1);
+            setForm1(values);
+          }
+    const Remove2Fields = index => {
+            const values  = [...form2];
+            values.splice(values.findIndex(value => value.index === index), 1);
+            setForm2(values);
+          }
+
+    const handleChangeInput1 = (index, event) => {
+            const newInputFields = form1.map(i => {
+              if(index === i.index) {
+                i[event.target.name] = event.target.value
+              }
+              return i;
+            })
+            setForm1(newInputFields);
+          }
+     const handleChangeInput2 = (index, event) => {
+            const newInputFields = form2.map(i => {
+              if(index === i.index) {
+                i[event.target.name] = event.target.value
+              }
+              return i;
+            })
+            setForm2(newInputFields);
+          }
 
     const onSummitClick = () =>
     {
         console.log('summit clicked!')
-        if (form.organization && form.medicine && form.pricemedicine &&form.amountmedicine 
-            && form.device && form.pricedevice && form.amountdevice)
+        if (form.organization && form1.medicine && form1.pricemedicine &&form1.amountmedicine 
+            && form2.device && form2.pricedevice && form2.amountdevice)
         {
             setError(false)
             console.log('form is valid')
@@ -93,6 +137,8 @@ export default (props) =>
         }
     }
     console.log(form)
+    console.log(form1)
+    console.log(form2)
     return (
         <div style={{ backgroundColor: Colour.AlmostWhite }}>
             <Box sx={container} >
@@ -125,71 +171,77 @@ export default (props) =>
                                 </FormControl>
                             </HStack>
 
-                            <HStack spacing={4} w='100%'>
-                            <FormControl isInvalid={error && !form.medicine} w='50%'>
+                        { form1.map(form1s => (
+                            <HStack spacing={4} w='100%' key={form1s.index}>
+                            <FormControl isInvalid={error && !form1s.medicine} w='50%'>
                                     <FormLabel htmlFor='medicine'>Medicine</FormLabel>
                                     <Select
                                         icon={<ChevronDownIcon />}
                                         placeholder='Select Medicine'
                                         bgColor={Colour.White}
-                                        onChange={(e) => setForm({...form,medicine:e.target.value})}
+                                        onChange={event => handleChangeInput1(form1s.medicine, event)}
                                     >
                                          {props.medicine.map((medicine, index) => (
                                             <option key={medicine.medicineID} value={medicine.medicineID}>{medicine.medicine_name}</option>
                                         ))}
                                     </Select>
                             </FormControl>
-                            <FormControl isInvalid={error && !form.pricemedicine}>
+                            <FormControl isInvalid={error && !form1s.pricemedicine}>
                                     <FormLabel htmlFor='price-medicine'>Price</FormLabel>
-                                         <Input id='price-medicine' value={form.pricemedicine}
-                                            onChange={(e) => { setForm({ ...form, pricemedicine: e.target.value }) }}
+                                         <Input id='price-medicine' 
+                                         onChange={event => handleChangeInput1(form1s.index, event)}
                                 />
                             </FormControl>
-                            <FormControl isInvalid={error && !form.amountmedicine}>
+                            <FormControl isInvalid={error && !form1s.amountmedicine}>
                                 <FormLabel htmlFor='amount-medicine'>Amount</FormLabel>
                                 <NumberInput max={1000000} min={1}>
-                                    <NumberInputField id='amount-medicine' value={form.amountmedicine} />
+                                    <NumberInputField id='amount-medicine' 
+                                    onChange={event => handleChangeInput1(form1s.index, event)} />
                                     <NumberInputStepper>
                                     <NumberIncrementStepper />
                                     <NumberDecrementStepper />
                                     </NumberInputStepper>
                                 </NumberInput>
                             </FormControl>
-                            <IconButton aria-label='Add' icon={<AddIcon />} />
-                            </HStack>
+                            <IconButton aria-label='Add' icon={<CopyIcon />} onClick={() => addForm1Fields()}/>
+                            <IconButton aria-label='Delete' icon={<DeleteIcon />} disabled={form1s.length === 1} onClick={() => Remove1Fields(form1s.index)}/>
+                            </HStack>))}
 
+                        { form2.map(form2s => (
                             <HStack spacing={4} w='100%'>
-                            <FormControl isInvalid={error && !form.device} w='50%'>
+                            <FormControl isInvalid={error && !form2s.device} w='50%'>
                                     <FormLabel htmlFor='device'>Device</FormLabel>
                                     <Select
                                         icon={<ChevronDownIcon />}
                                         placeholder='Select Device'
                                         bgColor={Colour.White}
-                                        onChange={(e) => setForm({...form,device:e.target.value})}
+                                        onChange={event => handleChangeInput2(form2s.device, event)}
                                     >
                                          {props.device.map((device, index) => (
                                             <option key={device.deviceID} value={device.deviceID}>{device.device_name}</option>
                                         ))}
                                     </Select>
                             </FormControl>
-                            <FormControl isInvalid={error && !form.pricedevice}>
+                            <FormControl isInvalid={error && !form2s.pricedevice}>
                                     <FormLabel htmlFor='price-device'>Price</FormLabel>
-                                         <Input id='price-device' value={form.pricemedicine}
-                                            onChange={(e) => { setForm({ ...form, pricemedicinee: e.target.value }) }}
+                                         <Input id='price-device' 
+                                         onChange={event => handleChangeInput2(form2s.pricedevice, event)}
                                 />
                             </FormControl>
-                            <FormControl isInvalid={error && !form.amountdevice}>
+                            <FormControl isInvalid={error && !form2s.amountdevice}>
                                 <FormLabel htmlFor='amount-medicine'>Amount</FormLabel>
                                 <NumberInput max={1000000} min={1}>
-                                    <NumberInputField id='amount-device' value={form.amountdevice} />
+                                    <NumberInputField id='amount-device' 
+                                    onChange={event => handleChangeInput2(form2s.amountdevice, event)}/>
                                     <NumberInputStepper>
                                     <NumberIncrementStepper />
                                     <NumberDecrementStepper />
                                     </NumberInputStepper>
                                 </NumberInput>
                             </FormControl>
-                            <IconButton aria-label='Add' icon={<AddIcon />} />
-                            </HStack>
+                            <IconButton aria-label='Add' icon={<CopyIcon />} onClick={() => addForm2Fields()}/>
+                            <IconButton aria-label='Delete' icon={<DeleteIcon />} disabled={form2s.length === 1} onClick={() => Remove2Fields(form2s.index)}/>
+                            </HStack>))}
                         </VStack>
                     </Box>
                 </Flex>
