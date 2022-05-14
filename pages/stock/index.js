@@ -12,8 +12,9 @@ import Colour from '../../Colour'
 import {Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer} from '@chakra-ui/react'
 import url from '../../url'
 
-export default () =>
+export default (props) =>
 {
+    console.log(props)
     const router = useRouter()
     const [search, setSearch] = useState('')
     const [medicine, setMedicine] = useState([])
@@ -160,7 +161,7 @@ export default () =>
                             </Box>
                             <Box>
                                 <StatLabel>Total amount of medicines ordered</StatLabel>
-                                <StatNumber>200</StatNumber>
+                                <StatNumber>{props.statmedData.totalimportC}</StatNumber>
                                 <StatHelpText> <StatArrow type="increase" /> 1.05% </StatHelpText>   
                             </Box>
                             </Flex>
@@ -363,5 +364,13 @@ export default () =>
     )
 }
 
-
+export const getServerSideProps = async ()=>{
+    const statmedData = await axios.get(`${url}/api/getStatMed`)
+    return {
+        props: {
+            statmedData: statmedData.data,
+        }
+    }
+}
+  
 

@@ -77,8 +77,15 @@ export default async (req, res) =>
                     GROUP BY "MedicineWithdraw"."medicineID")) 
         `)
         
-        
-        
-        res.json(result.rows)
+        res.json({
+            totalimportC: totalimportC.rows[0].totalimportC,
+            totalimportL: totalimportL.rows[0].totalimportL,
+            totalexportMC: totalexportMC.rows[0].totalexportMC,
+            totalexportDC: totalexportDC.rows[0].totalexportDC,
+            totalexportML: totalexportML.rows[0].totalexportML,
+            totalexportDL: totalexportDL.rows[0].totalexportDL,
+            toporgan:  toporgan.rows[0].toporgan,
+            topmedicine: topmedicine.rows[0].topmedicine
+        })
     }
 }
