@@ -26,13 +26,13 @@ export default async (req, res) => {
 
     let totalPatient = await db.query(`
         SELECT COUNT(*) AS totalPatient FROM "public"."Patient"
-        `);
-
-    let patientsPerDoctor = await db.query(`
-        SELECT AVG("Count") AS PatientsPerDoctor FROM (SELECT DISTINCT COUNT("patientID") AS "Count"
-        FROM "public"."Appointment" LEFT JOIN "public"."Staff" ON "Staff"."staffID" = "Appointment"."staffID"
-        WHERE "positionID" = 100 GROUP BY "Appointment"."staffID")
     `);
+
+    // let patientsPerDoctor = await db.query(`
+    //     SELECT AVG("Count") AS PatientsPerDoctor FROM (SELECT DISTINCT COUNT("patientID") AS "Count"
+    //     FROM "public"."Appointment" LEFT JOIN "public"."Staff" ON "Staff"."staffID" = "Appointment"."staffID"
+    //     WHERE "positionID" = 100 GROUP BY "Appointment"."staffID")
+    // `);
 
     let numberDiseaseEach = await db.query(`
         SELECT "diseaseName", COUNT("diseaseID") AS total
@@ -73,7 +73,6 @@ export default async (req, res) => {
       todayAppointment: todayAppointment.rows[0].todayappointment,
       todayPrescription: todayPrescription.rows[0].todayprescription,
       totalPatient: totalPatient.rows[0].totalpatient,
-      patientsPerDoctor: patientsPerDoctor.rows[0].patientsperdoctor,
       numberDiseaseEach: numberDiseaseEach.rows,
       patientInDepartment: patientInDepartment.rows,
       departmentStat: departmentStat.rows,

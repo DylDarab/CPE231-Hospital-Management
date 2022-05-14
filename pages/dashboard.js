@@ -196,7 +196,7 @@ export default (props) => {
           <Text fontSize="20px" fontWeight="bold" marginBottom="16px">
             Hospitality Status
           </Text>
-          <Grid templateColumns="repeat(4, 1fr)" gap="16px" margin="0px">
+          <Grid templateColumns="repeat(3, 1fr)" gap="16px" margin="0px">
             <Stat sx={statStyle}>
               <Flex alignItems="center" columnGap="8px">
                 <Image
@@ -224,20 +224,17 @@ export default (props) => {
               </Flex>
             </Stat>
             <Stat sx={statStyle}>
-              <StatLabel>Total Patients</StatLabel>
-              <StatNumber>{props.data.totalPatient}</StatNumber>
-              <StatHelpText>
-                <StatArrow type="decrease" />
-                2.05%
-              </StatHelpText>
-            </Stat>
-            <Stat sx={statStyle}>
-              <StatLabel>Patients per doctor</StatLabel>
-              <StatNumber>{props.data.patientsPerDoctor}</StatNumber>
-              <StatHelpText>
-                <StatArrow type="increase" />
-                1.05%
-              </StatHelpText>
+              <Flex alignItems="center" columnGap="12px">
+                <Image
+                  src="/assets/image/patient.png"
+                  filter="opacity(0.5) drop-shadow(0 0 0 green)"
+                  boxSize="48px"
+                />
+                <Flex flexDirection="column">
+                  <StatLabel>Total Patients</StatLabel>
+                  <StatNumber>{props.data.totalPatient}</StatNumber>
+                </Flex>
+              </Flex>
             </Stat>
           </Grid>
         </Box>
