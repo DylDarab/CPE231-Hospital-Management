@@ -92,7 +92,6 @@ export default (props) => {
         transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
     }
 
-<<<<<<< Updated upstream
     // useEffect(() =>
     // {
     //     const fetchPatientData = async () =>
@@ -108,9 +107,6 @@ export default (props) => {
     // }, [])
 
     const buttonStyle = (bgColor, textColor) => {
-=======
-    const buttonStyle = (bgColor, textColor='#000000') => {
->>>>>>> Stashed changes
         return {
             bg: bgColor,
             color: textColor,
