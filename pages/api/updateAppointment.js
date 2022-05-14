@@ -4,6 +4,7 @@ export default async (req, res) =>
 {
     let data = {
         "appointmentID": 3,
+        "summary": "sdfadfdfadsfas'dfks;dlfka;sdfdfsdfsadfasdfasdf",
         "medicine": [
             {
                 "medicineID": 1,
@@ -43,6 +44,11 @@ export default async (req, res) =>
         let appointmentID = req.body.appointmentID
         let medicine = req.body.medicine
         let device = req.body.device
+        let summary = req.body.summary
+
+        let updateAppointment = await db.query(`
+            UPDATE "public"."Appointment" SET "summary" = $1 WHERE "appointmentID" = $2
+        `,[summary, appointmentID])
 
         const promise = device.map(async (d) =>
         {
@@ -61,6 +67,7 @@ export default async (req, res) =>
             `, [m.medicineID, m.amount, m.price, appointmentID, m.type, m.note])
         })
         await Promise.all(promise2)
+
 
         res.json({"status":"ok"})
     }
