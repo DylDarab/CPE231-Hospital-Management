@@ -5,6 +5,7 @@ import Colour from '../Colour'
 
 export default (props) => {
     const { item, isOpen, onClose } = props
+    const date = new Date(item.end_time).toLocaleDateString()
 
     let line = {
         width: '100%',
@@ -15,7 +16,7 @@ export default (props) => {
         bgColor: Colour.LightGrey
     }
 
-    const infoBlock = (title, info, h='auto') => {
+    const infoBlock = (title, info, h='36px') => {
         return (
             <HStack>
                 <Text w='35%'>{title}</Text>
@@ -37,11 +38,11 @@ export default (props) => {
                 <ModalCloseButton />
                 <ModalBody mb='16px'>
                     <Stack>
-                        {infoBlock("Date", "TESTTEST")}
-                        {infoBlock("Doctor", "TESTTEST")}
-                        {infoBlock("Symptom", "TESTTESTTEST")}
-                        {infoBlock("Summary", "TESTTEST", '56px')}
-                        {infoBlock("Note", "TESTTEST")}
+                        {infoBlock("Date", date)}
+                        {infoBlock("Doctor", (item.staff_firstname + ' ' + item.staff_lastname))}
+                        {infoBlock("Symptom", item.symptoms)}
+                        {infoBlock("Summary", item.summary, '56px')}
+                        {infoBlock("Note", item.note)}
                     </Stack>
                 </ModalBody>
 

@@ -103,7 +103,7 @@ export default (props) =>
                             variant={!infoActive ? 'solid' : 'outline'}
                             bg={!infoActive ? Colour.SkyBlue : Colour.White}
                             borderColor={!infoActive ? 'none' : Colour.SkyBlue}
-                            onClick={() => router.push(`/patient/212/history`)}
+                            onClick={() => router.push(`/patient/${patientID}/history`)}
                         >
                             Appointment history
                         </Button>
