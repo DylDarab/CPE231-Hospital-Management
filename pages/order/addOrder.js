@@ -163,7 +163,7 @@ export default (props) =>
                                     <Select
                                         icon={<ChevronDownIcon />}
                                         placeholder='Select Organization'
-                                        bgColor={Colour.White}
+                                        bgColor={Colour.White} value={form.organization}
                                         onChange={(e) => setForm({...form,organization:e.target.value})}
                                     >
                                         {props.organization.map((organization, index) => (
@@ -176,12 +176,12 @@ export default (props) =>
 
                         { form1.map(form1s => (
                             <HStack spacing={4} w='100%' key={form1s.id}>
-                            <FormControl isInvalid={error && !form1s.medicine} w='50%'>
+                            <FormControl isInvalid={error && !form1.medicine} w='50%'>
                                     <FormLabel htmlFor='medicine'>Medicine</FormLabel>
                                     <Select
                                         icon={<ChevronDownIcon />}
                                         placeholder='Select Medicine'
-                                        bgColor={Colour.White}
+                                        bgColor={Colour.White} value={form1.medicine}
                                         onChange={event => handleChangeInput1(form1s.id, event)}
                                     >
                                          {props.medicine.map((medicine, index) => (
@@ -189,16 +189,16 @@ export default (props) =>
                                         ))}
                                     </Select>
                             </FormControl>
-                            <FormControl isInvalid={error && !form1s.pricemedicine}>
+                            <FormControl isInvalid={error && !form1.pricemedicine}>
                                     <FormLabel htmlFor='price-medicine'>Price</FormLabel>
-                                         <Input id='price-medicine' 
+                                         <Input id='price-medicine' value={form1.pricemedicine}
                                          onChange={event => handleChangeInput1(form1s.id, event)}
                                 />
                             </FormControl>
-                            <FormControl isInvalid={error && !form1s.amountmedicine}>
+                            <FormControl isInvalid={error && !form1.amountmedicine}>
                                 <FormLabel htmlFor='amount-medicine'>Amount</FormLabel>
-                                <NumberInput max={1000000} min={1}>
-                                    <NumberInputField id='amount-medicine' 
+                                <NumberInput max={1000000} min={1}> 
+                                    <NumberInputField id='amount-medicine' value={form1.amountmedicine}
                                     onChange={event => handleChangeInput1(form1s.id, event)} />
                                     <NumberInputStepper>
                                     <NumberIncrementStepper />
@@ -212,12 +212,12 @@ export default (props) =>
 
                         { form2.map(form2s => (
                             <HStack spacing={4} w='100%' key={form2s.id}>
-                            <FormControl isInvalid={error && !form2s.device} w='50%'>
+                            <FormControl isInvalid={error && !form2.device} w='50%'>
                                     <FormLabel htmlFor='device'>Device</FormLabel>
                                     <Select
                                         icon={<ChevronDownIcon />}
                                         placeholder='Select Device'
-                                        bgColor={Colour.White}
+                                        bgColor={Colour.White} value={form2.device}
                                         onChange={event => handleChangeInput2(form2s.id, event)}
                                     >
                                          {props.device.map((device, index) => (
@@ -225,16 +225,16 @@ export default (props) =>
                                         ))}
                                     </Select>
                             </FormControl>
-                            <FormControl isInvalid={error && !form2s.pricedevice}>
+                            <FormControl isInvalid={error && !form2.pricedevice}>
                                     <FormLabel htmlFor='price-device'>Price</FormLabel>
-                                         <Input id='price-device' 
+                                         <Input id='price-device' value={form2.pricemedevice}
                                          onChange={event => handleChangeInput2(form2s.id, event)}
                                 />
                             </FormControl>
-                            <FormControl isInvalid={error && !form2s.amountdevice}>
+                            <FormControl isInvalid={error && !form2.amountdevice}>
                                 <FormLabel htmlFor='amount-medicine'>Amount</FormLabel>
                                 <NumberInput max={1000000} min={1}>
-                                    <NumberInputField id='amount-device' 
+                                    <NumberInputField id='amount-device' value={form2.amountdevice}
                                     onChange={event => handleChangeInput2(form2s.id, event)}/>
                                     <NumberInputStepper>
                                     <NumberIncrementStepper />
