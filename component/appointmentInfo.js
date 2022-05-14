@@ -15,11 +15,11 @@ export default (props) => {
         bgColor: Colour.LightGrey
     }
 
-    const infoBlock = (title, info) => {
+    const infoBlock = (title, info, h='auto') => {
         return (
             <HStack>
                 <Text w='35%'>{title}</Text>
-                <Flex w='65%' minH='40px' border={'2px solid ' + Colour.LightGrey} padding='4px' alignItems='center'>
+                <Flex w='60%' minH={h} border={'2px solid ' + Colour.LightGrey} padding='4px'>
                     <Text w='100%'>{info}</Text>
                 </Flex>
             </HStack>
@@ -37,11 +37,10 @@ export default (props) => {
                 <ModalCloseButton />
                 <ModalBody mb='16px'>
                     <Stack>
-                        {infoBlock("Patient's name", "TESTTEST")}
                         {infoBlock("Date", "TESTTEST")}
                         {infoBlock("Doctor", "TESTTEST")}
-                        {infoBlock("Symptom", "TESTTEST")}
-                        {infoBlock("Summary", "TESTTEST")}
+                        {infoBlock("Symptom", "TESTTESTTEST")}
+                        {infoBlock("Summary", "TESTTEST", '56px')}
                         {infoBlock("Note", "TESTTEST")}
                     </Stack>
                 </ModalBody>
