@@ -20,16 +20,16 @@ export default async (req,res)=>{
             SELECT "OrderDetail"."medicineID", "OrderDetail"."amount"
             ,"OrderDetail"."o_priceperunit","Medicine"."medicine_name" FROM "public"."OrderDetail"
             LEFT JOIN "public"."Medicine" ON "Medicine"."medicineID" = "OrderDetail"."medicineID"
-            LEFT JOIN "public"."Order" ON "Order"."orderID" = "OrderDetail"."OrderID"
-            WHERE "OrderDetail"."OrderID" = $1 AND "OrderDetail"."medicineID" IS NOT NULL`
+            LEFT JOIN "public"."Order" ON "Order"."orderID" = "OrderDetail"."orderID"
+            WHERE "OrderDetail"."orderID" = $1 AND "OrderDetail"."medicineID" IS NOT NULL`
             , [orderID])
        
         let device = await db.query(`
             SELECT "OrderDetail"."deviceID", "OrderDetail"."amount"
             ,"OrderDetail"."o_priceperunit","Device"."device_name" FROM "public"."OrderDetail"
             LEFT JOIN "public"."Device" ON "Device"."deviceID" = "OrderDetail"."deviceID"
-            LEFT JOIN "public"."Order" ON "Order"."orderID" = "OrderDetail"."OrderID"
-            WHERE "OrderDetail"."OrderID" = $1 AND "OrderDetail"."deviceID" IS NOT NULL`
+            LEFT JOIN "public"."Order" ON "Order"."orderID" = "OrderDetail"."orderID"
+            WHERE "OrderDetail"."orderID" = $1 AND "OrderDetail"."deviceID" IS NOT NULL`
             , [orderID])
 
         res.json({medicine: medicine.rows, device: device.rows})
