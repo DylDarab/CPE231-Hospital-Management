@@ -53,9 +53,8 @@ export default async (req, res) => {
     let departmentStat = await db.query(`
         SELECT "department_name", COUNT(DISTINCT "Staff"."staffID") AS doctors, COUNT(DISTINCT "Appointment"."patientID") AS patients
         FROM "public"."Department" LEFT JOIN "public"."Staff" ON "Department"."departmentID" = "Staff"."departmentID"
-        LEFT JOIN "public"."Position" ON "Staff"."positionID" = "Position"."positionID"
         LEFT JOIN "public"."Appointment" ON "Appointment"."staffID" = "Staff"."staffID"
-        WHERE "Position"."positionID" = 100
+        WHERE "Staff"."positionID" = 1
         GROUP BY "department_name"
     `);
 
