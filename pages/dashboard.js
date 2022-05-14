@@ -20,6 +20,17 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Colour from "../Colour";
 import url from "../url";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+} from "@chakra-ui/react";
 
 export const patientInDepartment = {
   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -35,6 +46,8 @@ export const patientInDepartment = {
 };
 
 export default (props) => {
+  console.log(props.data.departmentStat);
+  console.log(props.data.departmentStatLastMonth);
   const [disease, setDisease] = useState({
     datasets: [{}],
   });
@@ -141,6 +154,37 @@ export default (props) => {
     padding: "24px",
   };
 
+  let table = [];
+  // for (var i of props.data.departmentStat) {
+  //   table.push(
+  //     <Tr>
+  //       <Td>{i.department_name}</Td>
+  //       <Td>{i.doctors}</Td>
+  //       <Td>{i.patients}</Td>
+  //       <Td>{i.patients / i.doctors}</Td>
+  //     </Tr>
+  // );
+
+  for (var i = 0; i < props.data.departmentStat.length; i++) {
+    table.push(
+      <Tr>
+        <Td>{props.data.departmentStat[i].department_name}</Td>
+        <Td>{props.data.departmentStat[i].doctors}</Td>
+        <Td>{props.data.departmentStat[i].patients}</Td>
+        <Td>
+          {props.data.departmentStat[i].patients /
+            props.data.departmentStat[i].doctors}
+        </Td>
+        {/* <Td>
+          {props.data.departmentStatLastMonth[i].patients /
+            props.data.departmentStatLastMonth[i].doctors}
+        </Td> */}
+      </Tr>
+    );
+  }
+
+  // console.log(department[1]);
+
   return (
     <div>
       <Box sx={container}>
@@ -201,6 +245,24 @@ export default (props) => {
           <Text fontSize="20px" fontWeight="bold" margin="8px 0 16px">
             Patient Statistics
           </Text>
+          <TableContainer
+            border="1px"
+            borderColor={Colour.LightGrey}
+            borderRadius="8px"
+            marginBottom="16px"
+          >
+            <Table size="sm">
+              <Thead>
+                <Tr>
+                  <Th>DEPARTMENT</Th>
+                  <Th>DOCTORS</Th>
+                  <Th>Patients</Th>
+                  <Th>PATIENTS PER DOCTOR</Th>
+                </Tr>
+              </Thead>
+              <Tbody>{table}</Tbody>
+            </Table>
+          </TableContainer>
           <Stack width="100%" direction="row" spacing="16px">
             <Box sx={borderStyle} width="90%">
               <Pie data={disease} />
@@ -215,9 +277,9 @@ export default (props) => {
               </Center>
             </Box>
           </Stack>
-          <Box sx={borderStyle} marginTop="16px">
+          {/* <Box sx={borderStyle} marginTop="16px">
             <Line data={patientInDepartment} />
-          </Box>
+          </Box> */}
         </Box>
       </Box>
     </div>
