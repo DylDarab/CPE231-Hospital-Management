@@ -5,12 +5,15 @@ export default async (req, res) =>
 
     let data = {
         "start_date": "2022-05-14T09:23:11.087Z", //isostring
+        "end_date": "2022-05-14T09:23:11.087Z", //isostring
         "patientID": "1",
         "staffID": "2",
+        "roomID": "1",
         "symptoms": "ปวดหัว",
-        "note": "กินข้าวน้อยเกินไป"
+        "note": "กินข้าวน้อยเกินไป",
+        "unit":2,
+        "price":100,
     }
-
 
     console.log(req.body)
     if (req.method === 'POST')
@@ -22,8 +25,13 @@ export default async (req, res) =>
         let note = req.body.note
 
         let appointment = await db.query(`
-            INSERT INTO "public"."Appointment" ("start_time","patientID","staffID","symptoms","note") VALUES ($1,$2,$3,$4,$5) RETURNING *
+            INSERT INTO "public"."Appointment" ("start_time","end_time","patientID","staffID","symptoms","note") 
+            VALUES ($1,$2,$3,$4,$5) RETURNING *
         `,[start_date, patientID, staffID, symptoms, note])
+
+        let room = await db.query(`
+            INSERT INTO "public"."RoomUse" ("roomID","appointmentID","unit","price") VALUES ($1,$2,$3)
+        `,[req.body.roomID, appointment.rows[0].appointmentID, req.body.unit])
 
         res.json(appointment.rows[0])
 
