@@ -18,8 +18,13 @@ function MyApp({ Component, pageProps })
 
   return (
     <ChakraProvider>
-      {checkToken(token) === false ? null : <Navbar />}
+      {checkToken(token) === false ? null : 
+      <>
+      <Navbar />
       <Account />
+      </>
+      }
+      
       <Component {...pageProps} />
 
     </ChakraProvider>)
