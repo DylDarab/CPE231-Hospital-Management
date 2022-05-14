@@ -5,10 +5,10 @@ import { useEffect, useState } from 'react'
 import Colour from '../Colour'
 
 export default (props) => {
-    const { isOpen, onClose } = props
+    const { item, isEdit, isOpen, onClose } = props
     const [form, setForm] = useState(
-        { date: '', time: '', department: "TEST", 
-            doctor: '', reason: '', note: '' }
+        { date: item.start_time.split('T')[0], time: item.start_time.split('T')[1].replace('Z',''), department: "TEST", 
+            doctor: item.staffID, reason: item.summary, note: item.note }
     )
 
     let line = {
@@ -29,7 +29,7 @@ export default (props) => {
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>
-                    Add appointment
+                    Appointment ID: {item.appointmentID}
                     <Box sx={line}></Box>
                 </ModalHeader>
                 <ModalCloseButton />
@@ -81,8 +81,8 @@ export default (props) => {
                     <Button onClick={onClose}>Summit</Button>
                     <Button onClick={() => {
                         onClose();
-                        // setForm({date: item.start_time.split('T')[0], time: item.start_time.split('T')[1].replace('Z',''), department: "TEST"
-                        //     , doctor: item.staffID, reason: item.summary, note: item.note})
+                        setForm({date: item.start_time.split('T')[0], time: item.start_time.split('T')[1].replace('Z',''), department: "TEST"
+                            , doctor: item.staffID, reason: item.summary, note: item.note})
                     }}>
                         Cancel
                     </Button>

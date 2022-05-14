@@ -26,7 +26,7 @@ export default () =>
     const [search, setSearch] = useState('')
     const [data, setData] = useState([])
     const [appointmentID, setAppointmentID] = useState('-')
-    const [selected, setSelected] = useState(null)
+    const [selected, setSelected] = useState(false)
 
     // const { isOpen, onOpen, onClose } = useDisclosure()
     // const finalRef = useRef()

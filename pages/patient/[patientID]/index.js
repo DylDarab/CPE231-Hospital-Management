@@ -10,6 +10,8 @@ import { useState, useEffect } from 'react'
 import {useRouter} from 'next/router'
 import url from '../../../url'
 
+import AppointmentAdd from '../../../component/appointmentAdd'
+
 export default (props) => {
 
     const router = useRouter()
@@ -17,6 +19,7 @@ export default (props) => {
     const patientID = router.query.patientID
     console.log(patientID)
 
+    const [selected, setSelected] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [infoActive, setInfoActive] = useState(true)
@@ -89,6 +92,7 @@ export default (props) => {
         transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
     }
 
+<<<<<<< Updated upstream
     // useEffect(() =>
     // {
     //     const fetchPatientData = async () =>
@@ -104,6 +108,9 @@ export default (props) => {
     // }, [])
 
     const buttonStyle = (bgColor, textColor) => {
+=======
+    const buttonStyle = (bgColor, textColor='#000000') => {
+>>>>>>> Stashed changes
         return {
             bg: bgColor,
             color: textColor,
@@ -233,10 +240,12 @@ export default (props) => {
                         </Button>
                     </ButtonGroup>
                     <Button leftIcon={<PlusSquareIcon />} sx={buttonStyle(Colour.DarkGreen, Colour.White)} variant='solid'
-                        onClick={()=>{router.push('/patient/addPatient')}}
+                        onClick={()=>{setSelected(true)}}
                     >
                         Add appointment
                     </Button>
+                    <AppointmentAdd isOpen={selected} onClose={()=>setSelected(false)} />
+
                 </HStack>
 
                 <Flex sx={container3}>                
