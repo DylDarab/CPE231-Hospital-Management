@@ -186,7 +186,7 @@ export default () =>
                                                     >
                                                         Edit
                                                     </Button>
-                                                    <AppointmentAdd item={item} isOpen={selected === index ? true : false} onClose={()=>setSelected(null)} />
+                                                    <AppointmentEdit item={item} isOpen={selected === index ? true : false} onClose={()=>setSelected(null)} />
 
                                                 </Td>
                                             </Tr>
