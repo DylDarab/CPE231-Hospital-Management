@@ -92,25 +92,7 @@ export default (props) => {
         transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
     }
 
-<<<<<<< Updated upstream
-    // useEffect(() =>
-    // {
-    //     const fetchPatientData = async () =>
-    //     {
-    //         setIsLoading(true)
-    //         let result = await axios.get(`${url}/api/getPatient/${patientID}`)
-    //         console.log('fetch' + result.data)
-    //         //setForm(result.data)
-    //         setIsLoading(false)         
-    //     }
-    //     fetchPatientData()
-    //     console.log(form)
-    // }, [])
-
     const buttonStyle = (bgColor, textColor) => {
-=======
-    const buttonStyle = (bgColor, textColor='#000000') => {
->>>>>>> Stashed changes
         return {
             bg: bgColor,
             color: textColor,
@@ -240,7 +222,7 @@ export default (props) => {
                         </Button>
                     </ButtonGroup>
                     <Button leftIcon={<PlusSquareIcon />} sx={buttonStyle(Colour.DarkGreen, Colour.White)} variant='solid'
-                        onClick={()=>{setSelected(true)}}
+                        onClick={()=>setSelected(true)}
                     >
                         Add appointment
                     </Button>
