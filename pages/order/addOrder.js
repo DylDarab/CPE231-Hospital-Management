@@ -41,7 +41,8 @@ export default (props) =>
         flexDirection: 'column',
         gap: '4',
         width: '100%',
-        padding: '16px'
+        padding: '16px',
+        bg: Colour.White,
     }
 
     let line = {
@@ -68,7 +69,8 @@ export default (props) =>
     }
 
     let summitButton = {
-        bg: Colour.Orange,
+        bg: Colour.Green,
+        color: Colour.White,
         _hover: { filter: 'brightness(0.9)' },
         transition: 'all 0.2s cubic-bezier(.08,.52,.52,1)',
         width: '100px',

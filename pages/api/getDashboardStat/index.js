@@ -67,6 +67,13 @@ export default async (req, res) => {
         GROUP BY "department_name"
     `);
 
+    let patientStat = await db.query(`
+        SELECT EXTRACT(MONTH FROM "start_time") AS month, COUNT(DISTINCT "patientID") AS patients
+        FROM "public"."Appointment"
+        WHERE EXTRACT(MONTH FROM "start_time") >= EXTRACT(MONTH FROM CURRENT_TIMESTAMP) -6
+        GROUP BY EXTRACT(MONTH FROM "start_time")
+    `);
+
     res.json({
       // todayAppointment: todayAll.rows[0].todayappointment,
       todayAppointment: todayAppointment.rows[0].todayappointment,
@@ -76,6 +83,7 @@ export default async (req, res) => {
       patientInDepartment: patientInDepartment.rows,
       departmentStat: departmentStat.rows,
       departmentStatLastMonth: departmentStatLastMonth.rows,
+      patientStat: patientStat.rows,
     });
   }
 };

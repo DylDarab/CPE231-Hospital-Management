@@ -32,18 +32,18 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 
-export const patientInDepartment = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-  datasets: [
-    {
-      label: "Number of patients in hospital",
-      data: [33, 53, 85, 41, 44, 65],
-      fill: true,
-      backgroundColor: "rgba(75,192,192,0.2)",
-      borderColor: "rgba(75,192,192,1)",
-    },
-  ],
-};
+// export const patientGraph = {
+//   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+//   datasets: [
+//     {
+//       label: "Number of patients in hospital",
+//       data: [33, 53, 85, 41, 44, 65],
+//       fill: true,
+//       backgroundColor: "rgba(75,192,192,0.2)",
+//       borderColor: "rgba(75,192,192,1)",
+//     },
+//   ],
+// };
 
 export default (props) => {
   console.log(props.data.departmentStat);
@@ -113,6 +113,48 @@ export default (props) => {
     fetchData();
   }, []);
 
+  const [patientGraph, setPatientGraph] = useState({
+    datasets: [{}],
+  });
+  useEffect(() => {
+    const label = [];
+    const data = [];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    for (var i of props.data.patientStat) {
+      label.push(months[i.month - 1]);
+      data.push(i.patients);
+    }
+
+    const fetchData = () => {
+      setPatientGraph({
+        labels: label,
+        datasets: [
+          {
+            label: "Total patients in the past 6 months",
+            data: data,
+            fill: true,
+            backgroundColor: "rgba(75,192,192,0.2)",
+            borderColor: "rgba(75,192,192,1)",
+          },
+        ],
+      });
+    };
+    fetchData();
+  }, []);
+
   let container = {
     width: "100vw",
     paddingLeft: "360px",
@@ -164,7 +206,6 @@ export default (props) => {
   //       <Td>{i.patients / i.doctors}</Td>
   //     </Tr>
   // );
-
   for (var i = 0; i < props.data.departmentStat.length; i++) {
     table.push(
       <Tr>
@@ -274,9 +315,9 @@ export default (props) => {
               </Center>
             </Box>
           </Stack>
-          {/* <Box sx={borderStyle} marginTop="16px">
-            <Line data={patientInDepartment} />
-          </Box> */}
+          <Box sx={borderStyle} marginTop="16px">
+            <Line data={patientGraph} />
+          </Box>
         </Box>
       </Box>
     </div>
