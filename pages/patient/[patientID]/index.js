@@ -92,23 +92,6 @@ export default (props) => {
         transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
     }
 
-<<<<<<< HEAD
-    // useEffect(() =>
-    // {
-    //     const fetchPatientData = async () =>
-    //     {
-    //         setIsLoading(true)
-    //         let result = await axios.get(`${url}/api/getPatient/${patientID}`)
-    //         console.log('fetch' + result.data)
-    //         //setForm(result.data)
-    //         setIsLoading(false)         
-    //     }
-    //     fetchPatientData()
-    //     console.log(form)
-    // }, [])
-
-=======
->>>>>>> acbbbda749c492db2744cb251122e53331bf1a9e
     const buttonStyle = (bgColor, textColor) => {
         return {
             bg: bgColor,
