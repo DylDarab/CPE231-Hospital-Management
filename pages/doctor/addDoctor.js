@@ -76,7 +76,7 @@ export default (props) =>
     }
 
 
-    const [file, setFile] = useState(['Profile name', null])
+    const [file, setFile] = useState(['Profile Image', null])
     const [allergyForm, setAllergyForm] = useState(true)
     const [error, setError] = useState(false)
     const [form, setForm] = useState({})
@@ -261,7 +261,7 @@ export default (props) =>
                         <VStack spacing={4}>
                             <HStack spacing={4} w='100%'>
                                 <FormControl isRequired isInvalid={error && !form.EC_name} w='50%'>
-                                    <FormLabel htmlFor='ec-name'>Name</FormLabel>
+                                    <FormLabel htmlFor='ec-name'>Department</FormLabel>
                                     <Select
                                         icon={<ChevronDownIcon />}
                                         placeholder='Select Department'
@@ -275,7 +275,7 @@ export default (props) =>
                                     </Select>
                                 </FormControl>
                                 <FormControl isRequired isInvalid={error && !form.EC_Relationship} w='50%'>
-                                    <FormLabel htmlFor='ec-relationship'>Relationship</FormLabel>
+                                    <FormLabel htmlFor='ec-relationship'>Position</FormLabel>
                                     
                                     <Select
                                         icon={<ChevronDownIcon />}
