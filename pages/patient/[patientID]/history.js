@@ -79,7 +79,7 @@ export default (props) =>
             <Loading isLoading={isLoading}/>
             <Box sx={container}>
                 <Heading>
-                    Patient
+                    Patient's Profile
                 </Heading>
                 <Box sx={line}></Box>
             </Box>
@@ -167,8 +167,8 @@ export default (props) =>
                                 <Td>TESTTESTTEST</Td>
                                 <Td>
                                     <Stack>
-                                        <Button size='xs' sx={buttonStyle(Colour.SkyBlue)}>Info</Button>
-                                        <Button size='xs' sx={buttonStyle(Colour.SkyBlue)}>Invoice</Button>
+                                        <Button size='xs' sx={buttonStyle(Colour.LightGrey)}>Info</Button>
+                                        <Button size='xs' sx={buttonStyle(Colour.LightGrey)}>Invoice</Button>
                                     </Stack>
                                 </Td>
                             </Tr>
@@ -192,8 +192,8 @@ export default (props) =>
                                 <Td>TESTTESTTEST</Td>
                                 <Td>
                                     <Stack>
-                                        <Button size='xs' sx={buttonStyle(Colour.SkyBlue)}>Info</Button>
-                                        <Button size='xs' sx={buttonStyle(Colour.SkyBlue)}>Invoice</Button>
+                                        <Button size='xs' sx={buttonStyle(Colour.LightGrey)}>Info</Button>
+                                        <Button size='xs' sx={buttonStyle(Colour.LightGrey)}>Invoice</Button>
                                     </Stack>
                                 </Td>
                             </Tr>

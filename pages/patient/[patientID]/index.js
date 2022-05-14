@@ -57,7 +57,8 @@ export default (props) => {
         flexDirection: 'column',
         gap: '4',
         width: '100%',
-        padding: '16px'
+        padding: '16px',
+        bgColor: Colour.White,
     }
 
     let line = {
@@ -75,7 +76,7 @@ export default (props) => {
         display: 'flex', 
         alignItems: 'center',
         borderRadius: 'md', 
-        bg: Colour.Orange, 
+        bg: Colour.LightGrey, 
         // color: 'white',
         px: 4, 
         h: 8,
@@ -102,7 +103,7 @@ export default (props) => {
     //     console.log(form)
     // }, [])
 
-    const buttonStyle = (bgColor, textColor='#000000') => {
+    const buttonStyle = (bgColor, textColor) => {
         return {
             bg: bgColor,
             color: textColor,
@@ -201,11 +202,11 @@ export default (props) => {
     console.log('path: ' + router.asPath)
     console.log(form.birthDate)
     return (
-        <div style={{backgroundColor: Colour.AlmostWhite}}>
+        <div style={{backgroundColor: Colour.AlmostWhite, marginBottom: '80px'}}>
             <Loading isLoading={isLoading}/>
             <Box sx={container} >
                 <Heading>
-                    Patient's profile
+                    Patient's Profile
                 </Heading>
                 <Box sx={line}></Box>
             </Box>
@@ -395,15 +396,15 @@ export default (props) => {
                 <HStack justify='end'>
                     {
                         !isEdit ?
-                            <Button sx={buttonStyle(Colour.Red)} onClick={() => setIsEdit(true)}>
+                            <Button sx={buttonStyle(Colour.Yellow, Colour.Black)} onClick={() => setIsEdit(true)}>
                                 Edit
                             </Button>
                         :
                             <ButtonGroup>
-                                <Button sx={buttonStyle(Colour.Orange)} onClick={() => onSummitClick()}>
-                                    Summit
+                                <Button sx={buttonStyle(Colour.Green, Colour.White)} onClick={() => onSummitClick()}>
+                                    Submit
                                 </Button>
-                                <Button sx={buttonStyle(Colour.Red)} onClick={() => setIsEdit(false)}>
+                                <Button sx={buttonStyle(Colour.Red, Colour.White)} onClick={() => setIsEdit(false)}>
                                     Cancel
                                 </Button>
                             </ButtonGroup>

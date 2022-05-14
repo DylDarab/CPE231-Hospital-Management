@@ -11,7 +11,7 @@ export default {
     //Color for button
     Orange:'#F7B372',//(Submit, Confirm button)
     Red: "#FF8686", //(Edit button)
-    SkyBlue: "#A8DAFD" ,//(Info button)
+    SkyBlue: "#caecfc" ,//(Info button)
     Grey: "#F0F0F0", //(Previous,Next button)
 
     //Color for type tags

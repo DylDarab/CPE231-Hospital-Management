@@ -39,7 +39,8 @@ export default ()=>{
         flexDirection: 'column',
         gap: '4',
         width: '100%',
-        padding: '16px'
+        padding: '16px',
+        bgColor: 'white',
     }
 
     let line = {
@@ -57,8 +58,7 @@ export default ()=>{
         display: 'flex', 
         alignItems: 'center',
         borderRadius: 'md', 
-        bg: Colour.Orange, 
-        // color: 'white',
+        bg: Colour.LightGrey, 
         px: 4, 
         h: 8,
         _hover: {filter: 'brightness(0.9)'},
@@ -66,7 +66,8 @@ export default ()=>{
     }
 
     let summitButton = {
-        bg: Colour.Orange,
+        bg: Colour.Green,
+        color: 'white',
         _hover: {filter: 'brightness(0.9)'},
         transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
         width: '100px',
@@ -160,7 +161,7 @@ export default ()=>{
     }
     console.log(form)
     return (
-        <div style={{backgroundColor: Colour.AlmostWhite}}>
+        <div style={{backgroundColor: Colour.AlmostWhite, marginBottom: '80px'}}>
             <Box sx={container} >
                 <Heading>
                     Add Patient
@@ -310,7 +311,7 @@ export default ()=>{
                 </Flex>
                 <HStack justify='end'>
                     <Button sx={summitButton} onClick={() => onSummitClick()}>
-                        Summit
+                        Submit
                     </Button>
                 </HStack>
             </Flex>

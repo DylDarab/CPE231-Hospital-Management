@@ -41,7 +41,8 @@ export default (props) =>
         flexDirection: 'column',
         gap: '4',
         width: '100%',
-        padding: '16px'
+        padding: '16px',
+        bgColor: 'white',
     }
 
     let line = {
@@ -187,7 +188,7 @@ export default (props) =>
     }
     console.log(form)
     return (
-        <div style={{ backgroundColor: Colour.AlmostWhite }}>
+        <div style={{ backgroundColor: Colour.AlmostWhite, marginBottom: '80px'}}>
             <Box sx={container} >
                 <Heading>
                     {props.staffData.firstname} {props.staffData.lastname}

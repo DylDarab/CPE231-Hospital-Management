@@ -42,7 +42,8 @@ export default (props) =>
         flexDirection: 'column',
         gap: '4',
         width: '100%',
-        padding: '16px'
+        padding: '16px',
+        bgColor: 'white',
     }
 
     let line = {
@@ -60,8 +61,7 @@ export default (props) =>
         display: 'flex',
         alignItems: 'center',
         borderRadius: 'md',
-        bg: Colour.Orange,
-        // color: 'white',
+        bg: Colour.LightGrey,
         px: 4,
         h: 8,
         _hover: { filter: 'brightness(0.9)' },
@@ -69,7 +69,8 @@ export default (props) =>
     }
 
     let summitButton = {
-        bg: Colour.Orange,
+        bg: Colour.Green,
+        color: 'white',
         _hover: { filter: 'brightness(0.9)' },
         transition: 'all 0.2s cubic-bezier(.08,.52,.52,1)',
         width: '100px',
@@ -188,7 +189,7 @@ export default (props) =>
     }
     console.log(form)
     return (
-        <div style={{ backgroundColor: Colour.AlmostWhite }}>
+        <div style={{ backgroundColor: Colour.AlmostWhite, marginBottom: "80px" }}>
             <Box sx={container} >
                 <Heading>
                     Add Doctor
@@ -223,7 +224,7 @@ export default (props) =>
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.lastname}>
                                 <FormLabel htmlFor='last-name'>Last Name</FormLabel>
-                                <Input id='last-name' value={form.lastname}
+                                <Input  id='last-name' value={form.lastname}
                                     onChange={(e) => { setForm({ ...form, lastname: e.target.value }) }}
                                 />
                             </FormControl>
@@ -235,7 +236,7 @@ export default (props) =>
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.birthDate}>
                                 <FormLabel htmlFor='birth-date'>Birth Date</FormLabel>
-                                <Input id='birth-date' type='date'
+                                <Input  id='birth-date' type='date'
                                     onChange={(e) => { setForm({ ...form, birthDate: e.target.value.replace('T', ' ') }) }}
                                 />
                             </FormControl>
@@ -312,7 +313,7 @@ export default (props) =>
                         </FormControl>
                         <FormControl isRequired isInvalid={error && !form.password} w='33.33%'>
                             <FormLabel htmlFor='password'>Password</FormLabel>
-                            <Input type='password' id='password' value={form.password}
+                            <Input  type='password' id='password' value={form.password}
                                 onChange={(e) => { setForm({ ...form, password: e.target.value }) }}
                             />
                         </FormControl>
