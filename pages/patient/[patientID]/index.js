@@ -92,6 +92,7 @@ export default (props) => {
         transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
     }
 
+<<<<<<< HEAD
     // useEffect(() =>
     // {
     //     const fetchPatientData = async () =>
@@ -106,6 +107,8 @@ export default (props) => {
     //     console.log(form)
     // }, [])
 
+=======
+>>>>>>> acbbbda749c492db2744cb251122e53331bf1a9e
     const buttonStyle = (bgColor, textColor) => {
         return {
             bg: bgColor,
@@ -236,7 +239,7 @@ export default (props) => {
                         </Button>
                     </ButtonGroup>
                     <Button leftIcon={<PlusSquareIcon />} sx={buttonStyle(Colour.DarkGreen, Colour.White)} variant='solid'
-                        onClick={()=>{setSelected(true)}}
+                        onClick={()=>setSelected(true)}
                     >
                         Add appointment
                     </Button>

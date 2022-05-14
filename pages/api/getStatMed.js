@@ -6,13 +6,13 @@ export default async (req, res) =>
     {
         let totalimportC = await db.query(`
         SELECT SUM("amount") OVER () AS "Sumamount" FROM "public"."OrderDetail"
-        LEFT JOIN "public"."Order" ON "Order"."orderID" = "OrderDetail"."OrderID"
+        LEFT JOIN "public"."Order" ON "Order"."orderID" = "OrderDetail"."orderID"
         WHERE CAST("dateInStock" AS DATE) >= CAST(NOW() AS DATE) - 30
         `)
 
         let totalimportL = await db.query(`
         SELECT SUM("amount") OVER () AS "Sumamount" FROM "public"."OrderDetail"
-        LEFT JOIN "public"."Order" ON "Order"."orderID" = "OrderDetail"."OrderID"
+        LEFT JOIN "public"."Order" ON "Order"."orderID" = "OrderDetail"."orderID"
         WHERE CAST("dateInStock" AS DATE) >= CAST(NOW() AS DATE) - 60
         `)
         
@@ -45,7 +45,7 @@ export default async (req, res) =>
         `)
 
         let toporgan = await db.query(`
-        SELECT "organization_name", COUNT("Order"."organizationID")
+        SELECT "organization_name", COUNT("Order"."organizationID") AS "TopOrgan" 
             FROM "public"."Order"
             INNER JOIN "public"."Organization" ON "Organization"."organizationID" = "Order"."organizationID" 
             WHERE CAST("dateInStock" AS DATE) >= CAST(NOW() AS DATE) - 30 
@@ -55,13 +55,13 @@ export default async (req, res) =>
                 FROM (SELECT "organization_name", COUNT("organization_name") AS "CNTOrgan"
                     FROM "public"."Organization"
                     INNER JOIN "public"."Order" ON "Order"."organizationID" = "Organization"."organizationID" 
-                    INNER JOIN "public"."OrderDetail" ON "OrderDetail"."OrderID" = "Order"."orderID"
+                    INNER JOIN "public"."OrderDetail" ON "OrderDetail"."orderID" = "Order"."orderID"
                         WHERE CAST("dateInStock" AS DATE) >= CAST(NOW() AS DATE) - 30
                         GROUP BY "organization_name"))
         `)
         
         let topmedicine = await db.query(`
-        SELECT "medicine_name", SUM("MedicineWithdraw"."withdrawAmount")
+        SELECT "medicine_name", SUM("MedicineWithdraw"."withdrawAmount") AS "TopMed"
         FROM "public"."MedicineWithdraw"
         INNER JOIN "public"."Medicine" ON "Medicine"."medicineID" = "MedicineWithdraw"."medicineID" 
         INNER JOIN "public"."Appointment" ON "Appointment"."appointmentID" = "MedicineWithdraw"."appointmentID"
@@ -78,14 +78,16 @@ export default async (req, res) =>
         `)
         
         res.json({
-            totalimportC: totalimportC.rows[0].totalimportC,
-            totalimportL: totalimportL.rows[0].totalimportL,
-            totalexportMC: totalexportMC.rows[0].totalexportMC,
-            totalexportDC: totalexportDC.rows[0].totalexportDC,
-            totalexportML: totalexportML.rows[0].totalexportML,
-            totalexportDL: totalexportDL.rows[0].totalexportDL,
-            toporgan:  toporgan.rows[0].toporgan,
-            topmedicine: topmedicine.rows[0].topmedicine
+            totalimportC: totalimportC.rows[0].Sumamount,
+            totalimportL: totalimportL.rows[0].Sumamount,
+            totalexportMC: totalexportMC.rows[0].MedSumamount,
+            totalexportDC: totalexportDC.rows[0].DeSumamount,
+            totalexportML: totalexportML.rows[0].MedSumamount,
+            totalexportDL: totalexportDL.rows[0].DeSumamount,
+            toporgan:  toporgan.rows[0].TopOrgan,
+            toporganName:  toporgan.rows[0].organization_name,
+            topmedicine: topmedicine.rows[0].TopMed,
+            topmedicineName: topmedicine.rows[0].medicine_name
         })
     }
 }

@@ -15,7 +15,7 @@ import axios from 'axios'
 import { useEffect, useState, useRef } from 'react'
 import Colour from '../../Colour'
 import Loading from '../../component/loading'
-import AppointmentInfo from '../../component/appointmentInfo'
+import AppointmentEdit from '../../component/appointmentEdit'
 import AppointmentAdd from '../../component/appointmentAdd'
 
 export default () =>
@@ -186,7 +186,7 @@ export default () =>
                                                     >
                                                         Edit
                                                     </Button>
-                                                    <AppointmentAdd item={item} isOpen={selected === index ? true : false} onClose={()=>setSelected(null)} />
+                                                    <AppointmentEdit item={item} isOpen={selected === index ? true : false} onClose={()=>setSelected(null)} />
 
                                                 </Td>
                                             </Tr>

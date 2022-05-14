@@ -8,7 +8,7 @@ export default async (req,res)=>{
     {
         // let data = await db.query(`
         // SELECT * FROM "public"."OrderDetail"
-        // LEFT JOIN "public"."Order" ON "Order"."orderID" = "OrderDetail"."OrderID"
+        // LEFT JOIN "public"."Order" ON "Order"."orderID" = "OrderDetail"."orderID"
         // LEFT JOIN "public"."Organization" ON "Organization"."organizationID" = "Order"."organizationID"
         // LEFT JOIN "public"."Medicine" ON "Medicine"."medicineID" = "OrderDetail"."medicineID"
         // LEFT JOIN "public"."Device" ON "Device"."deviceID" = "OrderDetail"."deviceID" 
