@@ -38,7 +38,7 @@ import { encode, decode } from "js-base64";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import url from "../url";
-import { getDate } from 'date-fns'
+import { getDate } from "date-fns";
 
 export default (props) => {
   const router = useRouter();
@@ -148,16 +148,13 @@ export default (props) => {
                         </Flex>
                       </Flex>
                     </Td>
-                    <Td>
-                      <Text whiteSpace='normal'>{item.description}</Text>
-                    </Td>
+                    <Td whiteSpace="normal">{item.description}</Td>
                   </Tr>
                 );
               })}
             </Tbody>
           </Table>
         </TableContainer>
-        
 
         <HStack variant="solid" justify="end">
           <Button

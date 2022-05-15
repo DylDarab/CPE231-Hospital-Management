@@ -144,9 +144,9 @@ export default () =>
                                         _hover={{ bgColor: Colour.AlmostWhite }} 
                                         onClick={() => onClickOrder(item.orderID)}>
                                             <Td>{item.orderID}</Td>
-                                            <Td>{item.dateOrder}</Td>
+                                            <Td>{new Date(item.dateOrder).toLocaleString()}</Td>
                                             <Td>{item.organization_name}</Td>
-                                            <Td>{item.dateInStock}</Td>
+                                            <Td>{new Date(item.dateInStock).toLocaleString()}</Td>
                                         </Tr>
                                     )
                                 })

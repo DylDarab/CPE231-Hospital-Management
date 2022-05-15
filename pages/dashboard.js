@@ -289,7 +289,7 @@ export default (props) => {
             borderRadius="8px"
             marginBottom="16px"
           >
-            <Table size="sm">
+            <Table>
               <Thead>
                 <Tr>
                   <Th>DEPARTMENT</Th>

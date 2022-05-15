@@ -159,7 +159,7 @@ export default (props) =>
                 </HStack>
 
                 <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px' bgColor={Colour.White}>
-                    <Table variant='striped' colorScheme='whiteAlpha'>
+                    <Table variant='simple'>
                         <Thead>
                             <Tr>
                                 <Th>ID</Th>
