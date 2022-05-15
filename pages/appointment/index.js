@@ -182,7 +182,7 @@ export default () =>
                                                     {item.start_time.substring(0, 10) + ' ' + item.start_time.substring(11, 16)}
                                                 </Td>
                                                 <Td>
-                                                    <Button leftIcon={<EditIcon />} sx={buttonStyle(Colour.Red)} onClick={() => setSelected(index)}
+                                                    <Button size='sm' leftIcon={<EditIcon />} sx={buttonStyle(Colour.Yellow)} onClick={() => setSelected(index)}
                                                     >
                                                         Edit
                                                     </Button>

@@ -411,6 +411,7 @@ export const getServerSideProps = async (context)=>{
     const data = await axios.get(`${url}/api/getPatient/${patientID}`)
     const rooms = await axios.get(`${url}/api/getRoom`)
     const doctors = await axios.get(`${url}/api/getDoctorList`)
+    const department = await axios.get(`${url}/api/getDepartment`)
     return {
         props: {
             data: data.data,
