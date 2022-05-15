@@ -457,7 +457,8 @@ export default (props) => {
                                                             }
                                                         </AutoCompleteList>
                                                     </AutoComplete>
-                                                    <NumberInput min={1} onChange={(e) => setNum(0, e, index)}
+                                                    <NumberInput min={1} max={item.m_amount} precision={0} step={1}
+                                                        onChange={(e) => setNum(0, e, index)}
                                                         isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                                     >
                                                         <NumberInputField />
@@ -532,7 +533,8 @@ export default (props) => {
                                                             }
                                                         </AutoCompleteList>
                                                     </AutoComplete>
-                                                    <NumberInput min={1} onChange={(e) => setNum(1, e, index)}
+                                                    <NumberInput min={1} max={item.d_amount} precision={0} step={1}
+                                                        onChange={(e) => setNum(1, e, index)}
                                                         isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                                     >
                                                         <NumberInputField />
