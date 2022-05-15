@@ -16,6 +16,12 @@ export default async (req,res)=>{
         // ,[orderID])
         // res.json(data.rows[0])
 
+        let orderDetail = await db.query(`
+            SELECT "Order".*,"Organization"."organization_name" FROM "public"."Order"  
+            LEFT JOIN "public"."Organization" ON "Organization"."organizationID" = "Order"."organizationID"
+            WHERE "orderID" = $1
+        `,[orderID])
+
         let medicine = await db.query(`
             SELECT "OrderDetail"."medicineID", "OrderDetail"."amount"
             ,"OrderDetail"."o_priceperunit","Medicine"."medicine_name" FROM "public"."OrderDetail"
@@ -32,7 +38,7 @@ export default async (req,res)=>{
             WHERE "OrderDetail"."orderID" = $1 AND "OrderDetail"."deviceID" IS NOT NULL`
             , [orderID])
 
-        res.json({medicine: medicine.rows, device: device.rows})
+        res.json({...orderDetail.rows[0],medicine: medicine.rows, device: device.rows})
 
     }
 }
