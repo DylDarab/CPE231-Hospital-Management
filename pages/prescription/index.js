@@ -165,7 +165,7 @@ export default () => {
   };
 
   return (
-    <div style={{ backgroundColor: Colour.AlmostWhite }}>
+    <div style={{ backgroundColor: Colour.AlmostWhite, marginBottom: '80px'}}>
       <Loading isLoading={isLoading} />
       <Box sx={container}>
         <Heading>Prescription</Heading>
