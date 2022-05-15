@@ -18,6 +18,7 @@ import axios from 'axios'
 import Colour from '../../Colour'
 import { useState } from 'react'
 import url from '../../url'
+import { setISODay } from 'date-fns';
 
 export default (props) =>
 {
@@ -84,9 +85,8 @@ export default (props) =>
         width: '100px',
     }
 
-    const [error, setError] = useState(false)
-    const [isEdit, setIsEdit] = useState(false)
     const [isConfirm, setIsConfirm] = useState(false)
+    const [isSend, setIsSend] = useState(false)
     const [dateInStock, setDateInStock] = useState('')
     const [organization, setOrganization] = useState([{"organizationID": "",
                                                         "organizationName": "",
@@ -250,6 +250,7 @@ export default (props) =>
                 isClosable: false,
                 
               })
+            setIsSend(true)
             setTimeout(() => {
                 router.push('/order')
             }, 3000)
@@ -515,12 +516,12 @@ export default (props) =>
                             <Text>Confirm?</Text>
                             <ButtonGroup>
                                 <Button sx={buttonStyle(Colour.Green, Colour.White)} 
-                                    onClick={() => onYesClick()}
+                                    onClick={() => onYesClick()} isDisabled={isSend}
                                 >
                                     Yes
                                 </Button>
                                 <Button sx={buttonStyle(Colour.Red, Colour.White)} 
-                                    onClick={() => setIsConfirm(false)}
+                                    onClick={() => setIsConfirm(false)} isDisabled={isSend}
                                 >
                                     No
                                 </Button>
