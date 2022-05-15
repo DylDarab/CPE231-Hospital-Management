@@ -84,7 +84,7 @@ export default (props) =>
     const onSummitClick = () =>
     {
         console.log('summit clicked!')
-        if (form.devicename && form.description && form.price && form.amount)
+        if (form.devicename && form.description && form.price && form.amount && form.permanent)
         {
             setError(false)
             console.log('form is valid')
@@ -135,6 +135,14 @@ export default (props) =>
                                 <Input  id='amount' value={0}
                                     onChange={(e) => { setForm({ ...form, amount: e.target.value }) }}
                                 />
+                            </FormControl>
+                            <FormControl isRequired isInvalid={error && !form.permanent}>
+                                <FormLabel htmlFor='permanent'>Permanent</FormLabel>
+                                <Select id='permanent' placeholder='Select Boolean'
+                                onChange={(e) => { setForm({ ...form, permanent: e.target.value }) }}>
+                                    <option>TRUE</option>
+                                    <option>FLASE</option>
+                                </Select>
                             </FormControl>
                         </SimpleGrid>
                     </Box>
