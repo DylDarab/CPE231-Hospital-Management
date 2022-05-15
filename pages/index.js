@@ -38,6 +38,7 @@ export default () =>
         sessionStorage.setItem('positionID',result.data.positionID)
         sessionStorage.setItem('name',result.data.firstname+' '+result.data.lastname)
         sessionStorage.setItem('profileimg',result.data.profile_img)
+        sessionStorage.setItem('staffID', result.data.staffID)
         console.table(result.data)
         router.push('/dashboard')
       }
