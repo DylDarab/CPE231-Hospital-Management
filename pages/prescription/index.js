@@ -3,7 +3,7 @@ import
     Avatar, Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement, InputGroup,
     HStack, Text, Container, Heading, Lorem, Stack, useDisclosure,
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
-    Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, CloseButton,
+    Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, CloseButton, useRadio,
 } from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, EditIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 
@@ -13,20 +13,24 @@ import { encode, decode } from 'js-base64'
 import phoneFormatter from 'phone-formatter'
 import axios from 'axios'
 import { useEffect, useState, useRef } from 'react'
+import { useRouter } from 'next/router'
 import Colour from '../../Colour'
 import Loading from '../../component/loading'
-import AppointmentInfo from '../../component/appointmentInfo'
 import AppointmentEdit from '../../component/appointmentEdit'
+import AppointmentAdd from '../../component/appointmentAdd'
+import { roundToNearestMinutes } from 'date-fns'
 
 export default () =>
 {
+    const router = useRouter()
+
     const [page, setPage] = useState(1)
     const [pageAmount, setPageAmount] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
     const [search, setSearch] = useState('')
     const [data, setData] = useState([])
     const [appointmentID, setAppointmentID] = useState('-')
-    const [selected, setSelected] = useState(null)
+    const [selected, setSelected] = useState(false)
 
     // const { isOpen, onOpen, onClose } = useDisclosure()
     // const finalRef = useRef()
@@ -73,7 +77,7 @@ export default () =>
         const fetchData = async () =>
         {
             setIsLoading(true)
-            let result = await axios.get(`${url}/api/getAppointment`, {
+            let result = await axios.get(`${url}/api/getPrescription`, {
                 headers: {
                     page: page,
                     search: encode(search),
@@ -134,7 +138,7 @@ export default () =>
                                 <Th>Patient ID</Th>
                                 <Th>Patient's name</Th>
                                 <Th>Doctor</Th>
-                                <Th>Department</Th>
+                                <Th>Room</Th>
                                 <Th>Date time</Th>
                             </Tr>
                         </Thead>
@@ -152,11 +156,11 @@ export default () =>
                                                         float='left'
                                                         borderRadius='full'
                                                         boxSize='40px'
-                                                        src={item.patient_img}
-                                                        alt={item.lname_p}
+                                                        src={item.patient_profile_img}
+                                                        alt={item.patient_lastname}
                                                     />
                                                     <Flex h='40px' align='center'>
-                                                        {item.fname_p + ' ' + item.lname_p}
+                                                        {item.patient_firstname + ' ' + item.patient_lastname}
                                                     </Flex>
                                                 </Flex>
                                             </Td>
@@ -167,22 +171,25 @@ export default () =>
                                                         float='left'
                                                         borderRadius='full'
                                                         boxSize='40px'
-                                                        src={item.profile_img}
-                                                        alt={item.lname_s}
+                                                        src={item.staff_profile_img}
+                                                        alt={item.staff_lastname}
                                                     />
                                                     <Flex h='40px' align='center'>
-                                                        {item.fname_s + ' ' + item.lname_s}
+                                                        {item.staff_firstname + ' ' + item.staff_lastname}
                                                     </Flex>
                                                 </Flex>
                                             </Td>
                                             <Td>
-                                                Maybe RoomUse?
+                                                {item.roomName ? item.roomName : '-'}
                                             </Td>
                                             <Td>
                                                 {item.start_time.substring(0, 10) + ' ' + item.start_time.substring(11, 16)}
                                             </Td>
                                             <Td>
-                                                <Button size='sm' leftIcon={<EditIcon />} sx={buttonStyle(Colour.Yellow)} onClick={() => setSelected(index)}
+                                                <Button size='sm' leftIcon={<EditIcon />} sx={buttonStyle(Colour.Yellow)}
+                                                    // onClick={() => setSelected(index)}
+                                                    onClick={() => router.push(`/appointment/${item.appointmentID}`)}
+
                                                 >
                                                     Edit
                                                 </Button>
