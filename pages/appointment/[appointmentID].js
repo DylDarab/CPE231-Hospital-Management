@@ -47,6 +47,7 @@ export default (props) => {
                                                 "name": "",
                                                 "price": "",
                                                 "amount": "",
+                                                "m_amount": "",
                                                 "type": "used",//takehome,used
                                                 "note": ""
                                             }])
@@ -54,6 +55,7 @@ export default (props) => {
                                             "name": "",
                                             "price": "",
                                             "amount": "",
+                                            "d_amount": "",
                                             "type": "used",//takehome,used
                                             "note": ""
                                         }])
@@ -170,11 +172,12 @@ export default (props) => {
         // console.log(check, i)
     }
 
-    const setName = (type, name, i, price = '', id = '') => {
+    const setName = (type, name, i, amount = '', price = '', id = '') => {
         // console.log(id, name)
         if (type) {
             let temp = [...deviceList]
             temp[i].name = name
+            temp[i].d_amount = amount
             temp[i].deviceID = id
             temp[i].price = price
             setDeviceList(temp)
@@ -182,6 +185,7 @@ export default (props) => {
         else {
             let temp = [...medicineList]
             temp[i].medicineID = id
+            temp[i].m_amount = amount
             temp[i].name = name
             temp[i].price = price
             setMedicineList(temp)
@@ -449,7 +453,7 @@ export default (props) => {
                                                                         value={med.medicine_name}
                                                                         textTransform="capitalize"
                                                                         align="center"
-                                                                        onClick={() => setName(0, med.medicine_name, index, med.m_priceperunit, med.medicineID)}
+                                                                        onClick={() => setName(0, med.medicine_name, index, med.m_amount, med.m_priceperunit, med.medicineID)}
                                                                     >
                                                                         <Text ml="4">{med.medicine_name}</Text>
                                                                     </AutoCompleteItem>
@@ -459,9 +463,9 @@ export default (props) => {
                                                     </AutoComplete>
                                                     <NumberInput min={1} max={item.m_amount} precision={0} step={1}
                                                         onChange={(e) => setNum(0, e, index)}
-                                                        isDisabled={isSubmit} _disabled={{opacity: 0.8}}
+                                                        isDisabled={isSubmit || !item.m_amount} _disabled={{opacity: 0.8}}
                                                     >
-                                                        <NumberInputField />
+                                                        <NumberInputField placeHolder={isSubmit || !item.m_amount ? 'amount' : item.m_amount} />
                                                         <NumberInputStepper>
                                                             <NumberIncrementStepper />
                                                             <NumberDecrementStepper />
@@ -525,7 +529,7 @@ export default (props) => {
                                                                         value={dev.device_name}
                                                                         textTransform="capitalize"
                                                                         align="center"
-                                                                        onClick={() => setName(1, dev.device_name, index, dev.d_priceperunit, dev.deviceID)}
+                                                                        onClick={() => setName(1, dev.device_name, index, dev.d_amount, dev.d_priceperunit, dev.deviceID)}
                                                                     >
                                                                         <Text ml="4">{dev.device_name}</Text>
                                                                     </AutoCompleteItem>
@@ -535,9 +539,9 @@ export default (props) => {
                                                     </AutoComplete>
                                                     <NumberInput min={1} max={item.d_amount} precision={0} step={1}
                                                         onChange={(e) => setNum(1, e, index)}
-                                                        isDisabled={isSubmit} _disabled={{opacity: 0.8}}
+                                                        isDisabled={isSubmit || !item.d_amount} _disabled={{opacity: 0.8}}
                                                     >
-                                                        <NumberInputField />
+                                                        <NumberInputField placeHolder={isSubmit || !item.d_amount ? 'amount' : item.d_amount}/>
                                                         <NumberInputStepper>
                                                             <NumberIncrementStepper />
                                                             <NumberDecrementStepper />
