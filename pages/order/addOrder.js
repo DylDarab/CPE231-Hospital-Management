@@ -206,7 +206,7 @@ export default (props) =>
                                     </NumberInputStepper>
                                 </NumberInput>
                             </FormControl>
-                            <IconButton aria-label='Add' icon={<CopyIcon />} onClick={() => addForm1Fields()}/>
+                            <IconButton aria-label='Add' icon={<AddIcon />} onClick={() => addForm1Fields()}/>
                             <IconButton aria-label='Delete' icon={<DeleteIcon />} disabled={form1.length === 1} onClick={() => Remove1Fields(form1s.id)}/>
                             </HStack>))}
 
@@ -242,7 +242,7 @@ export default (props) =>
                                     </NumberInputStepper>
                                 </NumberInput>
                             </FormControl>
-                            <IconButton aria-label='Add' icon={<CopyIcon />} onClick={() => addForm2Fields()}/>
+                            <IconButton aria-label='Add' icon={<AddIcon />} onClick={() => addForm2Fields()}/>
                             <IconButton aria-label='Delete' icon={<DeleteIcon />} disabled={form2.length === 1} onClick={() => Remove2Fields(form2s.id)}/>
                             </HStack>))}
                         </VStack>
