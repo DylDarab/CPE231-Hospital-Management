@@ -123,6 +123,15 @@ export default () =>
         }
     }
 
+    const editButton = (id) => {
+        // console.log(sessionStorage.getItem('positionID'))
+        if (sessionStorage.getItem('positionID') === '1')
+            router.push(`/appointment/${id}`)
+        else if (sessionStorage.getItem('positionID') === '3')
+            setSelected(index)
+    }
+    
+
     return (
         <div style={{ backgroundColor: Colour.AlmostWhite, marginBottom: '80px'}}>
             <Loading isLoading={isLoading}/>
@@ -192,13 +201,13 @@ export default () =>
                                                     {item.roomName ? item.roomName : '-'}
                                                 </Td>
                                                 <Td>
-                                                    {item.start_time.substring(0, 10) + ' ' + item.start_time.substring(11, 16)}
+                                                    {item.start_time ? new Date(item.start_time).toLocaleString() : '-'}
                                                 </Td>
                                                 <Td>
                                                     <Button size='sm' leftIcon={<EditIcon />} sx={buttonStyle(Colour.Yellow)} 
                                                         // onClick={() => setSelected(index)}
-                                                        onClick={() => router.push(`/appointment/${item.appointmentID}`)}
-
+                                                        // onClick={() => router.push(`/appointment/${item.appointmentID}`)}
+                                                        onClick={() => editButton(item.appointmentID)}
                                                     >
                                                         Edit
                                                     </Button>

@@ -31,7 +31,7 @@ export default (props) => {
 
     const [refresh, setRefresh] = useState(false)
     const [selected, setSelected] = useState(false)
-    const [isEdit, setIsEdit] = useState(false)
+    const [isSend, setIsSend] = useState(false)
     const [isSubmit, setIsSubmit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [infoActive, setInfoActive] = useState(true)
@@ -281,6 +281,7 @@ export default (props) => {
                 duration: 3000,
                 isClosable: false,
               })
+            setIsSend(true)
             setTimeout(() => {
                 router.push('/appointment')
             }, 3000)
@@ -520,12 +521,12 @@ export default (props) => {
                             <Text>Submit?</Text>
                             <ButtonGroup>
                                 <Button sx={buttonStyle(Colour.Green, Colour.White)} 
-                                    onClick={() => onYesClick()}
+                                    onClick={() => onYesClick()} isDisabled={isSend}
                                 >
                                     Yes
                                 </Button>
                                 <Button sx={buttonStyle(Colour.Red, Colour.White)} 
-                                    onClick={() => setIsSubmit(false)}
+                                    onClick={() => setIsSubmit(false)} isDisabled={isSend}
                                 >
                                     No
                                 </Button>
