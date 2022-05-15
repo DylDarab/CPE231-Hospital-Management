@@ -1,7 +1,8 @@
 import {Avatar, Box, Button, Checkbox, Flex, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, 
     Menu,MenuButton,MenuList,MenuItem,MenuItemOption,MenuGroup,MenuOptionGroup,MenuDivider,
     NumberInput,NumberInputField,NumberInputStepper,NumberIncrementStepper,NumberDecrementStepper,
-    InputRightElement, Heading, HStack, VStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup, ButtonGroup} from '@chakra-ui/react'
+    InputRightElement, Heading, HStack, VStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup, ButtonGroup,
+    useToast } from '@chakra-ui/react'
 import { AddIcon, ArrowBackIcon, ArrowForwardIcon, ChevronDownIcon, PlusSquareIcon, SearchIcon, SmallCloseIcon } from '@chakra-ui/icons'
 
 import {
@@ -23,6 +24,7 @@ export default (props) => {
     const { data, medicine, device } = props
     
     const router = useRouter()
+    const toast = useToast()
     const appointmentID = router.query.appointmentID
     console.log(appointmentID)
     console.log(props)
@@ -36,7 +38,7 @@ export default (props) => {
     const [file, setFile] = useState(['Profile name', null])
     const [error, setError] = useState(false)
     
-    const [symptom, setSymptom] = useState('')
+    const [symptom, setSymptom] = useState('' || data[0].symptoms)
     const [summary, setSummary] = useState('')
     const [medicineList, setMedicineList] = useState([{"medicineID": "",
                                                 "name": "",
@@ -149,18 +151,20 @@ export default (props) => {
         // console.log(check, i)
     }
 
-    const setName = (type, name, i, id = '') => {
+    const setName = (type, name, price, i, id = '') => {
         // console.log(id, name)
         if (type) {
             let temp = [...deviceList]
             temp[i].name = name
             temp[i].deviceID = id
+            temp[i].price = price
             setDeviceList(temp)
         }
         else {
             let temp = [...medicineList]
             temp[i].medicineID = id
             temp[i].name = name
+            temp[i].price = price
             setMedicineList(temp)
         }
     }
@@ -198,7 +202,10 @@ export default (props) => {
     const onYesClick = () => {
         let medicine = []
         let device = []
+        let error_m = ['Some fields are empty. ']
         let ch = true
+        let ch2 = true
+        let ch3 = true
         medicineList.forEach(item => {
             if (!(item.medicineID === '' && item.name === '' && item.price === '' 
                 && item.amount === '' && item.type === 'used' && item.note === '')) {
@@ -211,6 +218,8 @@ export default (props) => {
                 ch = false
             }
         })
+        if(!ch)
+            error_m.push('[Medicine] ')
         deviceList.forEach(item => {
             if (!(item.deviceID === '' && item.name === '' && item.price === '' 
                 && item.amount === '' && item.type === 'used' && item.note === '')) {
@@ -220,32 +229,60 @@ export default (props) => {
         device.forEach(item => {
             if (item.deviceID === '' || item.amount === '') {
                 // console.log('cant submit')
-                ch = false
+                ch2 = false
             }
         })
+        if(!ch2)
+            error_m.push('[Device] ')
+        if (!summary) {
+            ch3 = false
+            error_m.push('[Summary] ')
+        }
         console.log(medicine)
         console.log(device)
-        if (ch) {
+        if (ch && ch2 && ch3) {
             console.log('can send')
-            // let data = {
-            //     "symptom": symptom,
-            //     "summary": summary,
-            //     "medicine": medicine,
-            //     "device": device,
-            // }
-            // console.log(data)
-            // axios.post('/api/add/case', data)
-            //     .then(res => {
-            //         console.log(res)
-            //         setRefresh(!refresh)
-            //     })
-            //     .catch(err => {
-            //         console.log(err)
-            //     })
+            let data = {
+                "appointmentID": appointmentID,
+                "symptom": symptom,
+                "summary": summary,
+                "medicine": medicine,
+                "device": device,
+            }
+            console.log(data)
+            axios.post(`${url}/api/updateAppointment`, data)
+                .then(res => {
+                    console.log(res)
+                    // setRefresh(!refresh)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            toast({
+                title: 'Success submit.',
+                description: "We've updated your appointment for you.",
+                status: 'success',
+                duration: 3000,
+                isClosable: false,
+              })
+            setTimeout(() => {
+                router.push('/appointment')
+            }, 3000)
         }
         else {
             console.log('cant submit')
+            toast({
+                title: 'Error submit.',
+                description: error_m,
+                status: 'error',
+                duration: 3000,
+                isClosable: false,
+              })
+            setIsSubmit(false)
         }
+        
+        
+        
         // เดี๋ยวมาทำต่อ
     }
 
@@ -286,7 +323,7 @@ export default (props) => {
                         <FormControl>
                             <FormLabel>Symptom</FormLabel>
                             <Textarea resize='none' isDisabled _disabled={{opacity: 0.8}}
-                                value={data[0].symptoms}
+                                value={symptom}
                             />
                         </FormControl>
                         <FormControl>
@@ -344,7 +381,7 @@ export default (props) => {
                                                                         value={med.medicine_name}
                                                                         textTransform="capitalize"
                                                                         align="center"
-                                                                        onClick={() => setName(0, med.medicine_name, index, med.medicineID)}
+                                                                        onClick={() => setName(0, med.medicine_name, med.m_priceperunit, index, med.medicineID)}
                                                                     >
                                                                         <Text ml="4">{med.medicine_name}</Text>
                                                                     </AutoCompleteItem>
@@ -419,7 +456,7 @@ export default (props) => {
                                                                         value={dev.device_name}
                                                                         textTransform="capitalize"
                                                                         align="center"
-                                                                        onClick={() => setName(1, dev.device_name, index, med.medicineID)}
+                                                                        onClick={() => setName(1, dev.device_name, dev.d_priceperunit, index, dev.deviceID)}
                                                                     >
                                                                         <Text ml="4">{dev.device_name}</Text>
                                                                     </AutoCompleteItem>
