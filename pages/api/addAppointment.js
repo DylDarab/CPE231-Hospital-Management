@@ -49,7 +49,7 @@ export default async (req, res) =>
             INSERT INTO "public"."RoomUse" ("roomID","appointmentID","unit","price") VALUES ($1,$2,$3,$4)
         `, [req.body.roomID, appointment.rows[0].appointmentID, unit, price])
 
-        let log = await addLog(req.headers.staffid, `Schedule an appointment for Patient ${patient.rows[0].firstname} ${patient.rows[0].lastname} to meet with Dr.${staff.rows[0].firstname} ${staff.rows[0].lastname} from ${start_date.toLocaleTimeString('en-GB', { timeZone: 'Asia/Bangkok', hour12: false, hour: "numeric", minute: "numeric" })} to ${end_date.toLocaleTimeString('en-GB', { timeZone: 'Asia/Bangkok', hour12: false, hour: "numeric", minute: "numeric" })} ${start_date.toLocaleDateString('en-GB', { timeZone: 'Asia/Bangkok' })} at ${room.rows[0].roomName}`, new Date(), note)
+        let log = await addLog(req.headers.staffid, `Schedule an appointment ${appointment.rows[0].appointmentID} for Patient ${patient.rows[0].firstname} ${patient.rows[0].lastname} to meet with Dr.${staff.rows[0].firstname} ${staff.rows[0].lastname} from ${start_date.toLocaleTimeString('en-GB', { timeZone: 'Asia/Bangkok', hour12: false, hour: "numeric", minute: "numeric" })} to ${end_date.toLocaleTimeString('en-GB', { timeZone: 'Asia/Bangkok', hour12: false, hour: "numeric", minute: "numeric" })} ${start_date.toLocaleDateString('en-GB', { timeZone: 'Asia/Bangkok' })} at ${room.rows[0].roomName}`, new Date(), note)
 
         res.json(appointment.rows[0])
 

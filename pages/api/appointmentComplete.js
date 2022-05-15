@@ -1,4 +1,5 @@
 import db from '../../db'
+import addLog from '../../functions/addLog'
 
 export default async (req,res)=>{
     let appointmentID = req.body.appointmentid
@@ -8,4 +9,6 @@ export default async (req,res)=>{
         `,[appointmentID])
         res.json(result.rows)
     }
+
+    addLog(req.headers.staffid,`Appointment ${appointmentID} is completed`,new Date(),'')
 }
