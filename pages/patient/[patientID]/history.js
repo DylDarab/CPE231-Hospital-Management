@@ -146,7 +146,7 @@ export default (props) =>
                                                         alt='test'
                                                     />
                                                     <Flex h='40px' align='center'>
-                                                        {item.firstname + ' ' + item.lastname}
+                                                        {item.staff_firstname + ' ' + item.staff_lastname}
                                                     </Flex>
                                                 </Flex>
                                             </Td>

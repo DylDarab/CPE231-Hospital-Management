@@ -156,7 +156,7 @@ export default (props) =>
 
                 <Box sx={container2}>
                     <Text fontSize="20px" fontWeight="bold" marginBottom="8px">
-                     Medicine-Device Status
+                     Medicine-Device Status from last 30 days
                     </Text>
                     <Grid
                         templateColumns="repeat(2, 1fr)"
