@@ -6,6 +6,7 @@ import phoneFormatter from 'phone-formatter'
 
 import AppointmentAdd from '../../../component/appointmentAdd'
 import AppointmentInfo from '../../../component/appointmentInfo'
+import Invoice from '../../../component/invoice'
 
 import axios from 'axios'
 import Colour from '../../../Colour'
@@ -23,6 +24,7 @@ export default (props) =>
 
     const [selected, setSelected] = useState(false)
     const [selectedInfo, setSelectedInfo] = useState(null)
+    const [infoinvoice, setInvoice] = useState(null)
     const [infoActive, setInfoActive] = useState(false)
     const [department, setDepartment] = useState(null)
     const [search, setSearch] = useState('')
@@ -155,10 +157,12 @@ export default (props) =>
                                                         onClick={()=>setSelectedInfo(index)}
                                                     >
                                                         Info</Button>
-                                                    <Button size='xs' sx={buttonStyle(Colour.LightGrey)}>Invoice</Button>
+                                                    <Button size='xs' sx={buttonStyle(Colour.LightGrey)}
+                                                        onClick={()=>setInvoice(index)}
+                                                    >Invoice</Button>
                                                 </Stack>
                                                 <AppointmentInfo item={item} isOpen={selectedInfo === index ? true : false} onClose={()=>setSelectedInfo(null)} />
-
+                                                <Invoice item={item} isOpen={infoinvoice === index ? true : false} onClose={()=>setInvoice(null)} />
                                             </Td>
                                         </Tr>
                                     )
@@ -205,7 +209,7 @@ export const getServerSideProps = async (context)=>{
         props: {
             patient: data.data,
             rooms: rooms.data,
-            doctors: doctors.data
+            doctors: doctors.data,
         }
     }
 }
