@@ -23,6 +23,10 @@ export default (props) =>
 {
     const { organizationData, medicineData, deviceData } = props
     const router = useRouter()
+    const toast = useToast()
+
+    const orderID = router.query.orderID
+
     console.log(props)
 
     let container = {
@@ -83,7 +87,22 @@ export default (props) =>
 
     const [error, setError] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
-    const [isSubmit, setIsSubmit] = useState(false)
+    const [isConfirm, setIsConfirm] = useState(false)
+    const [dateInStock, setDateInStock] = useState('')
+    const [organization, setOrganization] = useState([{"organizationID": "",
+                                                        "organizationName": "",
+                                                    }])
+
+    const [medicineList, setMedicineList] = useState([{"medicineID": "",
+                                                "name": "",
+                                                "price": "",
+                                                "amount": "",
+                                            }])
+    const [deviceList, setDeviceList] = useState([{"deviceID": "",
+                                            "name": "",
+                                            "price": "",
+                                            "amount": "",
+                                        }])
 
     const buttonStyle = (bgColor, textColor) => {
         return {
@@ -94,110 +113,277 @@ export default (props) =>
         }
     }
 
+    const del = (type, i) => {
+        if (type) {
+            let temp = [...deviceList]
+            temp.splice(i, 1)
+            setDeviceList(temp)
+        }
+        else {
+            let temp = [...medicineList]
+            temp.splice(i, 1)
+            setMedicineList(temp)
+        }
+    }
+
+    const setName = (type, name, i, id = '') => {
+        // console.log(id, name)
+        if (type) {
+            let temp = [...deviceList]
+            temp[i].name = name
+            temp[i].deviceID = id
+            setDeviceList(temp)
+        }
+        else {
+            let temp = [...medicineList]
+            temp[i].medicineID = id
+            temp[i].name = name
+            setMedicineList(temp)
+        }
+    }
+
+    const setPrice = (type, price, i) => {
+        if (type) {
+            let temp = [...deviceList]
+            temp[i].price = price
+            setDeviceList(temp)
+        }
+        else {
+            let temp = [...medicineList]
+            temp[i].price = price
+            setMedicineList(temp)
+        }
+    }
+
+    const setAmount = (type, num, i) => {
+        if (type) {
+            let temp = [...deviceList]
+            temp[i].amount = num
+            setDeviceList(temp)
+        }
+        else {
+            let temp = [...medicineList]
+            temp[i].amount = num
+            setMedicineList(temp)
+        }
+    }
+
+    const onConfirmClick = () => {
+        setIsConfirm(true)
+    }
+    console.log(organization)
+    console.log(dateInStock)
+    console.log(medicineList)
+    console.log(deviceList)
+    // console.log(new Date().toLocaleDateString("sv-SE"))
     return (
         <div style={{ backgroundColor: Colour.AlmostWhite }}>
             <Box sx={container} >
                 <Heading>
-                    Add order
+                    Order ID: {orderID} 
                 </Heading>
                 <Box sx={line}></Box>
             </Box>
             <Flex sx={container2}>
                 <Flex sx={container3}>
-                    <Heading as='h4' size='md'>Order ID: </Heading>
-
-                    <Box>
+                    {/* <Box> */}
                         <VStack spacing={4} align='flex-start'>
-                            {/* <HStack spacing={4} w='100%'> */}
-                                <FormControl>
-                                    <FormLabel htmlFor='organization'>Organization</FormLabel>
-                                    <Input id='organization' 
-                                    isDisabled={isSubmit} _disabled={{opacity: 0.8}}
-                                    // onChange={(e)=>{setForm({...form, organization: e.target.value})}}
-                                     />
-                                </FormControl>
-                            {/* </HStack> */}
+                            <FormControl>
+                                <FormLabel>Organization</FormLabel>
+                                <Text>TESTTEST</Text>
+                            </FormControl>
+
+                            <FormControl>
+                                <FormLabel>Date in stock</FormLabel>
+                                <Text>TESTTEST</Text>
+
+                            </FormControl>
 
                             <HStack>
                                 <Heading as='h4' size='sm'>Medicine</Heading>
-                                <Button sx={buttonStyle(Colour.Green, Colour.White)} size='xs' rightIcon={<AddIcon />}
-                                    isDisabled={isSubmit} _disabled={{opacity: 0.8}}
-                                    onClick={()=>{setMedicineList([...medicineList, 
-                                        {"medicineID": "", "name": "", "price": "", "amount": "", "type": "used", "note": ""}])}}
-                                >
-                                    Add
-                                </Button>
+                                
                             </HStack>
 
-                            <HStack spacing={4} w='100%' justify='center'>
-                                <FormControl>
-                                        <FormLabel>Medicine</FormLabel>
-                                        <Input
-                                            isDisabled={isSubmit} _disabled={{opacity: 0.8}}
-                                            // onChange={(e)=>{setForm({...form, medicine: e.target.value})}}
-                                        />
-                                </FormControl>
-                                <FormControl w='50%'>
-                                    <FormLabel>Price</FormLabel>
-                                    <NumberInput min={1} 
-                                        isDisabled={isSubmit} 
-                                        // onChange={(e)=>{setForm({...form, amountmedicine: e.target.value})}}
-                                    >
-                                        <NumberInputField/>
-                                        <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                        </NumberInputStepper>
-                                    </NumberInput>
-                                </FormControl>
-                                <FormControl w='50%'>
-                                    <FormLabel>Amount</FormLabel>
-                                    <NumberInput min={1} 
-                                        isDisabled={isSubmit} 
-                                        // onChange={(e)=>{setForm({...form, amountmedicine: e.target.value})}}
-                                    >
-                                        <NumberInputField/>
-                                        <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                        </NumberInputStepper>
-                                    </NumberInput>
-                                </FormControl>
-                                <IconButton sx={buttonStyle(Colour.Red, Colour.White)} size='sm' icon={<CloseIcon />} />
+                            {/* {
+                                medicineList.map((item, index) => {
+                                    return (
+                                        <HStack spacing={4} w='100%' align='flex-end'>
+                                            <FormControl>
+                                                <FormLabel>Medicine</FormLabel>
+                                                <AutoComplete openOnFocus>
+                                                    <AutoCompleteInput variant="outline"
+                                                        value={item.name || ''}
+                                                        onChange={(e) => setName(0, e.target.value, index)}
+                                                        isDisabled={isConfirm} _disabled={{opacity: 0.8}}
+                                                    />
+                                                    <AutoCompleteList>
+                                                        { props ?
+                                                            medicineData.map((med, i) => (
+                                                                <AutoCompleteItem
+                                                                    key={i}
+                                                                    value={med.medicine_name}
+                                                                    textTransform="capitalize"
+                                                                    align="center"
+                                                                    onClick={() => setName(0, med.medicine_name, index, med.medicineID)}
+                                                                >
+                                                                    <Text ml="4">{med.medicine_name}</Text>
+                                                                </AutoCompleteItem>
+                                                            )) : null 
+                                                        }
+                                                    </AutoCompleteList>
+                                                </AutoComplete>
+                                            </FormControl>
+                                            <FormControl w='50%'>
+                                                <FormLabel>Price per unit</FormLabel>
+                                                <NumberInput min={1} 
+                                                    isDisabled={isConfirm}
+                                                    value={item.price || ''} 
+                                                    onChange={(e)=>{setPrice(0, e, index)}}
+                                                >
+                                                    <NumberInputField/>
+                                                    <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </FormControl>
+                                            <FormControl w='50%'>
+                                                <FormLabel>Amount</FormLabel>
+                                                <NumberInput min={1} 
+                                                    isDisabled={isConfirm} 
+                                                    value={item.amount || ''}
+                                                    onChange={(e)=>{setAmount(0, e, index)}}
+                                                >
+                                                    <NumberInputField/>
+                                                    <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </FormControl>
+                                            { index !== 0 ?
+                                                <IconButton sx={buttonStyle(Colour.Red, Colour.White)} size='sm' icon={<CloseIcon />} 
+                                                    onClick={() => del(0, index)}
+                                                /> :
+                                                <IconButton sx={buttonStyle(Colour.Red, Colour.White)} size='sm' icon={<CloseIcon />} 
+                                                    visibility='hidden'
+                                                />
+                                            }
+                                        </HStack>
+                                    );
+                                })
+                            } */}
+
+                            <HStack>
+                                <Heading as='h4' size='sm'>Device</Heading>
+                                
                             </HStack>
 
-                            <HStack spacing={4} w='100%'>
-                            <FormControl w='50%'>
-                                    <FormLabel htmlFor='device'>Device</FormLabel>
-                                    <Input id='device' 
-                                    isDisabled={!isEdit} _disabled={{opacity: 0.8}}
-                                    // onChange={(e)=>{setForm({...form, device: e.target.value})}}
-                                     />
-                            </FormControl>
-                            <FormControl>
-                                    <FormLabel htmlFor='price-device'>Price</FormLabel>
-                                    <Input id='price-device' 
-                                    isDisabled={!isEdit} _disabled={{opacity: 0.8}}
-                                    onChange={(e)=>{setForm({...form, pricedevice: e.target.value})}}
-                                     />
-                            </FormControl>
-                            <FormControl isInvalid={error && !form.amountdevice}>
-                                <FormLabel htmlFor='amount-device'>Amount</FormLabel>
-                                <NumberInput max={1000000} min={1} 
-                                    id='amount-device'  isDisabled={!isEdit} 
-                                    onChange={(e)=>{setForm({...form, amountdevice: e.target.value})}}>
-                                    <NumberInputField />
-                                    <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
-                            </FormControl>
-                            <IconButton aria-label='Add' icon={<AddIcon />} />
-                            </HStack>
+                            {/* {
+                                deviceList.map((item, index) => {
+                                    return (
+                                        <HStack spacing={4} w='100%' align='flex-end'>
+                                            <FormControl>
+                                                <FormLabel>Device</FormLabel>
+                                                <AutoComplete openOnFocus>
+                                                    <AutoCompleteInput variant="outline"
+                                                        value={item.name || ''}
+                                                        onChange={(e) => setName(1, e.target.value, index)}
+                                                        isDisabled={isConfirm} _disabled={{opacity: 0.8}}
+                                                    />
+                                                    <AutoCompleteList>
+                                                        { props ?
+                                                            deviceData.map((dev, i) => (
+                                                                <AutoCompleteItem
+                                                                    key={i}
+                                                                    value={dev.device_name}
+                                                                    textTransform="capitalize"
+                                                                    align="center"
+                                                                    onClick={() => setName(1, dev.device_name, index, dev.deviceID)}
+                                                                >
+                                                                    <Text ml="4">{dev.device_name}</Text>
+                                                                </AutoCompleteItem>
+                                                            )) : null 
+                                                        }
+                                                    </AutoCompleteList>
+                                                </AutoComplete>
+                                            </FormControl>
+                                            <FormControl w='50%'>
+                                                <FormLabel>Price per unit</FormLabel>
+                                                <NumberInput min={1} 
+                                                    isDisabled={isConfirm}
+                                                    value={item.price || ''} 
+                                                    onChange={(e)=>{setPrice(1, e, index)}}
+                                                >
+                                                    <NumberInputField/>
+                                                    <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </FormControl>
+                                            <FormControl w='50%'>
+                                                <FormLabel>Amount</FormLabel>
+                                                <NumberInput min={1} 
+                                                    isDisabled={isConfirm} 
+                                                    value={item.amount || ''}
+                                                    onChange={(e)=>{setAmount(1, e, index)}}
+                                                >
+                                                    <NumberInputField/>
+                                                    <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </FormControl>
+                                            { index !== 0 ?
+                                                <IconButton sx={buttonStyle(Colour.Red, Colour.White)} size='sm' icon={<CloseIcon />} 
+                                                    onClick={() => del(1, index)}
+                                                /> :
+                                                <IconButton sx={buttonStyle(Colour.Red, Colour.White)} size='sm' icon={<CloseIcon />} 
+                                                    visibility='hidden'
+                                                />
+                                            }
+                                        </HStack>
+                                    );
+                                })
+                            } */}
                         </VStack>
-                    </Box>
+                    {/* </Box> */}
                 </Flex>
+
+                {/* <HStack justify='end'>
+                    { !isConfirm ?
+                        <ButtonGroup>
+                            <Button sx={buttonStyle(Colour.Green, Colour.White)} 
+                                onClick={() => onConfirmClick()}
+                            >
+                                Confirm
+                            </Button>
+                            <Button sx={buttonStyle(Colour.Red, Colour.White)} 
+                                onClick={() => router.push('/order')}
+                            >
+                                Cancel
+                            </Button>
+                        </ButtonGroup> :
+                        <>
+                            <Text>Confirm?</Text>
+                            <ButtonGroup>
+                                <Button sx={buttonStyle(Colour.Green, Colour.White)} 
+                                    onClick={() => onYesClick()}
+                                >
+                                    Yes
+                                </Button>
+                                <Button sx={buttonStyle(Colour.Red, Colour.White)} 
+                                    onClick={() => setIsConfirm(false)}
+                                >
+                                    No
+                                </Button>
+                            </ButtonGroup>
+                        </>
+
+                    }
+                </HStack> */}
             </Flex>
         </div>
     )
@@ -226,13 +412,25 @@ export const getStaticProps = async (context)=>{
         }})
     return {
         props: {
-            organizationData: JSON.parse(JSON.stringify(organization.data)),
-            medicineData: JSON.parse(JSON.stringify(medicine.data)),
-            deviceData: JSON.parse(JSON.stringify(device.data))
+            data: JSON.parse(JSON.stringify(organization.data)),
             // data: data.data[0],
             // medicine: medicine.data,
             // device: device.data
         }
     }
 }
-            
+
+// export const getStaticProps = async (context) =>
+// {
+//     const organization = await axios.get(`${url}/api/getOrganization`)
+//     const medicine = await axios.get(`${url}/api/getNameMedicine`)
+//     const device = await axios.get(`${url}/api/getNameDevice`)
+//     return {
+//         props: {
+//             organization: organization.data,
+//             medicine: medicine.data,
+//             device: device.data
+//         },
+//         revalidate: 60
+//     }
+// }
