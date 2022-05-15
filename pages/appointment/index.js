@@ -4,8 +4,10 @@ import
     HStack, Text, Container, Heading, Lorem, Stack, useDisclosure,
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
     Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, CloseButton, useRadio,
+    AlertDialog,AlertDialogBody,AlertDialogFooter,AlertDialogHeader,AlertDialogContent,AlertDialogOverlay,
+    AlertDialogCloseButton,
 } from '@chakra-ui/react'
-import { ArrowBackIcon, ArrowForwardIcon, EditIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
+import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 
 import url from '../../url'
 import { encode, decode } from 'js-base64'
@@ -34,6 +36,7 @@ export default () =>
 
     // const { isOpen, onOpen, onClose } = useDisclosure()
     // const finalRef = useRef()
+    const cancelRef = useRef()
     const [positionID, setPositionID] = useState(null)
 
     useEffect(() =>
@@ -130,6 +133,37 @@ export default () =>
         else if (sessionStorage.getItem('positionID') === '3')
             setSelected(index)
     }
+
+    const deleteDialog = (onClose, isOpen, id = '') => {
+        return (
+            <>
+              <AlertDialog
+                motionPreset='slideInBottom'
+                leastDestructiveRef={cancelRef}
+                onClose={onClose}
+                isOpen={isOpen}
+                isCentered
+              >
+                <AlertDialogOverlay />
+        
+                <AlertDialogContent>
+                    <AlertDialogHeader>Delete Appointment</AlertDialogHeader>
+                    <AlertDialogBody>
+                        Are you sure? You can't undo this action afterwards.
+                    </AlertDialogBody>
+                    <AlertDialogFooter>
+                        <Button ref={cancelRef} onClick={onClose}>
+                            No
+                        </Button>
+                        <Button colorScheme='red' ml={3} onClick={() => {console.log('delete!'); setSelected(null)}}>
+                            Yes
+                        </Button>
+                    </AlertDialogFooter>
+                    </AlertDialogContent>
+              </AlertDialog>
+            </>
+          )
+    }
     
 
     return (
@@ -165,7 +199,6 @@ export default () =>
                                 <Th>Doctor</Th>
                                 <Th>Room</Th>
                                 <Th>Date time</Th>
-                                <Th>Detail</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -204,17 +237,18 @@ export default () =>
                                                     {item.start_time ? new Date(item.start_time).toLocaleString() : '-'}
                                                 </Td>
                                                 <Td>
-                                                    <Button size='sm' leftIcon={<EditIcon />} sx={buttonStyle(Colour.Yellow)} 
-                                                        // onClick={() => setSelected(index)}
+                                                    <Button size='sm' leftIcon={<DeleteIcon />} sx={buttonStyle(Colour.Red)} 
+                                                        onClick={() => setSelected(index)}
                                                         // onClick={() => router.push(`/appointment/${item.appointmentID}`)}
-                                                        onClick={() => editButton(item.appointmentID, index)}
+                                                        // onClick={() => editButton(item.appointmentID, index)}
                                                     >
-                                                        Edit
+                                                        Delete
                                                     </Button>
-                                                    {   selected === index ?
+                                                    {/* {   selected === index ?
                                                         <AppointmentEdit item={item} isOpen={selected === index ? true : false} onClose={()=>setSelected(null)} />
                                                         : null
-                                                    }
+                                                    } */}
+                                                    {deleteDialog(()=>setSelected(null), selected === index ? true : false)}
                                                 </Td>
                                             </Tr>
                                     )
@@ -250,7 +284,7 @@ export default () =>
                         Next
                     </Button>
                 </HStack>
-
+                
             </Flex>
             {/* <AppointmentEdit id={appointmentID} isOpen={isOpen} onClose={onClose} /> */}
         </div>
