@@ -20,7 +20,7 @@ export default async (req, res) =>
                     LEFT JOIN "public"."RoomUse" ON "RoomUse"."appointmentID" = "Appointment"."appointmentID"
                     LEFT JOIN "public"."Room" ON "Room"."roomID" = "RoomUse"."roomID"
                     WHERE "Appointment"."summary" IS NULL AND (LOWER(CONCAT("Patient".firstname,' ',"Patient".lastname)) LIKE '%${search}%') AND
-                    start_time BETWEEN CURRENT_DATE + INTERVAL '0 hour' AND CURRENT_DATE + INTERVAL '1 day' 
+                    start_time BETWEEN now() - INTERVAL '3 hour' AND now() + INTERVAL '1 day' 
                     ORDER BY "appointmentID" ASC LIMIT 10 OFFSET $1 `, [(page - 1) * 10])
         res.json(result.rows)
         

@@ -21,7 +21,7 @@ import {useRouter} from 'next/router'
 import url from '../../url'
 
 export default (props) => {
-    const { data, medicine, device } = props
+    const { data, medicine, device, diseases } = props
     
     const router = useRouter()
     const toast = useToast()
@@ -40,6 +40,9 @@ export default (props) => {
     
     const [symptom, setSymptom] = useState('' || data[0].symptoms)
     const [summary, setSummary] = useState('')
+    const [disease, setDisease] = useState([{"diseaseID": "",
+                                            "diseaseName": "",     
+                                        }])
     const [medicineList, setMedicineList] = useState([{"medicineID": "",
                                                 "name": "",
                                                 "price": "",
@@ -222,6 +225,7 @@ export default (props) => {
         let ch = true
         let ch2 = true
         let ch3 = true
+        let ch4 = true
         medicineList.forEach(item => {
             if (!(item.medicineID === '' && item.name === '' && item.price === '' 
                 && item.amount === '' && item.type === 'used' && item.note === '')) {
@@ -234,6 +238,11 @@ export default (props) => {
                 ch = false
             }
         })
+        if (!disease.diseaseName)
+        {
+            ch4 = false
+            error_m.push('[Disease] ')
+        }
         if(!ch)
             error_m.push('[Medicine] ')
         deviceList.forEach(item => {
@@ -256,10 +265,11 @@ export default (props) => {
         }
         console.log(medicine)
         console.log(device)
-        if (ch && ch2 && ch3) {
+        if (ch && ch2 && ch3 && ch4) {
             console.log('can send')
             let data = {
                 "appointmentID": appointmentID,
+                "diseaseID": disease,
                 "symptom": symptom,
                 "summary": summary,
                 "medicine": medicine,
@@ -304,6 +314,7 @@ export default (props) => {
     }
 
     console.log(data)
+    console.log(disease)
     console.log(medicineList)
     console.log(deviceList)
 
@@ -337,12 +348,52 @@ export default (props) => {
                                 />
                             </FormControl>
                         </HStack>
+
                         <FormControl>
                             <FormLabel>Symptom</FormLabel>
                             <Textarea resize='none' isDisabled _disabled={{opacity: 0.8}}
                                 value={symptom}
                             />
                         </FormControl>
+
+                        <FormControl>
+                            <FormLabel>Disease</FormLabel>
+                            <AutoComplete openOnFocus>
+                                <AutoCompleteInput variant="outline"
+                                    value={disease.diseaseName || ''}
+                                    onChange={(e) => {
+                                        let id = 0
+                                        diseases.forEach(item => {
+                                            if (item.diseaseName === e.target.value) {
+                                                id = item.DiseaseID
+                                            }
+                                        })
+                                        let temp = { diseaseID: id, diseaseName: e.target.value }
+                                        setDisease(temp)
+                                    }}
+                                    isDisabled={isSubmit} _disabled={{opacity: 0.8}}
+                                />
+                                <AutoCompleteList>
+                                    { props ?
+                                        diseases.map((dis, i) => (
+                                            <AutoCompleteItem
+                                                key={i}
+                                                value={dis.diseaseName}
+                                                textTransform="caitalize"
+                                                align="center"
+                                                onClick={() => {
+                                                    let temp = { diseaseID: dis.DiseaseID, diseaseName: dis.diseaseName }
+                                                    setDisease(temp)
+                                                }}
+                                            >
+                                                <Text ml="4">{dis.diseaseName}</Text>
+                                            </AutoCompleteItem>
+                                        )) : null 
+                                    }
+                                </AutoCompleteList>
+                            </AutoComplete>
+                        </FormControl>
+
                         <FormControl>
                             <FormLabel>Summary</FormLabel>
                             <Textarea resize='none' isDisabled={isSubmit} _disabled={{opacity: 0.8}}
@@ -560,6 +611,7 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async (context)=>{
     const id = context.params.appointmentID;
     const data = await axios.get(`${url}/api/getAppointment/${id}`);
+    const diseases = await axios.get(`${url}/api/getDisease`);
     const medicine = await axios.get(`${url}/api/getMedicine`, {
         headers: {
             "page": 0,       
@@ -571,6 +623,7 @@ export const getStaticProps = async (context)=>{
     return {
         props: {
             data: JSON.parse(JSON.stringify(data.data)),
+            diseases: JSON.parse(JSON.stringify(diseases.data)),
             medicine: JSON.parse(JSON.stringify(medicine.data)),
             device: JSON.parse(JSON.stringify(device.data))
             // data: data.data[0],
