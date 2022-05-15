@@ -5,7 +5,7 @@ import
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
     Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, CloseButton, useRadio,
 } from '@chakra-ui/react'
-import { ArrowBackIcon, ArrowForwardIcon, EditIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
+import { ArrowBackIcon, ArrowForwardIcon, EditIcon, PlusSquareIcon, SearchIcon, ViewIcon } from '@chakra-ui/icons'
 
 import url from '../../url'
 import { encode, decode } from 'js-base64'
@@ -19,6 +19,7 @@ import Loading from '../../component/loading'
 import AppointmentEdit from '../../component/appointmentEdit'
 import AppointmentAdd from '../../component/appointmentAdd'
 import { roundToNearestMinutes } from 'date-fns'
+import Invoice from '../../component/invoice'
 
 export default () =>
 {
@@ -31,6 +32,7 @@ export default () =>
     const [data, setData] = useState([])
     const [appointmentID, setAppointmentID] = useState('-')
     const [selected, setSelected] = useState(false)
+    const [selectedInfo, setSelectedInfo] = useState(null)
 
     // const { isOpen, onOpen, onClose } = useDisclosure()
     // const finalRef = useRef()
@@ -135,10 +137,10 @@ export default () =>
                     <Table variant='simple'>
                         <Thead>
                             <Tr>
-                                <Th>Patient ID</Th>
+                                <Th>Appointment ID</Th>
                                 <Th>Patient's name</Th>
-                                <Th>Doctor</Th>
-                                <Th>Room</Th>
+                                {/* <Th>Doctor</Th> */}
+                                {/* <Th>Room</Th> */}
                                 <Th>Date time</Th>
                             </Tr>
                         </Thead>
@@ -148,7 +150,7 @@ export default () =>
                                 {
                                     return (
                                         <Tr key={index}>
-                                            <Td>{item.patientID}</Td>
+                                            <Td>{item.appointmentID}</Td>
                                             <Td>
                                                 <Flex align='center' gap='8px'>
                                                     <Avatar
@@ -164,7 +166,7 @@ export default () =>
                                                     </Flex>
                                                 </Flex>
                                             </Td>
-                                            <Td>
+                                            {/* <Td>
                                                 <Flex align='center' gap='8px'>
                                                     <Avatar
                                                         display='inline-block'
@@ -178,22 +180,22 @@ export default () =>
                                                         {item.staff_firstname + ' ' + item.staff_lastname}
                                                     </Flex>
                                                 </Flex>
-                                            </Td>
-                                            <Td>
+                                            </Td> */}
+                                            {/* <Td>
                                                 {item.roomName ? item.roomName : '-'}
-                                            </Td>
+                                            </Td> */}
                                             <Td>
                                                 {item.start_time.substring(0, 10) + ' ' + item.start_time.substring(11, 16)}
                                             </Td>
                                             <Td>
-                                                <Button size='sm' leftIcon={<EditIcon />} sx={buttonStyle(Colour.Yellow)}
+                                                <Button size='sm' leftIcon={<ViewIcon />} sx={buttonStyle(Colour.SkyBlue)}
                                                     // onClick={() => setSelected(index)}
-                                                    onClick={() => router.push(`/appointment/${item.appointmentID}`)}
+                                                    onClick={()=>setSelectedInfo(index)}
 
                                                 >
-                                                    Edit
+                                                    Info
                                                 </Button>
-                                                <AppointmentEdit item={item} isOpen={selected === index ? true : false} onClose={() => setSelected(null)} />
+                                                <Invoice item={item} isOpen={selectedInfo === index ? true : false} onClose={()=>setSelectedInfo(null)} />
 
                                             </Td>
                                         </Tr>

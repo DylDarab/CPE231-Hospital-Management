@@ -14,6 +14,7 @@ import {
   ModalCloseButton,
   Textarea,
   Select,
+  useToast,
 } from "@chakra-ui/react";
 import { React, useEffect, useState } from "react";
 import Colour from "../Colour";
@@ -23,14 +24,17 @@ import axios from "axios";
 import url from "../url";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
-import { set } from 'date-fns'
+import { set } from "date-fns";
+import Loading from "./loading";
 
 export default (props) => {
   const router = useRouter();
+  const toast = useToast();
   const { isOpen, onClose, patientID } = props;
   console.log(props);
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const [availableRoom, setAvailableRoom] = useState([]);
   const [availbleDoctor, setAvailableDoctor] = useState([]);
@@ -57,28 +61,55 @@ export default (props) => {
     if (start_date && end_date && department && doctor && room && symptoms) {
       setError(false);
       // console.log(availableRoom[room].price);
-      setIsLoading(true)
-      axios.post(`${url}/api/addAppointment`, {
-        start_date: start_date,
-        end_date: end_date,
-        patientID: patientID,
-        staffID: doctor,
-        roomID: availableRoom[room].roomID,
-        symptoms: symptoms,
-        note: note,
-        unit: 1,
-        price: availableRoom[room].price,
-      },{headers: {
-          staffid: sessionStorage.getItem("staffID")
-
-      } }).then((response) => {
-          console.log(response.data)
-      }).catch(err => console.log(err))
-      setIsLoading(false)
-      onClose()
+      setIsLoading(true);
+      axios
+        .post(
+          `${url}/api/addAppointment`,
+          {
+            start_date: start_date,
+            end_date: end_date,
+            patientID: patientID,
+            staffID: doctor,
+            roomID: availableRoom[room].roomID,
+            symptoms: symptoms,
+            note: note,
+            unit: 1,
+            price: availableRoom[room].price,
+          },
+          {
+            headers: {
+              staffid: sessionStorage.getItem("staffID"),
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((err) => console.log(err));
+      setIsLoading(false);
+      toast({
+        title: "Success submit.",
+        description: "Appointment's already added.",
+        status: "success",
+        duration: 3000,
+        isClosable: false,
+      });
+      // onClose()
+      setIsSubmit(true);
+      onClose();
+      setSymptoms("");
+      setNote("");
     } else {
       setError(true);
       console.log("form is not valid");
+      toast({
+        title: "Error submit.",
+        description: "Please fill the required fields.",
+        status: "error",
+        duration: 3000,
+        isClosable: false,
+      });
+      setIsSubmit(false);
     }
   };
 
@@ -132,6 +163,7 @@ export default (props) => {
 
   return (
     <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+      <Loading isLoading={isLoading} />
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
@@ -242,6 +274,9 @@ export default (props) => {
             colorScheme="red"
             onClick={() => {
               onClose();
+              setIsSubmit(false);
+              setSymptoms("");
+              setNote("");
             }}
           >
             Cancel
