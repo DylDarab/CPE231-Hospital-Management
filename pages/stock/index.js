@@ -2,7 +2,7 @@ import { Image, Container, Text, Center, Box, Heading, Button, ButtonGroup,
         Input, InputRightElement, InputGroup, Grid, Stat, StatLabel,
         StatNumber, StatHelpText, StatArrow, StatGroup,} from '@chakra-ui/react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, HStack, Flex } from '@chakra-ui/react'
-import {SearchIcon, ArrowBackIcon, ArrowForwardIcon} from '@chakra-ui/icons'
+import {SearchIcon, ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, addButton} from '@chakra-ui/icons'
 import axios from 'axios'
 import { encode, decode } from 'js-base64'
 import  {useRouter}  from 'next/router'
@@ -69,6 +69,13 @@ export default (props) =>
         fetchDeviceData()
     }, [search,page])
 
+    const onAddMedicine = () =>{
+        router.push('/stock/addMedicine')
+    }
+    const onAddDevice = () =>{
+        router.push('/stock/addDevice')
+    }
+
     let container = {
         width: '100vw',
         paddingLeft: '360px',
@@ -130,6 +137,12 @@ export default (props) =>
         bg: Colour.Grey,
         _hover: {filter: 'brightness(0.9)'},
         transition:'all 0.2s cubic-bezier(.08,.52,.52,1)'
+    }
+    let addButton = {
+        bg: Colour.DarkGreen,
+        color: Colour.White,
+        _hover: { filter: 'brightness(0.9)' },
+        transition: 'all 0.2s cubic-bezier(.08,.52,.52,1)'
     }
 
     return (
@@ -253,6 +266,14 @@ export default (props) =>
                         </TabList>
                 <TabPanels>
                     <TabPanel>
+                    <HStack variant='solid' justify='space-between'>
+                        <Text fontSize="16px" fontWeight="bold" marginBottom="8px">
+                                Medicine
+                        </Text>
+                        <Button leftIcon={<PlusSquareIcon />} sx={addButton} variant='solid' onClick={()=>onAddMedicine()}>
+                            Add Medicine
+                        </Button>
+                    </HStack>
                         <Box sx={container1}>
                         <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px' bgColor={Colour.White}>
                             <Table variant='simple'>
@@ -311,6 +332,14 @@ export default (props) =>
                     
 
                     <TabPanel>
+                    <HStack variant='solid' justify='space-between'>
+                        <Text fontSize="16px" fontWeight="bold" marginBottom="8px">
+                                Device
+                        </Text>
+                        <Button leftIcon={<PlusSquareIcon />} sx={addButton} variant='solid' onClick={()=>onAddDevice()}>
+                            Add Device
+                        </Button>
+                    </HStack>
                     <Box sx={container1}>
                         <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px' bgColor={Colour.White} >
                             <Table variant='simple'>
