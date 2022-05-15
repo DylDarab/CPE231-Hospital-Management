@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import
     {
-        Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement,
+        Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, useToast,
         InputRightElement, Heading, HStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup, VStack
     } from '@chakra-ui/react'
 
@@ -17,6 +17,7 @@ export default (props) =>
 {
 
     const router = useRouter()
+    const toast = useToast()
     const [isLoading, setIsLoading] = useState(false)
     console.log(props)
 
@@ -96,6 +97,16 @@ export default (props) =>
             console.log(response.data)
         }).catch(err => console.log(err))
         setIsLoading(false)
+        toast({
+            title: 'Success submit.',
+            description: "Adding the medicine name is complete.",
+            status: 'success',
+            duration: 3000,
+            isClosable: false,
+          })
+        setTimeout(() => {
+            router.push('/stock')
+        }, 3000)
     }
     
     console.log(form)
@@ -133,7 +144,7 @@ export default (props) =>
                                     onChange={(e) => { setForm({ ...form, price: e.target.value }) }}
                                 />
                             </FormControl>
-                            <FormControl isDisabled ={error && !form.amount}>
+                            <FormControl isDisabled isInvalid={error && !form.amount}>
                                 <FormLabel htmlFor='amount'>Amount</FormLabel>
                                 <Input  id='amount' value={0}
                                     onChange={(e) => { setForm({ ...form, amount: e.target.value }) }}
