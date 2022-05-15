@@ -189,7 +189,7 @@ export default (props) =>
                                 boxSize="78px"/>
                             </Box>
                             <Box>
-                                <StatLabel>Total amount of medicines ordered</StatLabel>
+                                <StatLabel>Total ordered medicines</StatLabel>
                                 <StatNumber>{props.statmedData.totalimportC}</StatNumber>
                                 <StatHelpText> <StatArrow type =
                                     {(props.statmedData.totalimportC - (props.statmedData.totalimportL - props.statmedData.totalimportC))>=0?"increase":"decrease"}/>
@@ -207,7 +207,7 @@ export default (props) =>
                                 boxSize="78px"/>
                             </Box>
                             <Box>
-                                <StatLabel>Total amount of medicines dispensed</StatLabel>
+                                <StatLabel>Total dispensed medicines </StatLabel>
                                 <StatNumber>{props.statmedData.totalexportMC + props.statmedData.totalexportDC}</StatNumber>
                                 <StatHelpText> <StatArrow type =
                                     {((props.statmedData.totalexportMC + props.statmedData.totalexportDC) -
