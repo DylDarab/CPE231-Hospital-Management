@@ -82,10 +82,7 @@ export default (props) => {
             },
           }
         )
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((err) => console.log(err));
+      
       setIsLoading(false);
       toast({
         title: "Success submit.",
@@ -94,7 +91,6 @@ export default (props) => {
         duration: 3000,
         isClosable: false,
       });
-      // onClose()
       setIsSubmit(true);
       onClose();
       setSymptoms("");
