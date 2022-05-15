@@ -118,7 +118,7 @@ export default (props) =>
                     <AppointmentAdd isOpen={selected} onClose={()=>setSelected(false)} rooms={props.rooms} doctors={props.doctors} />
                 </HStack>
 
-                <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px'>
+                <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px' bg={Colour.White}>
                     <Table variant='simple'>
                         <Thead>
                             <Tr>

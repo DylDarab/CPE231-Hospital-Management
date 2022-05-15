@@ -108,7 +108,7 @@ export default () =>
     }
 
     return (
-        <div style={{ backgroundColor: Colour.AlmostWhite }}>
+        <div style={{ backgroundColor: Colour.AlmostWhite, marginBottom: '80px'}}>
             <Loading isLoading={isLoading}/>
             <Box sx={container} >
                 <Heading>
@@ -120,7 +120,7 @@ export default () =>
             <Flex sx={container2}>
                 <HStack justify='space-between'>
                     <Heading as='h4' size='md'>Upcoming appointments</Heading>
-                    <InputGroup maxWidth='400px'>
+                    <InputGroup maxWidth='400px' bgColor={Colour.White}>
                         <InputRightElement
                             pointerEvents='none'
                             children={<SearchIcon />}
@@ -131,7 +131,7 @@ export default () =>
                     </InputGroup>
                 </HStack>
 
-                <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px'>
+                <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px' bg={Colour.White}>
                     <Table variant='simple'>
                         <Thead>
                             <Tr>
@@ -140,6 +140,7 @@ export default () =>
                                 <Th>Doctor</Th>
                                 <Th>Room</Th>
                                 <Th>Date time</Th>
+                                <Th>Detail</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -166,14 +167,6 @@ export default () =>
                                                 </Td>
                                                 <Td>
                                                     <Flex align='center' gap='8px'>
-                                                        <Avatar
-                                                            display='inline-block'
-                                                            float='left'
-                                                            borderRadius='full'
-                                                            boxSize='40px'
-                                                            src={item.staff_profile_img}
-                                                            alt={item.staff_lastname}
-                                                        />
                                                         <Flex h='40px' align='center'>
                                                             {item.staff_firstname + ' ' + item.staff_lastname}
                                                         </Flex>

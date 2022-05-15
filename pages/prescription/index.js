@@ -165,7 +165,7 @@ export default () => {
   };
 
   return (
-    <div style={{ backgroundColor: Colour.AlmostWhite }}>
+    <div style={{ backgroundColor: Colour.AlmostWhite, marginBottom: '80px'}}>
       <Loading isLoading={isLoading} />
       <Box sx={container}>
         <Heading>Prescription</Heading>
@@ -177,7 +177,7 @@ export default () => {
           <Heading as="h4" size="md">
             Upcoming prescription
           </Heading>
-          <InputGroup maxWidth="400px">
+          <InputGroup maxWidth="400px" bgColor={Colour.White}>
             <InputRightElement pointerEvents="none" children={<SearchIcon />} />
             <Input
               type="text"
@@ -193,6 +193,7 @@ export default () => {
         <TableContainer
           border={"1px solid" + Colour.LightGrey}
           borderRadius="12px"
+          bg={Colour.White}
         >
           <Table variant="simple">
             <Thead>
@@ -202,6 +203,7 @@ export default () => {
                 {/* <Th>Doctor</Th> */}
                 {/* <Th>Room</Th> */}
                 <Th>Date time</Th>
+                <Th>Information</Th>
               </Tr>
             </Thead>
             <Tbody>

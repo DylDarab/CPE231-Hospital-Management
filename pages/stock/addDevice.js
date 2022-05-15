@@ -97,16 +97,27 @@ export default (props) =>
             console.log(response.data)
         }).catch(err => console.log(err))
         setIsLoading(false)
-        toast({
-            title: 'Success submit.',
-            description: "Adding the device name is complete.",
-            status: 'success',
-            duration: 3000,
-            isClosable: false,
-          })
-        setTimeout(() => {
-            router.push('/stock')
-        }, 3000)
+        if (form.devicename != null && form.description != null && form.price != null && form.permanent != null) {
+            toast({
+                title: 'Success submit.',
+                description: "Adding the device name is complete.",
+                status: 'success',
+                duration: 3000,
+                isClosable: false,
+              })
+            setTimeout(() => {
+                router.push('/stock')
+            }, 3000)}
+            else {
+                console.log('cant submit')
+                toast({
+                    title: 'Error submit.',
+                    description: "Error",
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: false,
+                  })
+            }
     }
 
     console.log(form)

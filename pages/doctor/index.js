@@ -115,7 +115,7 @@ export default (props) =>
     }
 
     return (
-        <Box bgColor={Colour.AlmostWhite}>
+        <Box bgColor={Colour.AlmostWhite} marginBottom='80px'>
             <Loading isLoading={isLoading} />
             <Navbar />
             <Box sx={container}>
