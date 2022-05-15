@@ -30,7 +30,17 @@ export default (props) =>
 
     useEffect(() =>
     {
+        const kickOut = () =>
+        {
+            sessionStorage.clear()
+            router.push('/')
+            alert('please login again')
+        }
         setPositionID(sessionStorage.getItem('positionID'))
+        if (sessionStorage.getItem('positionID') ==2)
+        {
+            kickOut()
+        }
     }, [])
 
     useEffect(() =>

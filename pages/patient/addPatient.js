@@ -3,10 +3,10 @@ import {Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Inp
     InputRightElement, Heading, HStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup} from '@chakra-ui/react'
 
 import Colour from '../../Colour'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 
 export default ()=>{
-
+    const router = useRouter()
     const [file, setFile] = useState(['Profile name', null])
     const [allergyForm, setAllergyForm] = useState(true)
     const [error, setError] = useState(false)
@@ -15,6 +15,22 @@ export default ()=>{
         phone_number: "", address: "", insurance: "", EC_name: "", EC_Relationship: "",
         EC_phone: "", bloodGroup: "", allergy: "", med_history: ""
     })
+    const [positionID, setPositionID] = useState(null)
+
+    useEffect(() =>
+    {
+        const kickOut = () =>
+        {
+            sessionStorage.clear()
+            router.push('/')
+            alert('please login again')
+        }
+        setPositionID(sessionStorage.getItem('positionID'))
+        if (sessionStorage.getItem('positionID') != 3)
+        {
+            kickOut()
+        }
+    }, [])
 
     let container = {
         width: '100vw',

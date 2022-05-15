@@ -18,6 +18,22 @@ export default (props) =>
 {
 
     const router = useRouter()
+    const [positionID, setPositionID] = useState(null)
+
+    useEffect(() =>
+    {
+        const kickOut = () =>
+        {
+            sessionStorage.clear()
+            router.push('/')
+            alert('please login again')
+        }
+        setPositionID(sessionStorage.getItem('positionID'))
+        if (sessionStorage.getItem('positionID') !=3)
+        {
+            kickOut()
+        }
+    }, [])
 
     let container = {
         width: '100vw',

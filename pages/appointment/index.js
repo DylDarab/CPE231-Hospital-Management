@@ -34,6 +34,22 @@ export default () =>
 
     // const { isOpen, onOpen, onClose } = useDisclosure()
     // const finalRef = useRef()
+    const [positionID, setPositionID] = useState(null)
+
+    useEffect(() =>
+    {
+        const kickOut = () =>
+        {
+            sessionStorage.clear()
+            router.push('/')
+            alert('please login again')
+        }
+        setPositionID(sessionStorage.getItem('positionID'))
+        if (sessionStorage.getItem('positionID') ==2)
+        {
+            kickOut()
+        }
+    }, [])
 
     let container = {
         width: '100vw',

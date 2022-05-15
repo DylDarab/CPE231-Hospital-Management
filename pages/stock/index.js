@@ -22,6 +22,22 @@ export default (props) =>
     const [page, setPage] = useState(1)
     const [pageAmount, setPageAmount] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
+    const [positionID, setPositionID] = useState(null)
+
+    useEffect(() =>
+    {
+        const kickOut = () =>
+        {
+            sessionStorage.clear()
+            router.push('/')
+            alert('please login again')
+        }
+        setPositionID(sessionStorage.getItem('positionID'))
+        if (sessionStorage.getItem('positionID') == 1)
+        {
+            kickOut()
+        }
+    }, [])
 
     const fetchMedicineData = async () =>
     {

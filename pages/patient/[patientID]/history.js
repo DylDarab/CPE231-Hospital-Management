@@ -42,6 +42,12 @@ export default (props) =>
         setPositionID(sessionStorage.getItem('positionID'))
     }, [])
 
+    const kickOut = () =>{
+        sessionStorage.clear()
+        router.push('/')
+        alert('please login again')
+    }
+
 
     let container = {
         width: '100vw',

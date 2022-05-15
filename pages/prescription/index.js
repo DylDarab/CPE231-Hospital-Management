@@ -68,7 +68,22 @@ export default () => {
   const [appointmentID, setAppointmentID] = useState("-");
   const [selected, setSelected] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
+  const [positionID, setPositionID] = useState(null)
 
+  useEffect(() =>
+  {
+    const kickOut = () =>
+    {
+      sessionStorage.clear()
+      router.push('/')
+      alert('please login again')
+    }
+    setPositionID(sessionStorage.getItem('positionID'))
+    if (sessionStorage.getItem('positionID') ==1)
+    {
+      kickOut()
+    }
+  }, [])
   // const { isOpen, onOpen, onClose } = useDisclosure()
   // const finalRef = useRef()
 

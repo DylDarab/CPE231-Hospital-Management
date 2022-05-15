@@ -19,6 +19,22 @@ export default (props) =>
     const router = useRouter()
     const toast = useToast()
     const [isLoading, setIsLoading] = useState(false)
+    const [positionID, setPositionID] = useState(null)
+
+    useEffect(() =>
+    {
+        const kickOut = () =>
+        {
+            sessionStorage.clear()
+            router.push('/')
+            alert('please login again')
+        }
+        setPositionID(sessionStorage.getItem('positionID'))
+        if (sessionStorage.getItem('positionID') ==1)
+        {
+            kickOut()
+        }
+    }, [])
     console.log(props)
 
     let container = {

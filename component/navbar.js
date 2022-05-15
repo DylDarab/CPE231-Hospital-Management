@@ -20,7 +20,7 @@ export default () =>
         if (checkToken(sessionStorage.getItem('token')) === false)
         {
             router.push('/')
-            alert('Please login first')
+            alert('Please login again')
         }
         setPositionID(sessionStorage.getItem('positionID'))
     }, [])

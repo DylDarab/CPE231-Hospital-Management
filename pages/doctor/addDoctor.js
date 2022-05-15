@@ -8,7 +8,7 @@ import
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import axios from 'axios'
 import Colour from '../../Colour'
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
 import emailValidate from 'email-validator'
 import phoneFormatter from 'phone-formatter'
 import url from '../../url'
@@ -17,6 +17,23 @@ export default (props) =>
 {
 
     const router = useRouter()
+
+    const [positionID, setPositionID] = useState(null)
+
+    useEffect(() =>
+    {
+        const kickOut = () =>
+        {
+            sessionStorage.clear()
+            router.push('/')
+            alert('please login again')
+        }
+        setPositionID(sessionStorage.getItem('positionID'))
+        if (sessionStorage.getItem('positionID') != 3)
+        {
+            kickOut()
+        }
+    }, [])
     console.log(props)
 
     let container = {
