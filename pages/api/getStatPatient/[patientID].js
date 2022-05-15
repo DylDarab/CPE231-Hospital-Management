@@ -44,27 +44,20 @@ export default async (req, res) =>
         INNER JOIN "public"."DeviceWithdraw" ON "DeviceWithdraw"."appointmentID" = "Appointment"."appointmentID"
         WHERE CAST("Appointment"."end_time" AS DATE) >= CAST(NOW() AS DATE) - 730 AND "Appointment"."patientID" = $1
         `,[patientID])
-
-        if(totalappC.rows[0] == null)
-        {totalappC.rows[0] = 0}
-        if(totalappL.rows[0] == null)
-        {totalappL.rows[0] = 0}
-        if(totalmedicineC.rows[0] == null)
-        {totalmedicineC.rows[0] = 0}
-        if(totalmedicineL.rows[0] == null)
-        {totalmedicineL.rows[0] = 0}
-        if(totaldeviceC.rows[0] == null)
-        {totaldeviceC.rows[0] = 0}
-        if(totaldeviceL.rows[0] == null)
-        {totaldeviceL.rows[0] = 0}
         
         res.json({
-            totalappC: totalappC.rows[0].CNTAppoint,
-            totalappL:  totalappL.rows[0].CNTAppoint,
-            totalmedicineC: totalmedicineC.rows[0].CNTMed,
-            totalmedicineL: totalmedicineL.rows[0].CNTMed,
-            totaldeviceC:  totaldeviceC.rows[0].CNTDe,
-            totaldeviceL: totaldeviceL.rows[0].CNTDe,
+            totalappC: (totalappC.rows[0] != null) ? 
+            totalappC.rows[0].CNTAppoint : 0,
+            totalappL: (totalappL.rows[0] != null) ? 
+            totalappL.rows[0].CNTAppoint : 0,
+            totalmedicineC: (totalmedicineC.rows[0] != null) ? 
+            totalmedicineC.rows[0].CNTMed : 0,
+            totalmedicineL: (totalmedicineL.rows[0] != null) ? 
+            totalmedicineL.rows[0].CNTMed : 0,
+            totaldeviceC: (totaldeviceC.rows[0] != null) ? 
+            totaldeviceC.rows[0].CNTDe : 0,
+            totaldeviceL: (totaldeviceL.rows[0] != null) ? 
+            totaldeviceL.rows[0].CNTDe : 0
         })
     }
 }
