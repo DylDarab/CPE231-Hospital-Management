@@ -2,6 +2,13 @@ import db from '../../db'
 import addLog from '../../functions/addLog'
 
 export default async (req,res)=>{
+
+    let body = {
+        "device_name": "กัญชา",
+        "description": "อร่อยจัง",
+        "m_priceperunit": "20",
+    }
+
     if(req.method==='POST')
     {
         let medicine_name = req.body.medicine_name
