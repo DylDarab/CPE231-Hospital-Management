@@ -39,7 +39,7 @@ import axios from "axios";
 // import { useRouter } from "next/router";
 
 export default (props) => {
-//   const router = useRouter();
+  //   const router = useRouter();
   const { item, isOpen, onClose } = props;
   const toast = useToast();
   const date = new Date(item.end_time).toLocaleDateString();
@@ -202,7 +202,7 @@ export default (props) => {
           {invoice !== null ? invoice.patientdata[0].appointmentID : null}
           <Box sx={line}></Box>
         </ModalHeader>
-        <ModalCloseButton />
+        {/* <ModalCloseButton /> */}
         <ModalBody mb="16px">
           <Box sx={itembox}>
             <Stack>
@@ -257,14 +257,24 @@ export default (props) => {
           {/* <Button colorScheme="teal" leftIcon={<CheckIcon />}>
             Dispensed and paid
           </Button> */}
-          {!isSubmit ? (
-            <Button
-              colorScheme="teal"
-              leftIcon={<CheckIcon />}
-              onClick={() => onSubmitClick()}
-            >
-              Dispensed and paid
-            </Button>
+          {isSubmit == false ? (
+            <ButtonGroup>
+              <Button
+                colorScheme="teal"
+                leftIcon={<CheckIcon />}
+                onClick={() => onSubmitClick()}
+              >
+                Dispensed and paid
+              </Button>
+              <Button
+                colorScheme="yellow"
+                onClick={() => {
+                  setIsSubmit(false), onClose();
+                }}
+              >
+                Cancel
+              </Button>
+            </ButtonGroup>
           ) : (
             <>
               <Text marginRight="16px">Submit?</Text>
@@ -272,7 +282,12 @@ export default (props) => {
                 <Button colorScheme="teal" onClick={() => onYesClick()}>
                   Yes
                 </Button>
-                <Button colorScheme="red" onClick={() => setIsSubmit(false)}>
+                <Button
+                  colorScheme="red"
+                  onClick={() => {
+                    setIsSubmit(false)
+                  }}
+                >
                   No
                 </Button>
               </ButtonGroup>

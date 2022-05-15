@@ -36,11 +36,10 @@ export default async (req, res) => {
 
     let numberDiseaseEach = await db.query(`
         SELECT "diseaseName", COUNT("diseaseID") AS total
-        FROM "public"."Appointment" LEFT JOIN "public"."Patient" ON "Appointment"."patientID" = "Patient"."patientID"
-        LEFT JOIN "public"."PatientDisease" ON "Patient"."patientID" = "PatientDisease"."patientID"
-        LEFT JOIN "public"."Disease" ON "PatientDisease"."diseaseID" = "Disease"."DiseaseID"
+        FROM "public"."AppointmentDisease" LEFT JOIN "public"."Appointment" ON "Appointment"."appointmentID" = "AppointmentDisease"."appointmentID"
+        LEFT JOIN "public"."Disease" ON "Disease"."DiseaseID" = "AppointmentDisease"."diseaseID"
         WHERE CAST(start_time AS DATE) >= CAST(NOW() AS DATE) -30
-        GROUP BY "diseaseID", "diseaseName"
+        GROUP BY "diseaseName"
     `);
 
     let patientInDepartment = await db.query(`
@@ -57,7 +56,6 @@ export default async (req, res) => {
         WHERE "Staff"."positionID" = 1
         GROUP BY "department_name"
     `);
-
 
     let patientStat = await db.query(`
         SELECT EXTRACT(MONTH FROM "start_time") AS month, COUNT(DISTINCT "patientID") AS patients

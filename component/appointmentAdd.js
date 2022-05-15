@@ -166,7 +166,7 @@ export default (props) => {
           Add appointment
           <Box sx={line}></Box>
         </ModalHeader>
-        <ModalCloseButton />
+        {/* <ModalCloseButton /> */}
         <ModalBody mb="16px">
           <VStack>
             <FormControl isRequired isInvalid={error && !start_date}>
