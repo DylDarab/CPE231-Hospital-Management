@@ -17,6 +17,7 @@ export default (props) =>
 {
 
     const router = useRouter()
+    const [isLoading, setIsLoading] = useState(false)
     console.log(props)
 
     let container = {
@@ -76,25 +77,27 @@ export default (props) =>
         width: '100px',
     }
 
-    const [file, setFile] = useState(['Profile Image', null])
-    const [allergyForm, setAllergyForm] = useState(true)
     const [error, setError] = useState(false)
     const [form, setForm] = useState({})
+    const [medicine, setMedicine] = useState([])
 
-    const onSummitClick = () =>
+    const PostDeviceData = async () =>
     {
-        console.log('summit clicked!')
-        if (form.medicinename && form.description && form.price && form.amount)
-        {
-            setError(false)
-            console.log('form is valid')
-        }
-        else
-        {
-            setError(true)
-            console.log('form is not valid')
-        }
+        console.log(sessionStorage.getItem("staffID"))
+        setIsLoading(true)
+        axios.post(`${url}/api/addMedicine`, {
+                medicine_name: form.medicinename,
+                description: form.description,
+                m_priceperunit: form.price
+        },{headers: {
+            staffid: sessionStorage.getItem("staffID")
+            
+        } }).then((response) => {
+            console.log(response.data)
+        }).catch(err => console.log(err))
+        setIsLoading(false)
     }
+    
     console.log(form)
     return (
         <div style={{ backgroundColor: Colour.AlmostWhite, marginBottom: "80px" }}>
@@ -130,7 +133,7 @@ export default (props) =>
                                     onChange={(e) => { setForm({ ...form, price: e.target.value }) }}
                                 />
                             </FormControl>
-                            <FormControl isDisabled isInvalid={error && !form.amount}>
+                            <FormControl isDisabled ={error && !form.amount}>
                                 <FormLabel htmlFor='amount'>Amount</FormLabel>
                                 <Input  id='amount' value={0}
                                     onChange={(e) => { setForm({ ...form, amount: e.target.value }) }}
@@ -141,7 +144,7 @@ export default (props) =>
                 </Flex>
 
                 <HStack justify='end'>
-                    <Button sx={summitButton} onClick={() => onSummitClick()}>
+                    <Button sx={summitButton} onClick={() => PostDeviceData()}>
                         Submit
                     </Button>
                 </HStack>

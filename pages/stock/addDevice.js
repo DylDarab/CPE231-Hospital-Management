@@ -17,6 +17,7 @@ export default (props) =>
 {
 
     const router = useRouter()
+    const [isLoading, setIsLoading] = useState(false)
     console.log(props)
 
     let container = {
@@ -76,25 +77,27 @@ export default (props) =>
         width: '100px',
     }
 
-    const [file, setFile] = useState(['Profile Image', null])
-    const [allergyForm, setAllergyForm] = useState(true)
     const [error, setError] = useState(false)
     const [form, setForm] = useState({})
 
-    const onSummitClick = () =>
+    const PostDeviceData = async () =>
     {
-        console.log('summit clicked!')
-        if (form.devicename && form.description && form.price && form.amount && form.permanent)
-        {
-            setError(false)
-            console.log('form is valid')
-        }
-        else
-        {
-            setError(true)
-            console.log('form is not valid')
-        }
+        console.log(sessionStorage.getItem("staffID"))
+        setIsLoading(true)
+        axios.post(`${url}/api/addDevice`, {
+                device_name: form.devicename,
+                description: form.description,
+                d_priceperunit: form.price,
+                isPermenant: form.permanent
+        },{headers: {
+            staffid: sessionStorage.getItem("staffID")
+            
+        } }).then((response) => {
+            console.log(response.data)
+        }).catch(err => console.log(err))
+        setIsLoading(false)
     }
+
     console.log(form)
     return (
         <div style={{ backgroundColor: Colour.AlmostWhite, marginBottom: "80px" }}>
@@ -141,7 +144,7 @@ export default (props) =>
                                 <Select id='permanent' placeholder='Select Boolean'
                                 onChange={(e) => { setForm({ ...form, permanent: e.target.value }) }}>
                                     <option>TRUE</option>
-                                    <option>FLASE</option>
+                                    <option>FALSE</option>
                                 </Select>
                             </FormControl>
                         </SimpleGrid>
@@ -149,7 +152,7 @@ export default (props) =>
                 </Flex>
 
                 <HStack justify='end'>
-                    <Button sx={summitButton} onClick={() => onSummitClick()}>
+                    <Button sx={summitButton} onClick={() => PostDeviceData()}>
                         Submit
                     </Button>
                 </HStack>
