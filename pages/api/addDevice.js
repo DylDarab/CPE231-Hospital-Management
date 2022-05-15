@@ -3,7 +3,10 @@ import db from '../../db'
 export default async (req,res)=>{
 
     let body = {
-
+        "device_name": "กัญชา",
+        "description": "อร่อยจัง",
+        "d_priceperunit": "20",
+        "isPermenant": true
     }
 
     if(req.method==='POST')
