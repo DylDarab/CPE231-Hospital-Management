@@ -58,14 +58,6 @@ export default async (req, res) => {
         GROUP BY "department_name"
     `);
 
-    let departmentStatLastMonth = await db.query(`
-        SELECT "department_name", COUNT(DISTINCT "Staff"."staffID") AS doctors, COUNT(DISTINCT "Appointment"."patientID") AS patients
-        FROM "public"."Department" LEFT JOIN "public"."Staff" ON "Department"."departmentID" = "Staff"."departmentID"
-        LEFT JOIN "public"."Position" ON "Staff"."positionID" = "Position"."positionID"
-        LEFT JOIN "public"."Appointment" ON "Appointment"."staffID" = "Staff"."staffID"
-        WHERE "Position"."positionID" = 100 AND CAST(start_time AS DATE) >= CAST(NOW() AS DATE) -30
-        GROUP BY "department_name"
-    `);
 
     let patientStat = await db.query(`
         SELECT EXTRACT(MONTH FROM "start_time") AS month, COUNT(DISTINCT "patientID") AS patients
@@ -82,7 +74,6 @@ export default async (req, res) => {
       numberDiseaseEach: numberDiseaseEach.rows,
       patientInDepartment: patientInDepartment.rows,
       departmentStat: departmentStat.rows,
-      departmentStatLastMonth: departmentStatLastMonth.rows,
       patientStat: patientStat.rows,
     });
   }
