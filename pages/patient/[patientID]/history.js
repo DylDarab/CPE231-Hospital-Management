@@ -1,6 +1,9 @@
-import { Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement, InputGroup,
-    HStack, Text,Container, Heading, Stack,
-    Table, Thead, Tbody,Tfoot,Tr,Th,Td,TableCaption,TableContainer, CloseButton,} from '@chakra-ui/react'
+import
+    {
+        Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement, InputGroup,
+        HStack, Text, Container, Heading, Stack,
+        Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, CloseButton,
+    } from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 import phoneFormatter from 'phone-formatter'
 
@@ -13,7 +16,7 @@ import Colour from '../../../Colour'
 import Loading from '../../../component/loading'
 import { encode, decode } from 'js-base64'
 import { useState, useEffect } from 'react'
-import {useRouter} from 'next/router'
+import { useRouter } from 'next/router'
 import url from '../../../url'
 
 export default (props) =>
@@ -32,8 +35,14 @@ export default (props) =>
     const [page, setPage] = useState(1)
     const [pageAmount, setPageAmount] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
+    const [positionID, setPositionID] = useState(null)
 
-    
+    useEffect(() =>
+    {
+        setPositionID(sessionStorage.getItem('positionID'))
+    }, [])
+
+
     let container = {
         width: '100vw',
         paddingLeft: '360px',
@@ -61,28 +70,29 @@ export default (props) =>
     }
 
     let infoButton = {
-        _hover: {filter: 'brightness(0.9)'},
-        transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
+        _hover: { filter: 'brightness(0.9)' },
+        transition: 'all 0.2s cubic-bezier(.08,.52,.52,1)',
     }
 
     let pageButton = {
         bg: Colour.Grey,
-        _hover: {filter: 'brightness(0.9)'},
-        transition:'all 0.2s cubic-bezier(.08,.52,.52,1)'
+        _hover: { filter: 'brightness(0.9)' },
+        transition: 'all 0.2s cubic-bezier(.08,.52,.52,1)'
     }
 
-    const buttonStyle = (bgColor, textColor='#000000') => {
+    const buttonStyle = (bgColor, textColor = '#000000') =>
+    {
         return {
             bg: bgColor,
             color: textColor,
-            _hover: {filter: 'brightness(0.9)'},
-            transition:'all 0.2s cubic-bezier(.08,.52,.52,1)',
+            _hover: { filter: 'brightness(0.9)' },
+            transition: 'all 0.2s cubic-bezier(.08,.52,.52,1)',
         }
     }
 
     return (
-        <div style={{backgroundColor: Colour.AlmostWhite}}>
-            <Loading isLoading={isLoading}/>
+        <div style={{ backgroundColor: Colour.AlmostWhite }}>
+            <Loading isLoading={isLoading} />
             <Box sx={container}>
                 <Heading>
                     Patient's Profile
@@ -110,12 +120,14 @@ export default (props) =>
                             Appointment history
                         </Button>
                     </ButtonGroup>
-                    <Button leftIcon={<PlusSquareIcon />} sx={buttonStyle(Colour.DarkGreen, Colour.White)} variant='solid'
-                        onClick={()=>setSelected(true)}
-                    >
-                        Add appointment
-                    </Button>
-                    <AppointmentAdd isOpen={selected} onClose={()=>setSelected(false)} rooms={props.rooms} doctors={props.doctors} />
+                    {positionID == 3 ?
+                        <Button leftIcon={<PlusSquareIcon />} sx={buttonStyle(Colour.DarkGreen, Colour.White)} variant='solid'
+                            onClick={() => setSelected(true)}
+                        >
+                            Add appointment
+                        </Button>
+                        : null}
+                    <AppointmentAdd isOpen={selected} onClose={() => setSelected(false)} rooms={props.rooms} doctors={props.doctors} />
                 </HStack>
 
                 <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px' bg={Colour.White}>
@@ -154,21 +166,21 @@ export default (props) =>
                                             <Td>
                                                 <Stack>
                                                     <Button size='xs' sx={buttonStyle(Colour.LightGrey)}
-                                                        onClick={()=>setSelectedInfo(index)}
+                                                        onClick={() => setSelectedInfo(index)}
                                                     >
                                                         Info</Button>
                                                     <Button size='xs' sx={buttonStyle(Colour.LightGrey)}
-                                                        onClick={()=>setInvoice(index)}
+                                                        onClick={() => setInvoice(index)}
                                                     >Invoice</Button>
                                                 </Stack>
-                                                <AppointmentInfo item={item} isOpen={selectedInfo === index ? true : false} onClose={()=>setSelectedInfo(null)} />
-                                                <Invoice item={item} isOpen={infoinvoice === index ? true : false} onClose={()=>setInvoice(null)} />
+                                                <AppointmentInfo item={item} isOpen={selectedInfo === index ? true : false} onClose={() => setSelectedInfo(null)} />
+                                                <Invoice item={item} isOpen={infoinvoice === index ? true : false} onClose={() => setInvoice(null)} />
                                             </Td>
                                         </Tr>
                                     )
                                 })
                             }
-                            
+
                         </Tbody>
 
                     </Table>
@@ -176,7 +188,8 @@ export default (props) =>
 
                 <HStack variant='solid' justify='end'>
                     <Button leftIcon={<ArrowBackIcon />} sx={pageButton} variant='solid'
-                        onClick={()=>{
+                        onClick={() =>
+                        {
                             if (page > 1)
                                 setPage(page - 1)
                         }}
@@ -186,7 +199,8 @@ export default (props) =>
                     </Button>
                     <Center>{page}</Center>
                     <Button rightIcon={<ArrowForwardIcon />} sx={pageButton} variant='solid'
-                        onClick={()=>{
+                        onClick={() =>
+                        {
                             if (page < pageAmount)
                                 setPage(page + 1)
                         }}
@@ -200,7 +214,8 @@ export default (props) =>
     )
 }
 
-export const getServerSideProps = async (context)=>{
+export const getServerSideProps = async (context) =>
+{
     let patientID = context.params.patientID
     const data = await axios.get(`${url}/api/getAppointmentHistory/${patientID}`)
     const rooms = await axios.get(`${url}/api/getRoom`)

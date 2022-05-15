@@ -1,6 +1,9 @@
-import { Avatar, Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement, InputGroup,
-    HStack, Text,Container, Heading,
-    Table, Thead, Tbody,Tfoot,Tr,Th,Td,TableCaption,TableContainer, CloseButton,} from '@chakra-ui/react'
+import
+    {
+        Avatar, Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement, InputGroup,
+        HStack, Text, Container, Heading,
+        Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, CloseButton,
+    } from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 import phoneFormatter from 'phone-formatter'
 
@@ -10,7 +13,7 @@ import Colour from '../../Colour'
 import Loading from '../../component/loading'
 import { encode, decode } from 'js-base64'
 import { useState, useEffect } from 'react'
-import {useRouter} from 'next/router'
+import { useRouter } from 'next/router'
 import url from '../../url'
 
 export default (props) =>
@@ -23,6 +26,12 @@ export default (props) =>
     const [page, setPage] = useState(1)
     const [pageAmount, setPageAmount] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
+    const [positionID, setPositionID] = useState(null)
+
+    useEffect(() =>
+    {
+        setPositionID(sessionStorage.getItem('positionID'))
+    }, [])
 
     useEffect(() =>
     {
@@ -41,12 +50,12 @@ export default (props) =>
             if (result.data.length !== 0)
             {
                 setPageAmount(result.data[0].page_amount)
-            }      
+            }
             // console.log(result.data)
             // console.log(search)
         }
         fetchPatientData()
-    }, [search,page])
+    }, [search, page])
 
     let container = {
         width: '100vw',
@@ -77,24 +86,25 @@ export default (props) =>
     let addButton = {
         bg: Colour.DarkGreen,
         color: Colour.White,
-        _hover: {filter: 'brightness(0.9)'},
-        transition:'all 0.2s cubic-bezier(.08,.52,.52,1)'
+        _hover: { filter: 'brightness(0.9)' },
+        transition: 'all 0.2s cubic-bezier(.08,.52,.52,1)'
 
     }
 
     let pageButton = {
         bg: Colour.Grey,
-        _hover: {filter: 'brightness(0.9)'},
-        transition:'all 0.2s cubic-bezier(.08,.52,.52,1)'
+        _hover: { filter: 'brightness(0.9)' },
+        transition: 'all 0.2s cubic-bezier(.08,.52,.52,1)'
     }
 
-    const onClickPatient = (id) => {
+    const onClickPatient = (id) =>
+    {
         router.push(`/patient/${id}`)
     }
 
     return (
-        <div style={{backgroundColor: Colour.AlmostWhite, marginBottom: '80px'}}>
-            <Loading isLoading={isLoading}/>
+        <div style={{ backgroundColor: Colour.AlmostWhite, marginBottom: '80px' }}>
+            <Loading isLoading={isLoading} />
             <Box sx={container}>
                 <Heading>
                     Patient
@@ -108,15 +118,19 @@ export default (props) =>
                             pointerEvents='none'
                             children={<SearchIcon />}
                         />
-                        <Input type='text' placeholder='Search' 
-                            onChange={(e) => {setSearch(e.target.value); setPage(1)}}
+                        <Input type='text' placeholder='Search'
+                            onChange={(e) => { setSearch(e.target.value); setPage(1) }}
                         />
                     </InputGroup>
-                    <Button leftIcon={<PlusSquareIcon />} sx={addButton} variant='solid'
-                        onClick={()=>{router.push('/patient/addPatient')}}
-                    >
-                        Add patient
-                    </Button>
+                    {positionID == 3 ?
+
+                        <Button leftIcon={<PlusSquareIcon />} sx={addButton} variant='solid'
+                            onClick={() => { router.push('/patient/addPatient') }}
+                        >
+                            Add patient
+                        </Button>
+                        : null
+                    }
                 </HStack>
 
                 <TableContainer border={'1px solid' + Colour.LightGrey} borderRadius='12px' bgColor={Colour.White}>
@@ -133,8 +147,8 @@ export default (props) =>
                                 patient.map((item, index) => 
                                 {
                                     return (
-                                        <Tr key={index} cursor='pointer' 
-                                            _hover={{ bgColor: Colour.AlmostWhite }} 
+                                        <Tr key={index} cursor='pointer'
+                                            _hover={{ bgColor: Colour.AlmostWhite }}
                                             onClick={() => onClickPatient(item.patientID)}
                                         >
                                             <Td>{item.patientID}</Td>
@@ -153,7 +167,7 @@ export default (props) =>
                                                     </Flex>
                                                 </Flex>
                                             </Td>
-                                            <Td isNumeric>{phoneFormatter.format(item.phone_number,'NNN-NNN-NNNN')}</Td>
+                                            <Td isNumeric>{phoneFormatter.format(item.phone_number, 'NNN-NNN-NNNN')}</Td>
                                         </Tr>
                                     )
                                 })
@@ -165,7 +179,8 @@ export default (props) =>
 
                 <HStack variant='solid' justify='end'>
                     <Button leftIcon={<ArrowBackIcon />} sx={pageButton} variant='solid'
-                        onClick={()=>{
+                        onClick={() =>
+                        {
                             if (page > 1)
                                 setPage(page - 1)
                         }}
@@ -175,7 +190,8 @@ export default (props) =>
                     </Button>
                     <Center>{page}</Center>
                     <Button rightIcon={<ArrowForwardIcon />} sx={pageButton} variant='solid'
-                        onClick={()=>{
+                        onClick={() =>
+                        {
                             if (page < pageAmount)
                                 setPage(page + 1)
                         }}

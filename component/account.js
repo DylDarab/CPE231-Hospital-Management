@@ -17,6 +17,7 @@ export default () => {
   const [name,setName] = useState('')
   const [profileimg,setProfileimg] = useState('')
   const [isShow,setIsShow] = useState(false)
+  const [positionID,setPositionID] = useState(false)
 
   useEffect(()=>{
     if(sessionStorage.getItem('token') !== null)
@@ -25,6 +26,8 @@ export default () => {
       setName(sessionStorage.getItem('name'))
       setProfileimg(sessionStorage.getItem('profileimg'))
     }
+    setPositionID(sessionStorage.getItem('positionID'))
+
   },[])
 
   const onLogout = () => {
@@ -39,7 +42,7 @@ export default () => {
         <HStack spacing="16px" padding="8px">
           <Box textAlign="right">
             <Text fontWeight='bold'>{name}</Text>
-            <Text fontSize='14px'>Admin</Text>
+            <Text fontSize='14px'>{positionID == 1 ? "Doctor" : positionID == 2 ? "Pharmacist": "Admin"}</Text>
           </Box>
           <Avatar src={profileimg}/>
         </HStack>
