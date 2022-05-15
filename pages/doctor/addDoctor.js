@@ -174,9 +174,9 @@ export default (props) =>
     const onSummitClick = () =>
     {
         console.log('summit clicked!')
-        if (form.firstname && form.lastname && form.gender && form.birthDate &&
-            form.citizenID && form.phone_number && form.address && form.EC_name &&
-            form.EC_Relationship && form.EC_phone && form.bloodGroup)
+        if (form.firstname && form.lastname && form.citizenID && form.birthDate &&
+            form.phone_number && form.email && form.department && form.position &&
+            form.licensed_number && form.username && form.password && form.confirm_password)
         {
             setError(false)
             console.log('form is valid')
@@ -228,9 +228,9 @@ export default (props) =>
                                     onChange={(e) => { setForm({ ...form, lastname: e.target.value }) }}
                                 />
                             </FormControl>
-                            <FormControl isRequired isInvalid={error && !form.gender}>
-                                <FormLabel htmlFor='gender'>Citizen ID</FormLabel>
-                                <Input id='last-name' value={form.citizenID}
+                            <FormControl isRequired isInvalid={error && !form.citizenID}>
+                                <FormLabel htmlFor='citizen'>Citizen ID</FormLabel>
+                                <Input id='citizen' value={form.citizenID}
                                     onChange={(e) => { setForm({ ...form, citizenID: e.target.value }) }}
                                 />
                             </FormControl>
@@ -247,8 +247,8 @@ export default (props) =>
                                 />
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.email}>
-                                <FormLabel htmlFor='citizen-id'>Email Address</FormLabel>
-                                <Input id='citizen-id'
+                                <FormLabel htmlFor='email'>Email Address</FormLabel>
+                                <Input id='email'
                                     onChange={(e) => checkEmail(e)}
                                 />
                             </FormControl>
@@ -261,7 +261,7 @@ export default (props) =>
                     <Box>
                         <VStack spacing={4}>
                             <HStack spacing={4} w='100%'>
-                                <FormControl isRequired isInvalid={error && !form.EC_name} w='50%'>
+                                <FormControl isRequired isInvalid={error && !form.department} w='50%'>
                                     <FormLabel htmlFor='ec-name'>Department</FormLabel>
                                     <Select
                                         icon={<ChevronDownIcon />}
@@ -275,14 +275,14 @@ export default (props) =>
 
                                     </Select>
                                 </FormControl>
-                                <FormControl isRequired isInvalid={error && !form.EC_Relationship} w='50%'>
+                                <FormControl isRequired isInvalid={error && !form.position} w='50%'>
                                     <FormLabel htmlFor='ec-relationship'>Position</FormLabel>
                                     
                                     <Select
                                         icon={<ChevronDownIcon />}
                                         placeholder='Select Position'
                                         bgColor={Colour.White}
-                                        onChange={(e) => setForm({...form,department:e.target.value})}
+                                        onChange={(e) => setForm({...form,position:e.target.value})}
                                     >
                                         {props.position.map((position, index) => (
                                             <option key={position.position_name} value={position.position_name}>{position.position_name}</option>

@@ -81,7 +81,6 @@ export default (props) =>
     const [error, setError] = useState(false)
     const [form, setForm] = useState({})
     const [medicine, setMedicine] = useState([])
-
     const PostDeviceData = async () =>
     {
         console.log(sessionStorage.getItem("staffID"))
@@ -92,11 +91,11 @@ export default (props) =>
                 m_priceperunit: form.price
         },{headers: {
             staffid: sessionStorage.getItem("staffID")
-            
         } }).then((response) => {
             console.log(response.data)
         }).catch(err => console.log(err))
         setIsLoading(false)
+        if (form.medicinename != null && form.description != null && form.price != null) {
         toast({
             title: 'Success submit.',
             description: "Adding the medicine name is complete.",
@@ -106,7 +105,17 @@ export default (props) =>
           })
         setTimeout(() => {
             router.push('/stock')
-        }, 3000)
+        }, 3000)}
+        else {
+            console.log('cant submit')
+            toast({
+                title: 'Error submit.',
+                description: "Error",
+                status: 'error',
+                duration: 3000,
+                isClosable: false,
+              })
+        }
     }
     
     console.log(form)
