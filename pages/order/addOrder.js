@@ -50,7 +50,8 @@ export default (props) =>
         flexDirection: 'column',
         gap: '4',
         width: '100%',
-        padding: '16px'
+        padding: '16px',
+        bgColor: Colour.White,
     }
 
     let line = {
