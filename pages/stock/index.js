@@ -177,7 +177,7 @@ export default (props) =>
                                 <StatNumber>{props.statmedData.totalimportC}</StatNumber>
                                 <StatHelpText> <StatArrow type =
                                     {(props.statmedData.totalimportC - (props.statmedData.totalimportL - props.statmedData.totalimportC))>=0?"increase":"decrease"}/>
-                                    {props.statmedData.totalimportC - (props.statmedData.totalimportL - props.statmedData.totalimportC)} from last month
+                                    {props.statmedData.totalimportC - (props.statmedData.totalimportL - props.statmedData.totalimportC)} from last 60 days
                                 </StatHelpText>
                             </Box>
                             </Flex>
@@ -199,7 +199,7 @@ export default (props) =>
                                     (props.statmedData.totalexportMC + props.statmedData.totalexportDC)))>=0?"increase":"decrease"}/>
                                     {((props.statmedData.totalexportMC + props.statmedData.totalexportDC) -
                                     ((props.statmedData.totalexportML + props.statmedData.totalexportDL) - 
-                                    (props.statmedData.totalexportMC + props.statmedData.totalexportDC)))} from last month
+                                    (props.statmedData.totalexportMC + props.statmedData.totalexportDC)))} from last 60 days
                                 </StatHelpText>   
                             </Box>
                             </Flex>
