@@ -16,7 +16,7 @@ export default async (req, res) =>
         else
         {
             let result = await db.query(`
-            SELECT "Log".*,"Staff"."firstname" AS staff_firstname,"Staff"."lastname" AS staff_lastname
+            SELECT "Log".*,"Staff"."firstname" AS staff_firstname,"Staff"."lastname" AS staff_lastname,COUNT(*) OVER() as page_amount
             FROM "public"."Log" LEFT JOIN "public"."Staff" ON "Staff"."staffID" = "Log"."staffID"
             LIMIT 10 OFFSET ${page}
             `)
