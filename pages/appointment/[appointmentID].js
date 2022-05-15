@@ -30,6 +30,7 @@ export default (props) => {
     const [refresh, setRefresh] = useState(false)
     const [selected, setSelected] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
+    const [isSubmit, setIsSubmit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [infoActive, setInfoActive] = useState(true)
     const [file, setFile] = useState(['Profile name', null])
@@ -191,12 +192,59 @@ export default (props) => {
     }
 
     const onSummitClick = () => {
-        let first_check = medicineList[0].medicineID === '' && medicineList[0].name === '' 
-                    && medicineList[0].price === '' && medicineList[0].amount === '' 
-                    && medicineList[0].type === 'used' && medicineList[0].note === ''
-        console.log(first_check)
-        if (first_check && medicineList.length === 1) {
-            setMedicineList([])
+        setIsSubmit(true)
+    }
+
+    const onYesClick = () => {
+        let medicine = []
+        let device = []
+        let ch = true
+        medicineList.forEach(item => {
+            if (!(item.medicineID === '' && item.name === '' && item.price === '' 
+                && item.amount === '' && item.type === 'used' && item.note === '')) {
+                medicine.push(item)
+            }
+        })
+        medicine.forEach(item => {
+            if (item.medicineID === '' || item.amount === '') {
+                // console.log('cant submit')
+                ch = false
+            }
+        })
+        deviceList.forEach(item => {
+            if (!(item.deviceID === '' && item.name === '' && item.price === '' 
+                && item.amount === '' && item.type === 'used' && item.note === '')) {
+                device.push(item)
+            }
+        })
+        device.forEach(item => {
+            if (item.deviceID === '' || item.amount === '') {
+                // console.log('cant submit')
+                ch = false
+            }
+        })
+        console.log(medicine)
+        console.log(device)
+        if (ch) {
+            console.log('can send')
+            // let data = {
+            //     "symptom": symptom,
+            //     "summary": summary,
+            //     "medicine": medicine,
+            //     "device": device,
+            // }
+            // console.log(data)
+            // axios.post('/api/add/case', data)
+            //     .then(res => {
+            //         console.log(res)
+            //         setRefresh(!refresh)
+            //     })
+            //     .catch(err => {
+            //         console.log(err)
+            //     })
+        }
+        else {
+            console.log('cant submit')
         }
         // เดี๋ยวมาทำต่อ
     }
@@ -224,26 +272,28 @@ export default (props) => {
                                 <FormLabel>First name</FormLabel>
                                 <Input 
                                         isDisabled _disabled={{opacity: 0.8}}
-                                        value={data.patient_firstname}
+                                        value={data[0].patient_firstname}
                                 />
                             </FormControl>
                             <FormControl>
                                 <FormLabel>Last name</FormLabel>
                                 <Input 
                                         isDisabled _disabled={{opacity: 0.8}}
-                                        value={data.patient_lastname}
+                                        value={data[0].patient_lastname}
                                 />
                             </FormControl>
                         </HStack>
                         <FormControl>
                             <FormLabel>Symptom</FormLabel>
                             <Textarea resize='none' isDisabled _disabled={{opacity: 0.8}}
-                                value={data.symptoms}
+                                value={data[0].symptoms}
                             />
                         </FormControl>
                         <FormControl>
                             <FormLabel>Summary</FormLabel>
-                            <Textarea resize='none' /*value={props.lastname}*//>
+                            <Textarea resize='none' isDisabled={isSubmit} _disabled={{opacity: 0.8}}
+                                value={summary} onChange={e => setSummary(e.target.value)}
+                            />
                         </FormControl> 
 
                         <HStack align='flex-start'>
@@ -251,6 +301,7 @@ export default (props) => {
                                 <HStack>
                                     <Heading as='h4' size='sm'>Medicine</Heading>
                                     <Button sx={buttonStyle(Colour.Green, Colour.White)} size='xs' rightIcon={<AddIcon />}
+                                        isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                         onClick={()=>{setMedicineList([...medicineList, 
                                             {"medicineID": "", "name": "", "price": "", "amount": "", "type": "used", "note": ""}])}}
                                     >
@@ -264,6 +315,7 @@ export default (props) => {
                                                 <HStack justify='space-between'>
                                                     <Checkbox onChange={(e) => setCheck(0, e.target.checked, index)}
                                                         isChecked={item.type === 'takehome'}
+                                                        isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                                     >
                                                         Take me home
                                                     </Checkbox>
@@ -271,6 +323,7 @@ export default (props) => {
                                                         <Button id={index} sx={buttonStyle(Colour.Red, Colour.White)} 
                                                             size='xs' rightIcon={<SmallCloseIcon />}
                                                             onClick={() => del(0, index)}
+                                                            isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                                         >
                                                             Remove
                                                         </Button> : null
@@ -281,6 +334,7 @@ export default (props) => {
                                                         <AutoCompleteInput variant="outline"
                                                             value={item.name || ''}
                                                             onChange={(e) => setName(0, e.target.value, index)}
+                                                            isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                                         />
                                                         <AutoCompleteList>
                                                             { props ?
@@ -298,7 +352,9 @@ export default (props) => {
                                                             }
                                                         </AutoCompleteList>
                                                     </AutoComplete>
-                                                    <NumberInput min={1} onChange={(e) => setNum(0, e, index)}>
+                                                    <NumberInput min={1} onChange={(e) => setNum(0, e, index)}
+                                                        isDisabled={isSubmit} _disabled={{opacity: 0.8}}
+                                                    >
                                                         <NumberInputField />
                                                         <NumberInputStepper>
                                                             <NumberIncrementStepper />
@@ -308,6 +364,7 @@ export default (props) => {
                                                 </HStack>
                                                 <Input placeholder='Note...' value={item.note}
                                                     onChange={(e) => setNote(0, e.target.value, index)}
+                                                    isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                                 />
                                             </Flex>
                                         );
@@ -319,6 +376,7 @@ export default (props) => {
                                 <HStack>
                                     <Heading as='h4' size='sm'>Device</Heading>
                                     <Button sx={buttonStyle(Colour.Green, Colour.White)} size='xs' rightIcon={<AddIcon />}
+                                        isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                         onClick={()=>{setDeviceList([...deviceList, 
                                             {"deviceID": "", "name": "", "price": "", "amount": "", "type": "used", "note": ""}])}}
                                     >
@@ -332,6 +390,7 @@ export default (props) => {
                                                 <HStack justify='space-between'>
                                                     <Checkbox onChange={(e) => setCheck(1, e.target.checked, index)}
                                                         isChecked={item.type === 'takehome'}
+                                                        isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                                     >
                                                         Take me home
                                                     </Checkbox>
@@ -339,6 +398,7 @@ export default (props) => {
                                                         <Button id={index} sx={buttonStyle(Colour.Red, Colour.White)} 
                                                             size='xs' rightIcon={<SmallCloseIcon />}
                                                             onClick={() => del(1, index)}
+                                                            isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                                         >
                                                             Remove
                                                         </Button> : null
@@ -349,6 +409,7 @@ export default (props) => {
                                                         <AutoCompleteInput variant="outline"
                                                             value={item.name || ''}
                                                             onChange={(e) => setName(1, e.target.value, index)}
+                                                            isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                                         />
                                                         <AutoCompleteList>
                                                             { props ?
@@ -366,7 +427,9 @@ export default (props) => {
                                                             }
                                                         </AutoCompleteList>
                                                     </AutoComplete>
-                                                    <NumberInput min={1} onChange={(e) => setNum(1, e, index)}>
+                                                    <NumberInput min={1} onChange={(e) => setNum(1, e, index)}
+                                                        isDisabled={isSubmit} _disabled={{opacity: 0.8}}
+                                                    >
                                                         <NumberInputField />
                                                         <NumberInputStepper>
                                                             <NumberIncrementStepper />
@@ -376,6 +439,7 @@ export default (props) => {
                                                 </HStack>
                                                 <Input placeholder='Note...' value={item.note}
                                                     onChange={(e) => setNote(1, e.target.value, index)}
+                                                    isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                                 />
                                             </Flex>
                                         );
@@ -386,25 +450,60 @@ export default (props) => {
                 </Flex>
 
                 <HStack justify='end'>
-                    <ButtonGroup>
-                        <Button sx={buttonStyle(Colour.Green, Colour.White)} 
-                            onClick={() => onSummitClick()}
-                        >
-                            Submit
-                        </Button>
-                        <Button sx={buttonStyle(Colour.Red, Colour.White)} 
-                            onClick={() => router.push('/appointment')}
-                        >
-                            Cancel
-                        </Button>
-                    </ButtonGroup>
+                    { !isSubmit ?
+                        <ButtonGroup>
+                            <Button sx={buttonStyle(Colour.Green, Colour.White)} 
+                                onClick={() => onSummitClick()}
+                            >
+                                Submit
+                            </Button>
+                            <Button sx={buttonStyle(Colour.Red, Colour.White)} 
+                                onClick={() => router.push('/appointment')}
+                            >
+                                Cancel
+                            </Button>
+                        </ButtonGroup> :
+                        <>
+                            <Text>Submit?</Text>
+                            <ButtonGroup>
+                                <Button sx={buttonStyle(Colour.Green, Colour.White)} 
+                                    onClick={() => onYesClick()}
+                                >
+                                    Yes
+                                </Button>
+                                <Button sx={buttonStyle(Colour.Red, Colour.White)} 
+                                    onClick={() => setIsSubmit(false)}
+                                >
+                                    No
+                                </Button>
+                            </ButtonGroup>
+                        </>
+
+                    }
                 </HStack>
             </Flex>
         </div>
     )
 }
 
-export const getServerSideProps = async (context)=>{
+export const getStaticPaths = async () => {
+    const res = await axios.get(`${url}/api/getAppointment/path`);
+    const paths = res.data.map((item) => ({
+        params: {
+            appointmentID: item.appointmentID
+        }
+    }));
+    // const paths = [
+    //     {
+    //         params: {
+    //             appointmentID: '1'
+    //         }
+    //     }
+    // ]
+    return { paths, fallback: false };
+}
+
+export const getStaticProps = async (context)=>{
     const id = context.params.appointmentID;
     const data = await axios.get(`${url}/api/getAppointment/${id}`);
     const medicine = await axios.get(`${url}/api/getMedicine`, {
@@ -417,9 +516,12 @@ export const getServerSideProps = async (context)=>{
         }})
     return {
         props: {
-            data: data.data[0],
-            medicine: medicine.data,
-            device: device.data
+            data: JSON.parse(JSON.stringify(data.data)),
+            medicine: JSON.parse(JSON.stringify(medicine.data)),
+            device: JSON.parse(JSON.stringify(device.data))
+            // data: data.data[0],
+            // medicine: medicine.data,
+            // device: device.data
         }
     }
 }
