@@ -123,7 +123,7 @@ export default () =>
         }
     }
 
-    const editButton = (id) => {
+    const editButton = (id, index) => {
         // console.log(sessionStorage.getItem('positionID'))
         if (sessionStorage.getItem('positionID') === '1')
             router.push(`/appointment/${id}`)
@@ -207,7 +207,7 @@ export default () =>
                                                     <Button size='sm' leftIcon={<EditIcon />} sx={buttonStyle(Colour.Yellow)} 
                                                         // onClick={() => setSelected(index)}
                                                         // onClick={() => router.push(`/appointment/${item.appointmentID}`)}
-                                                        onClick={() => editButton(item.appointmentID)}
+                                                        onClick={() => editButton(item.appointmentID, index)}
                                                     >
                                                         Edit
                                                     </Button>
