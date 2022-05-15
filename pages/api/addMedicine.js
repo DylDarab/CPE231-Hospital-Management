@@ -1,4 +1,5 @@
 import db from '../../db'
+import addLog from '../../functions/addLog'
 
 export default async (req,res)=>{
     if(req.method==='POST')
@@ -10,6 +11,9 @@ export default async (req,res)=>{
         let result = await db.query(`
         INSERT INTO "public"."Medicine" ("medicine_name","description","m_priceperunit") 
         VALUES ($1,$2,$3) RETURNING *`,[medicine_name,description,m_priceperunit])
+
+        let log = await addLog(req.headers.staffid, `Add new medicine name: ${medicine_name} description: ${description} price: ${m_priceperunit} to database`, new Date())
+
 
         res.json(result.rows[0])
     }
