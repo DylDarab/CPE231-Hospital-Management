@@ -151,7 +151,7 @@ export default (props) => {
         // console.log(check, i)
     }
 
-    const setName = (type, name, price, i, id = '') => {
+    const setName = (type, name, i, price = '', id = '') => {
         // console.log(id, name)
         if (type) {
             let temp = [...deviceList]
@@ -381,7 +381,7 @@ export default (props) => {
                                                                         value={med.medicine_name}
                                                                         textTransform="capitalize"
                                                                         align="center"
-                                                                        onClick={() => setName(0, med.medicine_name, med.m_priceperunit, index, med.medicineID)}
+                                                                        onClick={() => setName(0, med.medicine_name, index, med.m_priceperunit, med.medicineID)}
                                                                     >
                                                                         <Text ml="4">{med.medicine_name}</Text>
                                                                     </AutoCompleteItem>
@@ -456,7 +456,7 @@ export default (props) => {
                                                                         value={dev.device_name}
                                                                         textTransform="capitalize"
                                                                         align="center"
-                                                                        onClick={() => setName(1, dev.device_name, dev.d_priceperunit, index, dev.deviceID)}
+                                                                        onClick={() => setName(1, dev.device_name, index, dev.d_priceperunit, dev.deviceID)}
                                                                     >
                                                                         <Text ml="4">{dev.device_name}</Text>
                                                                     </AutoCompleteItem>
