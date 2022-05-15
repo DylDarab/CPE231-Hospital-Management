@@ -1,4 +1,5 @@
-import db from '../../../db'
+import db from '../../db'
+import addLog from '../../functions/addLog'
 
 export default async (req, res) =>
 {
@@ -67,7 +68,6 @@ export default async (req, res) =>
             `, [m.medicineID, m.amount, m.price, appointmentID, m.type, m.note])
         })
         await Promise.all(promise2)
-
 
         res.json({"status":"ok"})
     }

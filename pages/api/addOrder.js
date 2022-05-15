@@ -1,4 +1,5 @@
 import db from '../../db/index'
+import addLog from '../../functions/addLog'
 
 export default async (req, res) =>
 {
@@ -37,6 +38,7 @@ export default async (req, res) =>
             })
             await Promise.all(promise2)
 
+            addLog(req.headers.staffid, `Add stock order From ${organizationName}`,new Date(),'')
             res.json({ "status": "ok" })
         }
         else
@@ -62,6 +64,8 @@ export default async (req, res) =>
             })
             await Promise.all(promise2)
 
+            
+            addLog(req.headers.staffid, `Add stock order From ${organizationName}`, new Date(), '')
             res.json({ "status": "ok" })
         }
     }

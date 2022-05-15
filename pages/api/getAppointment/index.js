@@ -15,7 +15,7 @@ export default async (req, res) =>
                     "Staff".lastname AS lname_s, CEILING(COUNT(*) OVER()/10) as page_amount FROM "Appointment"
                     LEFT JOIN "Patient" ON "Patient"."patientID" = "Appointment"."patientID"
                     LEFT JOIN "Staff" ON "Staff"."staffID" = "Appointment"."staffID"
-                    WHERE (LOWER(CONCAT("Patient".firstname,' ',"Patient".lastname)) LIKE '%${search}%') AND
+                    WHERE "Appointment"."summary" IS NOT NULL AND (LOWER(CONCAT("Patient".firstname,' ',"Patient".lastname)) LIKE '%${search}%') AND
                     start_time BETWEEN CURRENT_DATE + INTERVAL '0 hour' AND CURRENT_DATE + INTERVAL '1 day' 
                     ORDER BY "appointmentID" ASC LIMIT 10 OFFSET $1 `, [(page - 1) * 10])
         res.json(result.rows)
