@@ -342,77 +342,156 @@ export default (props) =>
                                 </Button>
                             </HStack>
 
-                        { form1.map(form1s => (
-                            <HStack spacing={4} w='100%' key={form1s.id}>
-                            <FormControl isInvalid={error && !form1.medicine} w='50%'>
-                                    <FormLabel htmlFor='medicine'>Medicine</FormLabel>
-                                    <Select
-                                        icon={<ChevronDownIcon />}
-                                        placeholder='Select Medicine'
-                                        bgColor={Colour.White} value={form1.medicine}
-                                        onChange={event => handleChangeInput1(form1s.id, event)}
-                                    >
-                                         {props.medicine.map((medicine, index) => (
-                                            <option key={medicine.medicineID} value={medicine.medicineID}>{medicine.medicine_name}</option>
-                                        ))}
-                                    </Select>
-                            </FormControl>
-                            <FormControl isInvalid={error && !form1.pricemedicine}>
-                                    <FormLabel htmlFor='price-medicine'>Price</FormLabel>
-                                         <Input id='price-medicine' value={form1.pricemedicine}
-                                         onChange={event => handleChangeInput1(form1s.id, event)}
-                                />
-                            </FormControl>
-                            <FormControl isInvalid={error && !form1.amountmedicine}>
-                                <FormLabel htmlFor='amount-medicine'>Amount</FormLabel>
-                                <NumberInput max={1000000} min={1}> 
-                                    <NumberInputField id='amount-medicine' value={form1.amountmedicine}
-                                    onChange={event => handleChangeInput1(form1s.id, event)} />
-                                    <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
-                            </FormControl>
-                            <IconButton aria-label='Add' icon={<AddIcon />} onClick={() => addForm1Fields()}/>
-                            <IconButton aria-label='Delete' icon={<DeleteIcon />} disabled={form1.length === 1} onClick={() => Remove1Fields(form1s.id)}/>
-                            </HStack>))}
+                            {
+                                medicineList.map((item, index) => {
+                                    return (
+                                        <HStack spacing={4} w='100%' align='flex-end'>
+                                            <FormControl>
+                                                <FormLabel>Medicine</FormLabel>
+                                                <AutoComplete openOnFocus>
+                                                    <AutoCompleteInput variant="outline"
+                                                        value={item.name || ''}
+                                                        onChange={(e) => setName(0, e.target.value, index)}
+                                                        isDisabled={isConfirm} _disabled={{opacity: 0.8}}
+                                                    />
+                                                    <AutoCompleteList>
+                                                        { props ?
+                                                            medicineData.map((med, i) => (
+                                                                <AutoCompleteItem
+                                                                    key={i}
+                                                                    value={med.medicine_name}
+                                                                    textTransform="capitalize"
+                                                                    align="center"
+                                                                    onClick={() => setName(0, med.medicine_name, index, med.medicineID)}
+                                                                >
+                                                                    <Text ml="4">{med.medicine_name}</Text>
+                                                                </AutoCompleteItem>
+                                                            )) : null 
+                                                        }
+                                                    </AutoCompleteList>
+                                                </AutoComplete>
+                                            </FormControl>
+                                            <FormControl w='50%'>
+                                                <FormLabel>Price per unit</FormLabel>
+                                                <NumberInput min={1} 
+                                                    isDisabled={isConfirm}
+                                                    value={item.price || ''} 
+                                                    onChange={(e)=>{setPrice(0, e, index)}}
+                                                >
+                                                    <NumberInputField/>
+                                                    <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </FormControl>
+                                            <FormControl w='50%'>
+                                                <FormLabel>Amount</FormLabel>
+                                                <NumberInput min={1} 
+                                                    isDisabled={isConfirm} 
+                                                    value={item.amount || ''}
+                                                    onChange={(e)=>{setAmount(0, e, index)}}
+                                                >
+                                                    <NumberInputField/>
+                                                    <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </FormControl>
+                                            { index !== 0 ?
+                                                <IconButton sx={buttonStyle(Colour.Red, Colour.White)} size='sm' icon={<CloseIcon />} 
+                                                    onClick={() => del(0, index)}
+                                                /> :
+                                                <IconButton sx={buttonStyle(Colour.Red, Colour.White)} size='sm' icon={<CloseIcon />} 
+                                                    visibility='hidden'
+                                                />
+                                            }
+                                        </HStack>
+                                    );
+                                })
+                            }
 
-                        { form2.map(form2s => (
-                            <HStack spacing={4} w='100%' key={form2s.id}>
-                            <FormControl isInvalid={error && !form2.device} w='50%'>
-                                    <FormLabel htmlFor='device'>Device</FormLabel>
-                                    <Select
-                                        icon={<ChevronDownIcon />}
-                                        placeholder='Select Device'
-                                        bgColor={Colour.White} value={form2.device}
-                                        onChange={event => handleChangeInput2(form2s.id, event)}
-                                    >
-                                         {props.device.map((device, index) => (
-                                            <option key={device.deviceID} value={device.deviceID}>{device.device_name}</option>
-                                        ))}
-                                    </Select>
-                            </FormControl>
-                            <FormControl isInvalid={error && !form2.pricedevice}>
-                                    <FormLabel htmlFor='price-device'>Price</FormLabel>
-                                         <Input id='price-device' value={form2.pricemedevice}
-                                         onChange={event => handleChangeInput2(form2s.id, event)}
-                                />
-                            </FormControl>
-                            <FormControl isInvalid={error && !form2.amountdevice}>
-                                <FormLabel htmlFor='amount-medicine'>Amount</FormLabel>
-                                <NumberInput max={1000000} min={1}>
-                                    <NumberInputField id='amount-device' value={form2.amountdevice}
-                                    onChange={event => handleChangeInput2(form2s.id, event)}/>
-                                    <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
-                            </FormControl>
-                            <IconButton aria-label='Add' icon={<AddIcon />} onClick={() => addForm2Fields()}/>
-                            <IconButton aria-label='Delete' icon={<DeleteIcon />} disabled={form2.length === 1} onClick={() => Remove2Fields(form2s.id)}/>
-                            </HStack>))}
+                            <HStack>
+                                <Heading as='h4' size='sm'>Device</Heading>
+                                <Button sx={buttonStyle(Colour.Green, Colour.White)} size='xs' rightIcon={<AddIcon />}
+                                    isDisabled={isConfirm} _disabled={{opacity: 0.8}}
+                                    onClick={()=>{setDeviceList([...deviceList, 
+                                        {"deviceID": "", "name": "", "price": "", "amount": ""}])}}
+                                >
+                                    Add
+                                </Button>
+                            </HStack>
+
+                            {
+                                deviceList.map((item, index) => {
+                                    return (
+                                        <HStack spacing={4} w='100%' align='flex-end'>
+                                            <FormControl>
+                                                <FormLabel>Device</FormLabel>
+                                                <AutoComplete openOnFocus>
+                                                    <AutoCompleteInput variant="outline"
+                                                        value={item.name || ''}
+                                                        onChange={(e) => setName(1, e.target.value, index)}
+                                                        isDisabled={isConfirm} _disabled={{opacity: 0.8}}
+                                                    />
+                                                    <AutoCompleteList>
+                                                        { props ?
+                                                            deviceData.map((dev, i) => (
+                                                                <AutoCompleteItem
+                                                                    key={i}
+                                                                    value={dev.device_name}
+                                                                    textTransform="capitalize"
+                                                                    align="center"
+                                                                    onClick={() => setName(1, dev.device_name, index, dev.deviceID)}
+                                                                >
+                                                                    <Text ml="4">{dev.device_name}</Text>
+                                                                </AutoCompleteItem>
+                                                            )) : null 
+                                                        }
+                                                    </AutoCompleteList>
+                                                </AutoComplete>
+                                            </FormControl>
+                                            <FormControl w='50%'>
+                                                <FormLabel>Price per unit</FormLabel>
+                                                <NumberInput min={1} 
+                                                    isDisabled={isConfirm}
+                                                    value={item.price || ''} 
+                                                    onChange={(e)=>{setPrice(1, e, index)}}
+                                                >
+                                                    <NumberInputField/>
+                                                    <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </FormControl>
+                                            <FormControl w='50%'>
+                                                <FormLabel>Amount</FormLabel>
+                                                <NumberInput min={1} 
+                                                    isDisabled={isConfirm} 
+                                                    value={item.amount || ''}
+                                                    onChange={(e)=>{setAmount(1, e, index)}}
+                                                >
+                                                    <NumberInputField/>
+                                                    <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </FormControl>
+                                            { index !== 0 ?
+                                                <IconButton sx={buttonStyle(Colour.Red, Colour.White)} size='sm' icon={<CloseIcon />} 
+                                                    onClick={() => del(1, index)}
+                                                /> :
+                                                <IconButton sx={buttonStyle(Colour.Red, Colour.White)} size='sm' icon={<CloseIcon />} 
+                                                    visibility='hidden'
+                                                />
+                                            }
+                                        </HStack>
+                                    );
+                                })
+                            }
                         </VStack>
                     {/* </Box> */}
                 </Flex>
