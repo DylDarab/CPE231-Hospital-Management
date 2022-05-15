@@ -106,6 +106,7 @@ export default () =>
                         </AccordionItem>
 
                     </Accordion>
+                    {createMenu("log")}
                 </Stack>
             </VStack>
         </nav>
