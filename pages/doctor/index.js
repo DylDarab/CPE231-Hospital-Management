@@ -2,7 +2,7 @@ import
 {
     Box, ButtonGroup, Button, Center, Flex, Image, Input, InputRightElement, InputGroup,
     HStack, Text, Container, Heading, Select,
-    Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer,
+    Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, Avatar
 } from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, ChevronDownIcon, SearchIcon } from '@chakra-ui/icons'
 import axios from 'axios'
@@ -190,7 +190,7 @@ export default (props) =>
                                     <Td>{d.staffID}</Td>
                                     <Td>
                                         <Flex align='center' gap='8px'>
-                                            <Image
+                                            <Avatar
                                                 display='inline-block'
                                                 float='left'
                                                 borderRadius='full'
