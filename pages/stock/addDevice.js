@@ -8,7 +8,7 @@ import
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import axios from 'axios'
 import Colour from '../../Colour'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import emailValidate from 'email-validator'
 import phoneFormatter from 'phone-formatter'
 import url from '../../url'
