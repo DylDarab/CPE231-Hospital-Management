@@ -485,7 +485,7 @@ export default (props) => {
               {/* <FormErrorMessage>First name is required.</FormErrorMessage> */}
             </FormControl>
             <FormControl isRequired isInvalid={error && !form.password}>
-              <FormLabel htmlFor="first-name">First name</FormLabel>
+              <FormLabel htmlFor="first-name">Password</FormLabel>
               <Input
                 id="first-name"
                 value={form.password}
