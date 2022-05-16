@@ -1,5 +1,5 @@
 import db from '../../db'
-
+import addLog from '../../functions/addLog'
 export default async (req, res) =>
 {
     const { firstname, lastname, dob, citizenID,license_number,phone_number,
@@ -16,6 +16,9 @@ export default async (req, res) =>
                 , [firstname, lastname, citizenID, dob, license_number, phone_number, salary,
                     username, password, email, profile_img, positionID, departmentID])
             res.json(result.rows[0])
+
+            addLog(req.headers.staffid, `Add new staff ${firstname} ${lastname}`, new Date(), '')
+
         }
         else
             res.send('Register failed')
