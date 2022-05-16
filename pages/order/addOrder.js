@@ -234,7 +234,9 @@ export default (props) =>
                 "device": device,
             }
             console.log(data)
-            axios.post(`${url}/api/addOrder`, data)
+            axios.post(`${url}/api/addOrder`, data, {headers: {
+                staffid: sessionStorage.getItem("staffID")
+            }})
                 .then(res => {
                     console.log(res)
                     // setRefresh(!refresh)
