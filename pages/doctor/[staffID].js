@@ -80,6 +80,7 @@ export default (props) =>
     const [allergyForm, setAllergyForm] = useState(true)
     const [error, setError] = useState(false)
     const [form, setForm] = useState({})
+    const [isEdit, setIsEdit] = useState(false)
 
     const checkCitizen = (e) =>
     {
