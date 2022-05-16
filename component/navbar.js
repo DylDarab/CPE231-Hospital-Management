@@ -21,7 +21,6 @@ export default () =>
         if (sessionStorage.getItem('token') === null)
         {
             router.push('/')
-            alert('Please login again')
         }
         setPositionID(sessionStorage.getItem('positionID'))
     }, [])

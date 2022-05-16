@@ -4,7 +4,7 @@ import
     HStack, Text, Container, Heading, Lorem, Stack, useDisclosure,
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
     Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, CloseButton, useRadio,
-    AlertDialog,AlertDialogBody,AlertDialogFooter,AlertDialogHeader,AlertDialogContent,AlertDialogOverlay,
+    AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay,
     AlertDialogCloseButton,
 } from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon, EditIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
@@ -15,7 +15,7 @@ import { encode, decode } from 'js-base64'
 import phoneFormatter from 'phone-formatter'
 import axios from 'axios'
 import { useEffect, useState, useRef } from 'react'
-import {useRouter} from 'next/router'
+import { useRouter } from 'next/router'
 import Colour from '../../Colour'
 import Loading from '../../component/loading'
 import AppointmentEdit from '../../component/appointmentEdit'
@@ -48,7 +48,7 @@ export default () =>
             alert('please login again')
         }
         setPositionID(sessionStorage.getItem('positionID'))
-        if (sessionStorage.getItem('positionID') ==2)
+        if (sessionStorage.getItem('positionID') == 2)
         {
             kickOut()
         }
@@ -127,7 +127,8 @@ export default () =>
         }
     }
 
-    const editButton = (id, index) => {
+    const editButton = (id, index) =>
+    {
         // console.log(sessionStorage.getItem('positionID'))
         if (sessionStorage.getItem('positionID') === '1')
             router.push(`/appointment/${id}`)
@@ -135,41 +136,64 @@ export default () =>
             setSelected(index)
     }
 
-    const deleteDialog = (onClose, isOpen, id = '') => {
+    const onDelete = async () =>
+    {
+        const result = await axios.delete(`${url}/api/deleteAppointment`, {
+            headers: {
+                appointmentid: data[selected].appointmentID
+            },
+        })
+        console.log(result)
+        if (result)
+        {
+            alert('Delete Successfully')
+            setPage(1)
+            setSearch('')
+            window.location.reload()
+
+        }
+        else
+        {
+            alert('Delete Failed')
+        }
+    }
+
+    const deleteDialog = (onClose, isOpen, id = '') =>
+    {
         return (
             <>
-              <AlertDialog
-                motionPreset='slideInBottom'
-                leastDestructiveRef={cancelRef}
-                onClose={onClose}
-                isOpen={isOpen}
-                isCentered
-              >
-                <AlertDialogOverlay />
-        
-                <AlertDialogContent>
-                    <AlertDialogHeader>Delete Appointment</AlertDialogHeader>
-                    <AlertDialogBody>
-                        Are you sure? You can't undo this action afterwards.
-                    </AlertDialogBody>
-                    <AlertDialogFooter>
-                        <Button ref={cancelRef} onClick={onClose}>
-                            No
-                        </Button>
-                        <Button colorScheme='red' ml={3} onClick={() => {console.log('delete!'); setSelected(null)}}>
-                            Yes
-                        </Button>
-                    </AlertDialogFooter>
+                <AlertDialog
+                    motionPreset='slideInBottom'
+                    leastDestructiveRef={cancelRef}
+                    onClose={onClose}
+                    isOpen={isOpen}
+                    isCentered
+                >
+                    <AlertDialogOverlay />
+
+                    <AlertDialogContent>
+                        <AlertDialogHeader>Delete Appointment</AlertDialogHeader>
+                        <AlertDialogBody>
+                            Are you sure? You can't undo this action afterwards.
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={onClose}>
+                                No
+                            </Button>
+                            <Button colorScheme='red' ml={3} onClick={() => onDelete()}>
+                                Yes
+                            </Button>
+                        </AlertDialogFooter>
                     </AlertDialogContent>
-              </AlertDialog>
+                </AlertDialog>
             </>
-          )
+        )
     }
-    
+
 
     return (
-        <div style={{ backgroundColor: Colour.AlmostWhite, marginBottom: '80px'}}>
-            <Loading isLoading={isLoading}/>
+        <div style={{ backgroundColor: Colour.AlmostWhite, marginBottom: '80px' }}>
+            <Loading isLoading={isLoading} />
             <Box sx={container} >
                 <Heading>
                     Appointment
@@ -207,64 +231,64 @@ export default () =>
                                 data.map((item, index) => 
                                 {
                                     return (
-                                            <Tr key={index}>
-                                                <Td>{item.patientID}</Td>
-                                                <Td>
-                                                    <Flex align='center' gap='8px'>
-                                                        <Avatar
-                                                            display='inline-block'
-                                                            float='left'
-                                                            borderRadius='full'
-                                                            boxSize='40px'
-                                                            src={item.patient_profile_img}
-                                                            alt={item.patient_lastname}
-                                                        />
-                                                        <Flex h='40px' align='center'>
-                                                            {item.patient_firstname + ' ' + item.patient_lastname}
-                                                        </Flex>
+                                        <Tr key={index}>
+                                            <Td>{item.patientID}</Td>
+                                            <Td>
+                                                <Flex align='center' gap='8px'>
+                                                    <Avatar
+                                                        display='inline-block'
+                                                        float='left'
+                                                        borderRadius='full'
+                                                        boxSize='40px'
+                                                        src={item.patient_profile_img}
+                                                        alt={item.patient_lastname}
+                                                    />
+                                                    <Flex h='40px' align='center'>
+                                                        {item.patient_firstname + ' ' + item.patient_lastname}
                                                     </Flex>
-                                                </Td>
-                                                <Td>
-                                                    <Flex align='center' gap='8px'>
-                                                        <Flex h='40px' align='center'>
-                                                            {item.staff_firstname + ' ' + item.staff_lastname}
-                                                        </Flex>
+                                                </Flex>
+                                            </Td>
+                                            <Td>
+                                                <Flex align='center' gap='8px'>
+                                                    <Flex h='40px' align='center'>
+                                                        {item.staff_firstname + ' ' + item.staff_lastname}
                                                     </Flex>
-                                                </Td>
-                                                <Td>
-                                                    {item.roomName ? item.roomName : '-'}
-                                                </Td>
-                                                <Td>
-                                                    {item.start_time ? new Date(item.start_time).toLocaleString() : '-'}
-                                                </Td>
-                                                <Td>
-                                                    {  sessionStorage.getItem('positionID') === '3' ?
-                                                        <Button size='sm' leftIcon={<DeleteIcon />} sx={buttonStyle(Colour.Red)} 
-                                                            onClick={() => setSelected(index)}
-                                                            // onClick={() => router.push(`/appointment/${item.appointmentID}`)}
-                                                            // onClick={() => editButton(item.appointmentID, index)}
-                                                        >
-                                                            Delete
-                                                        </Button> :
-                                                        <Button size='sm' leftIcon={<EditIcon />} sx={buttonStyle(Colour.Yellow)} 
-                                                            // onClick={() => setSelected(index)}
-                                                            onClick={() => router.push(`/appointment/${item.appointmentID}`)}
-                                                            // onClick={() => editButton(item.appointmentID, index)}
-                                                        >
-                                                            Edit
-                                                        </Button>
-                                                    }
-                                                    {/* {   selected === index ?
+                                                </Flex>
+                                            </Td>
+                                            <Td>
+                                                {item.roomName ? item.roomName : '-'}
+                                            </Td>
+                                            <Td>
+                                                {item.start_time ? new Date(item.start_time).toLocaleString() : '-'}
+                                            </Td>
+                                            <Td>
+                                                {sessionStorage.getItem('positionID') === '3' ?
+                                                    <Button size='sm' leftIcon={<DeleteIcon />} sx={buttonStyle(Colour.Red)}
+                                                        onClick={() => setSelected(index)}
+                                                    // onClick={() => router.push(`/appointment/${item.appointmentID}`)}
+                                                    // onClick={() => editButton(item.appointmentID, index)}
+                                                    >
+                                                        Delete
+                                                    </Button> :
+                                                    <Button size='sm' leftIcon={<EditIcon />} sx={buttonStyle(Colour.Yellow)}
+                                                        // onClick={() => setSelected(index)}
+                                                        onClick={() => router.push(`/appointment/${item.appointmentID}`)}
+                                                    // onClick={() => editButton(item.appointmentID, index)}
+                                                    >
+                                                        Edit
+                                                    </Button>
+                                                }
+                                                {/* {   selected === index ?
                                                         <AppointmentEdit item={item} isOpen={selected === index ? true : false} onClose={()=>setSelected(null)} />
                                                         : null
                                                     } */}
-                                                    {deleteDialog(()=>setSelected(null), selected === index ? true : false)}
-                                                </Td>
-                                            </Tr>
+                                                {deleteDialog(() => setSelected(null), selected === index ? true : false)}
+                                            </Td>
+                                        </Tr>
                                     )
                                 })
                             }
-                            
+
 
                         </Tbody>
 
@@ -294,7 +318,7 @@ export default () =>
                         Next
                     </Button>
                 </HStack>
-                
+
             </Flex>
             {/* <AppointmentEdit id={appointmentID} isOpen={isOpen} onClose={onClose} /> */}
         </div>

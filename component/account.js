@@ -11,6 +11,7 @@ import {
 import Colour from "../Colour";
 import {useState,useEffect}  from 'react'
 import { useRouter } from 'next/router';
+import { ro } from 'date-fns/locale'
 
 export default () => {
   const router = useRouter();
@@ -25,6 +26,10 @@ export default () => {
       setIsShow(true)
       setName(sessionStorage.getItem('name'))
       setProfileimg(sessionStorage.getItem('profileimg'))
+    }
+    else
+    {
+      router.push('/')
     }
     setPositionID(sessionStorage.getItem('positionID'))
 

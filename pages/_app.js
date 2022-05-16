@@ -5,18 +5,20 @@ import Account from '../component/account'
 import checkToken from '../functions/checkToken'
 import { useState, useEffect } from 'react'
 import Loading from '../component/loading'
-import Router from "next/router"
+import {useRouter} from 'next/router'
+import Router from 'next/router'
 function MyApp({ Component, pageProps })
 {
   const [token, setToken] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
   useEffect(() =>
   {
-    if (typeof window !== 'undefined')
-    {
+
       setToken(sessionStorage.getItem('token'))
-    }
+    
   }, [pageProps])
+
 
   useEffect(() =>
   {
@@ -43,10 +45,14 @@ function MyApp({ Component, pageProps })
   return (
     <ChakraProvider>
       <Loading isLoading={isLoading} />
-      <>
-        <Navbar />
-        <Account />
-      </>
+      {(token !== null) ?
+        <>
+          <Navbar />
+          <Account />
+        </>
+        :
+        null
+      }
       <Component {...pageProps} />
 
     </ChakraProvider>)
