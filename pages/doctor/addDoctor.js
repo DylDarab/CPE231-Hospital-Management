@@ -21,6 +21,7 @@ import {
   RadioGroup,
   VStack,
   useToast,
+  Avatar
 } from "@chakra-ui/react";
 
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -272,6 +273,9 @@ export default (props) => {
         duration: 3000,
         isClosable: false,
       });
+      setTimeout(() => {
+        router.push('/doctor')
+    }, 3000)
     // window.location.reload();
     //   setTimeout(function(){
     //       window.location.reload(1);
@@ -302,6 +306,7 @@ export default (props) => {
           <Heading as="h4" size="md">
             Personal information
           </Heading>
+          <Avatar size='2xl' src={form.profile_img} />
 
           <HStack>
             {/* <Text maxW='400px' overflow='hidden' whiteSpace='nowrap' textOverflow='ellipsis'>
@@ -314,7 +319,7 @@ export default (props) => {
                                 onChange={(e) => { setForm({ ...form, profile_img: e.target.value }) }}
                             /> */}
             <FormControl>
-              <FormLabel htmlFor="profile_img">Profile_img</FormLabel>
+              <FormLabel htmlFor="profile_img">Profile image</FormLabel>
               <Input
                 id="profile_img"
                 value={form.profile_img}
