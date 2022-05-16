@@ -12,7 +12,7 @@ export default async (req, res) =>
         {
             let result = await db.query(`
                 UPDATE "public"."Staff" SET "firstname"=$1, "lastname"=$2, "citizenID"=$3,
-                "birthDate"=$4,"license_number"=$5,"phone_number"=$6,"salary"=$7,"username"=$8,
+                "birthDate"=$4,"licensed_number"=$5,"phone_number"=$6,"salary"=$7,"username"=$8,
                 "password"=$9,"email"=$10,"profile_img"=$11,"positionID"=$12,"departmentID"=$13
                 WHERE "staffID"=$14 RETURNING *
             `,[firstname, lastname, citizenID, dob, license_number, phone_number, salary,
