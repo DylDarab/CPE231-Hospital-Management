@@ -52,12 +52,11 @@ export default async (req, res) =>
             GROUP BY "organization_name"
             HAVING COUNT("Order"."organizationID") = (
                 SELECT MAX("CNTOrgan")
-                FROM (SELECT "organization_name", COUNT("organization_name") AS "CNTOrgan"
-                    FROM "public"."Organization"
-                    INNER JOIN "public"."Order" ON "Order"."organizationID" = "Organization"."organizationID" 
-                    INNER JOIN "public"."OrderDetail" ON "OrderDetail"."orderID" = "Order"."orderID"
-                        WHERE CAST("dateInStock" AS DATE) >= CAST(NOW() AS DATE) - 30
-                        GROUP BY "organization_name"))
+                FROM (SELECT "organization_name", COUNT("Order"."organizationID") AS "CNTOrgan" 
+                FROM "public"."Order"
+                INNER JOIN "public"."Organization" ON "Organization"."organizationID" = "Order"."organizationID" 
+                WHERE CAST("dateInStock" AS DATE) >= CAST(NOW() AS DATE) - 30 
+                GROUP BY "organization_name"))
         `)
         
         let topmedicine = await db.query(`
@@ -69,12 +68,12 @@ export default async (req, res) =>
         GROUP BY "medicine_name"
         HAVING SUM("MedicineWithdraw"."withdrawAmount") = (
         SELECT MAX("SUMMed")
-            FROM (SELECT "MedicineWithdraw"."medicineID", SUM("MedicineWithdraw"."withdrawAmount") AS "SUMMed"
-                FROM "public"."MedicineWithdraw"
-                INNER JOIN "public"."Medicine" ON "Medicine"."medicineID" = "MedicineWithdraw"."medicineID"
-                INNER JOIN "public"."Appointment" ON "Appointment"."appointmentID" = "MedicineWithdraw"."appointmentID"
-                    WHERE CAST("end_time" AS DATE) >= CAST(NOW() AS DATE) - 30 
-                    GROUP BY "MedicineWithdraw"."medicineID")) 
+            FROM (SELECT "medicine_name", SUM("MedicineWithdraw"."withdrawAmount") AS "SUMMed"
+            FROM "public"."MedicineWithdraw"
+            INNER JOIN "public"."Medicine" ON "Medicine"."medicineID" = "MedicineWithdraw"."medicineID" 
+            INNER JOIN "public"."Appointment" ON "Appointment"."appointmentID" = "MedicineWithdraw"."appointmentID"
+            WHERE CAST("end_time" AS DATE) >= CAST(NOW() AS DATE) - 30 
+            GROUP BY "medicine_name")) 
         `)
         
         res.json({
