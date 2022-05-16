@@ -78,7 +78,7 @@ export default (props) => {
       setIsLoading(false);
       //if result.data[0].page_amount is not null, set pageAmount to result.data[0].page_amount else set to 1
       if (result.data.length !== 0) {
-        setPageAmount(result.data[0].page_amount);
+        setPageAmount(Math.ceil(result.data[0].page_amount/10));
       }
       // console.log(result.data)
       // console.log(search)
@@ -171,7 +171,6 @@ export default (props) => {
             </Tbody>
           </Table>
         </TableContainer>
-
         <HStack variant="solid" justify="end">
           <Button
             leftIcon={<ArrowBackIcon />}
