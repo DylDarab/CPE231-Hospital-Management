@@ -202,19 +202,7 @@ export default (props) =>
 
     // const onSummitClick = () =>
     // {
-    //     console.log('summit clicked!')
-    //     if (form.firstname && form.lastname && form.gender && form.birthDate &&
-    //         form.citizenID && form.phone_number && form.address && form.EC_name &&
-    //         form.EC_Relationship && form.EC_phone && form.bloodGroup)
-    //     {
-    //         setError(false)
-    //         console.log('form is valid')
-    //     }
-    //     else
-    //     {
-    //         setError(true)
-    //         console.log('form is not valid')
-    //     }
+    //    axios.post(`${url}/api/updatePatient`,form)
     // }
     const onSummitClick = () => {
         console.log('summit clicked!')
@@ -223,7 +211,7 @@ export default (props) =>
             form.citizenID && form.phone && form.address && form.EC_name &&
             form.EC_relationship && form.EC_phone && form.blood)
         {
-            axios.post(`${url}/api/updatePatient`, {...form, patientID}, {headers: {
+            axios.post(`${url}/api/updatePatient`, {...form, patientID:patientID}, {headers: {
                 staffid: sessionStorage.getItem("staffID")
             }})
                 .then(res => {
@@ -316,15 +304,13 @@ export default (props) =>
 
                     {isEdit &&
                         <HStack>
-                            <Text maxW='400px' overflow='hidden' whiteSpace='nowrap' textOverflow='ellipsis'>
-                                {file[0]}
-                            </Text>
-                            <FormLabel display='flex'>
-                                <input type="file" hidden accept="image/*" onChange={handleFile} />
-                                <Box sx={fileButton}>
-                                    Choose file
-                                </Box>
-                            </FormLabel>
+                            <FormControl isRequired isInvalid={error && !form.profile_img}>
+                                <FormLabel htmlFor='profile_img'>Profile Image URL</FormLabel>
+                                <Input id='profile_img' value={form.profile_img} isDisabled={!isEdit} _disabled={{ opacity: 0.8 }}
+                                    onChange={(e) => { setForm({ ...form, profile_img: e.target.value }) }}
+                                />
+                                {/* <FormErrorMessage>First name is required.</FormErrorMessage> */}
+                            </FormControl>
                         </HStack>
                     }
 
@@ -354,10 +340,10 @@ export default (props) =>
                                     <option value='Other'>Other</option>
                                 </Select>
                             </FormControl>
-                            <FormControl isRequired isInvalid={error && !form.birthDate}>
+                            <FormControl isRequired isInvalid={error && !form.dob}>
                                 <FormLabel htmlFor='birth-date'>Birth date</FormLabel>
                                 <Input id='birth-date' type='date' isDisabled={!isEdit} _disabled={{ opacity: 0.8 }}
-                                    defaultValue={form.birthDate}
+                                    defaultValue={form.dob}
                                     onChange={(e) => { setForm({ ...form, dob: e.target.value.replace('T', ' ') }) }}
                                 />
                             </FormControl>
@@ -369,10 +355,10 @@ export default (props) =>
                                     onChange={(e) => checkCitizen(e)}
                                 />
                             </FormControl>
-                            <FormControl isRequired isInvalid={error && !form.phone_number}>
+                            <FormControl isRequired isInvalid={error && !form.phone}>
                                 <FormLabel htmlFor='phone'>Phone number</FormLabel>
                                 <Input id='phone' isDisabled={!isEdit} _disabled={{ opacity: 0.8 }}
-                                    defaultValue={form.phone_number}
+                                    defaultValue={form.phone}
                                     onChange={(e) => checkPhone(e)}
                                 />
                             </FormControl>
@@ -407,7 +393,7 @@ export default (props) =>
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.EC_Relationship} w='20%'>
                                 <FormLabel htmlFor='ec-relationship'>Relationship</FormLabel>
-                                <Input id='ec-relationship' value={form.EC_Relationship}
+                                <Input id='ec-relationship' defaultValue={form.EC_relationship}
                                     isDisabled={!isEdit} _disabled={{ opacity: 0.8 }}
                                     onChange={(e) => { setForm({ ...form, EC_relationship: e.target.value }) }}
                                 />
@@ -416,6 +402,7 @@ export default (props) =>
                                 <FormLabel htmlFor='ec-phone'>Phone number</FormLabel>
                                 <Input id='ec-phone'
                                     isDisabled={!isEdit} _disabled={{ opacity: 0.8 }}
+                                    defaultValue={form.EC_phone}
                                     onChange={(e) => checkECPhone(e)}
                                 />
                             </FormControl>
@@ -428,7 +415,7 @@ export default (props) =>
                     <HStack spacing={8}>
                         <FormControl w='296px' isRequired isInvalid={error && !form.bloodGroup}>
                             <FormLabel htmlFor='blood'>Blood</FormLabel>
-                            <Select id='blood' placeholder='Select blood type' defaultValue={form.bloodGroup}
+                            <Select id='blood' placeholder='Select blood type' defaultValue={form.blood}
                                 isDisabled={!isEdit} _disabled={{ opacity: 0.8 }}
                                 onChange={(e) => { setForm({ ...form, blood: e.target.value }) }}
                             >
