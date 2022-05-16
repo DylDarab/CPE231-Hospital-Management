@@ -1,7 +1,7 @@
 import
 {
     Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement,
-    InputRightElement, Heading, HStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup, ButtonGroup
+    InputRightElement, Heading, HStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup, ButtonGroup, useToast
 } from '@chakra-ui/react'
 import { ArrowBackIcon, ArrowForwardIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 
@@ -19,6 +19,7 @@ export default (props) =>
 {
 
     const router = useRouter()
+    const toast = useToast()
 
     const patientID = router.query.patientID
     console.log(patientID)
@@ -32,11 +33,11 @@ export default (props) =>
     const [error, setError] = useState(false)
     const [form, setForm] = useState({
         firstname: props.data.firstname, lastname: props.data.lastname,
-        gender: props.data.gender, birthDate: props.data.birthDate.split('T')[0],
-        citizenID: props.data.citizenID, phone_number: props.data.phone_number,
+        gender: props.data.gender, dob: props.data.birthDate.split('T')[0],
+        citizenID: props.data.citizenID, phone: props.data.phone_number,
         address: props.data.address, insurance: props.data.insurance,
-        EC_name: props.data.EC_name, EC_Relationship: props.data.EC_Relationship,
-        EC_phone: props.data.EC_phone, bloodGroup: props.data.bloodGroup,
+        EC_name: props.data.EC_name, EC_relationship: props.data.EC_Relationship,
+        EC_phone: props.data.EC_phone, blood: props.data.bloodGroup,
         allergy: props.data.allergy, med_history: props.data.med_history,
         profile_img: props.data.profile_img
     })
@@ -171,11 +172,11 @@ export default (props) =>
         let phone = e.target.value
         if (result)
         {
-            setForm({ ...form, phone_number: phone })
+            setForm({ ...form, phone: phone })
         }
         else
         {
-            setForm({ ...form, phone_number: "" })
+            setForm({ ...form, phone: "" })
         }
     }
 
@@ -199,23 +200,72 @@ export default (props) =>
         }
     }
 
-    const onSummitClick = () =>
-    {
+    // const onSummitClick = () =>
+    // {
+    //     console.log('summit clicked!')
+    //     if (form.firstname && form.lastname && form.gender && form.birthDate &&
+    //         form.citizenID && form.phone_number && form.address && form.EC_name &&
+    //         form.EC_Relationship && form.EC_phone && form.bloodGroup)
+    //     {
+    //         setError(false)
+    //         console.log('form is valid')
+    //     }
+    //     else
+    //     {
+    //         setError(true)
+    //         console.log('form is not valid')
+    //     }
+    // }
+    const onSummitClick = () => {
         console.log('summit clicked!')
-        if (form.firstname && form.lastname && form.gender && form.birthDate &&
-            form.citizenID && form.phone_number && form.address && form.EC_name &&
-            form.EC_Relationship && form.EC_phone && form.bloodGroup)
+        console.log("check form", form)
+        if (form.firstname && form.lastname && form.gender && form.dob &&
+            form.citizenID && form.phone && form.address && form.EC_name &&
+            form.EC_relationship && form.EC_phone && form.blood)
         {
+            axios.post(`${url}/api/updatePatient`, {...form, patientID}, {headers: {
+                staffid: sessionStorage.getItem("staffID")
+            }})
+                .then(res => {
+                    console.log(res)
+                    // setRefresh(!refresh)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
             setError(false)
+            toast({
+                title: 'Success submit.',
+                description: "The information has been updated.",
+                status: 'success',
+                duration: 3000,
+                isClosable: false,
+                
+              })
+            setTimeout(() => {
+                router.push('/patient')
+            }, 3000)
             console.log('form is valid')
         }
         else
         {
             setError(true)
+            toast({
+                title: 'Error submit.',
+                description: 'Some fields are error.',
+                status: 'error',
+                duration: 3000,
+                isClosable: false,
+                containerStyle: {
+                    maxWidth: '700px',
+                  },
+              })
             console.log('form is not valid')
         }
     }
-    // console.log(form)
+
+
+    console.log("form", form)
     console.log('path: ' + router.asPath)
     console.log(form.birthDate)
     return (
@@ -308,7 +358,7 @@ export default (props) =>
                                 <FormLabel htmlFor='birth-date'>Birth date</FormLabel>
                                 <Input id='birth-date' type='date' isDisabled={!isEdit} _disabled={{ opacity: 0.8 }}
                                     defaultValue={form.birthDate}
-                                    onChange={(e) => { setForm({ ...form, birthDate: e.target.value.replace('T', ' ') }) }}
+                                    onChange={(e) => { setForm({ ...form, dob: e.target.value.replace('T', ' ') }) }}
                                 />
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.citizenID}>
@@ -359,7 +409,7 @@ export default (props) =>
                                 <FormLabel htmlFor='ec-relationship'>Relationship</FormLabel>
                                 <Input id='ec-relationship' value={form.EC_Relationship}
                                     isDisabled={!isEdit} _disabled={{ opacity: 0.8 }}
-                                    onChange={(e) => { setForm({ ...form, EC_Relationship: e.target.value }) }}
+                                    onChange={(e) => { setForm({ ...form, EC_relationship: e.target.value }) }}
                                 />
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.EC_phone} w='30%'>
@@ -380,7 +430,7 @@ export default (props) =>
                             <FormLabel htmlFor='blood'>Blood</FormLabel>
                             <Select id='blood' placeholder='Select blood type' defaultValue={form.bloodGroup}
                                 isDisabled={!isEdit} _disabled={{ opacity: 0.8 }}
-                                onChange={(e) => { setForm({ ...form, bloodGroup: e.target.value }) }}
+                                onChange={(e) => { setForm({ ...form, blood: e.target.value }) }}
                             >
                                 <option>O</option>
                                 <option>A</option>

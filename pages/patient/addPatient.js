@@ -277,7 +277,7 @@ export default ()=>{
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.dob}>
                                 <FormLabel htmlFor='birth-date'>Birth date</FormLabel>
-                                <Input id='birth-date' type='datetime-local'
+                                <Input id='birth-date' type='date'
                                     onChange={(e)=>{setForm({...form, dob: e.target.value.replace('T', ' ')})}}
                                 />
                             </FormControl>
