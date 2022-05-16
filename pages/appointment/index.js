@@ -7,7 +7,7 @@ import
     AlertDialog,AlertDialogBody,AlertDialogFooter,AlertDialogHeader,AlertDialogContent,AlertDialogOverlay,
     AlertDialogCloseButton,
 } from '@chakra-ui/react'
-import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
+import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon, EditIcon, PlusSquareIcon, SearchIcon } from '@chakra-ui/icons'
 
 import url from '../../url'
 import { encode, decode } from 'js-base64'
@@ -237,13 +237,22 @@ export default () =>
                                                     {item.start_time ? new Date(item.start_time).toLocaleString() : '-'}
                                                 </Td>
                                                 <Td>
-                                                    <Button size='sm' leftIcon={<DeleteIcon />} sx={buttonStyle(Colour.Red)} 
-                                                        onClick={() => setSelected(index)}
-                                                        // onClick={() => router.push(`/appointment/${item.appointmentID}`)}
-                                                        // onClick={() => editButton(item.appointmentID, index)}
-                                                    >
-                                                        Delete
-                                                    </Button>
+                                                    {  sessionStorage.getItem('positionID') === '3' ?
+                                                        <Button size='sm' leftIcon={<DeleteIcon />} sx={buttonStyle(Colour.Red)} 
+                                                            onClick={() => setSelected(index)}
+                                                            // onClick={() => router.push(`/appointment/${item.appointmentID}`)}
+                                                            // onClick={() => editButton(item.appointmentID, index)}
+                                                        >
+                                                            Delete
+                                                        </Button> :
+                                                        <Button size='sm' leftIcon={<EditIcon />} sx={buttonStyle(Colour.Yellow)} 
+                                                            // onClick={() => setSelected(index)}
+                                                            onClick={() => router.push(`/appointment/${item.appointmentID}`)}
+                                                            // onClick={() => editButton(item.appointmentID, index)}
+                                                        >
+                                                            Edit
+                                                        </Button>
+                                                    }
                                                     {/* {   selected === index ?
                                                         <AppointmentEdit item={item} isOpen={selected === index ? true : false} onClose={()=>setSelected(null)} />
                                                         : null
