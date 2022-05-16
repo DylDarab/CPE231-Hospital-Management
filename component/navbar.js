@@ -17,7 +17,8 @@ export default () =>
     const [positionID, setPositionID] = useState(null)
     useEffect(() =>
     {
-        if (checkToken(sessionStorage.getItem('token')) === false)
+        console.log('bro',sessionStorage.getItem('token'))   
+        if (sessionStorage.getItem('token') === null)
         {
             router.push('/')
             alert('Please login again')

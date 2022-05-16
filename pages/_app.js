@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps })
       setToken(sessionStorage.getItem('token'))
     }
   }, [pageProps])
-  
+
   useEffect(() =>
   {
     const start = () =>
@@ -42,14 +42,11 @@ function MyApp({ Component, pageProps })
 
   return (
     <ChakraProvider>
-      <Loading isLoading={isLoading}/>
-      {checkToken(token) === false ? null :
-        <>
-          <Navbar />
-          <Account />
-        </>
-      }
-
+      <Loading isLoading={isLoading} />
+      <>
+        <Navbar />
+        <Account />
+      </>
       <Component {...pageProps} />
 
     </ChakraProvider>)
