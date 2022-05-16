@@ -18,8 +18,8 @@ export default async (req, res) =>
             let result = await db.query(`
             SELECT "Log".*,"Staff"."firstname" AS staff_firstname,"Staff"."lastname" AS staff_lastname,COUNT(*) OVER() as page_amount
             FROM "public"."Log" LEFT JOIN "public"."Staff" ON "Staff"."staffID" = "Log"."staffID"
-            LIMIT 10 OFFSET ${page}
-            `)
+            LIMIT 10 OFFSET $1
+            `,[(page - 1) * 10])
             res.json(result.rows)
         }
     }
