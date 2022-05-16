@@ -10,6 +10,7 @@ export default async (req, res) =>
         let organizationID = req.body.organizationID
         let organizationName = req.body.organizationName
 
+        console.log(req.body)
         if (organizationID == '0')
         {
             let organization = await db.query(`
@@ -17,7 +18,6 @@ export default async (req, res) =>
                 RETURNING *
             `, [organizationName])
 
-            console.log(organization.rows[0].organizationID)
             let addOrder = await db.query(`
                 INSERT INTO "public"."Order" ("dateOrder","organizationID","dateInStock") VALUES ($1,$2,$3) RETURNING *
             `, [dateOrder, organization.rows[0].organizationID, dateInStock])
@@ -29,7 +29,7 @@ export default async (req, res) =>
                 `, [m.medicineID, m.amount, m.price, addOrder.rows[0].orderID])
 
                 await db.query(`
-                    UPDATE "public"."Medicine" SET "m_amount" = "m_amount"+ $1 WHERE "medicineID" = $2
+                    UPDATE "public"."Medicine" SET "m_amount" = "m_amount"+ $1 WHERE "medicineID" = $2 RETURNING *
                 `,[m.amount, m.medicineID])
             })
             await Promise.all(promise)
@@ -51,7 +51,6 @@ export default async (req, res) =>
         }
         else
         {
-            console.log('right here')
             let addOrder = await db.query(`
                 INSERT INTO "public"."Order" ("dateOrder","organizationID","dateInStock") VALUES ($1,$2,$3) RETURNING *
             `, [dateOrder, organizationID, dateInStock])
@@ -61,6 +60,11 @@ export default async (req, res) =>
                 await db.query(`
                     INSERT INTO "public"."OrderDetail" ("medicineID","amount","o_priceperunit","orderID") VALUES ($1,$2,$3,$4)
                 `, [m.medicineID, m.amount, m.price, addOrder.rows[0].orderID])
+           
+                await db.query(`
+                    UPDATE "public"."Medicine" SET "m_amount" = "m_amount"+ $1 WHERE "medicineID" = $2 RETURNING *
+                `, [m.amount, m.medicineID])
+                
             })
             await Promise.all(promise)
 
@@ -69,6 +73,10 @@ export default async (req, res) =>
                 await db.query(`
                     INSERT INTO "public"."OrderDetail" ("deviceID","amount","o_priceperunit","orderID") VALUES ($1,$2,$3,$4)
                 `, [d.deviceID, d.amount, d.price, addOrder.rows[0].orderID])
+            
+                await db.query(`
+                    UPDATE "public"."Device" SET "d_amount" = "d_amount"+ $1 WHERE "deviceID" = $2
+                `, [d.amount, d.deviceID])
             })
             await Promise.all(promise2)
 
