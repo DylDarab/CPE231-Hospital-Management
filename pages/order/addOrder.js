@@ -87,6 +87,7 @@ export default (props) =>
 
     const [isConfirm, setIsConfirm] = useState(false)
     const [isSend, setIsSend] = useState(false)
+    const [error, setError] = useState(false)
     const [dateInStock, setDateInStock] = useState('')
     const [organization, setOrganization] = useState([{"organizationID": "",
                                                         "organizationName": "",
@@ -270,6 +271,7 @@ export default (props) =>
                   },
               })
             setIsConfirm(false)
+            setError(true)
         }
     }
     console.log(organization)
@@ -291,9 +293,10 @@ export default (props) =>
                         <VStack spacing={4} align='flex-start'>
                             <FormControl>
                                 <FormLabel>Organization</FormLabel>
-                                <AutoComplete openOnFocus>
+                                <AutoComplete openOnFocus >
                                     <AutoCompleteInput variant="outline" w='50%'
                                         value={organization.organizationName || ''}
+                                        isInvalid={error && !organization.organizationName}
                                         onChange={(e) => {
                                             let id = 0
                                             organizationData.forEach(item => {
@@ -331,6 +334,7 @@ export default (props) =>
                                 <FormLabel>Date in stock</FormLabel>
                                 <Input w='50%' type='date' value={dateInStock}
                                     isDisabled={isConfirm} _disabled={{opacity: 0.8}}
+                                    isInvalid={error && !dateInStock}
                                     onChange={(e) => {setDateInStock(e.target.value)}}
                                 />
                             </FormControl>
@@ -357,6 +361,8 @@ export default (props) =>
                                                         value={item.name || ''}
                                                         onChange={(e) => setName(0, e.target.value, index)}
                                                         isDisabled={isConfirm} _disabled={{opacity: 0.8}}
+                                                        isInvalid={error && !item.medicineID && item.name}
+                                                                // T           T
                                                     />
                                                     <AutoCompleteList>
                                                         { props ?
@@ -377,8 +383,9 @@ export default (props) =>
                                             </FormControl>
                                             <FormControl w='50%'>
                                                 <FormLabel>Price per unit</FormLabel>
-                                                <NumberInput min={1} 
-                                                    isDisabled={isConfirm}
+                                                <NumberInput min={1}
+                                                    isDisabled={isConfirm || !item.medicineID} _disabled={{opacity: 0.8}}
+                                                    isInvalid={error && !item.price && item.medicineID}
                                                     value={item.price || ''} 
                                                     onChange={(e)=>{setPrice(0, e, index)}}
                                                 >
@@ -391,8 +398,9 @@ export default (props) =>
                                             </FormControl>
                                             <FormControl w='50%'>
                                                 <FormLabel>Amount</FormLabel>
-                                                <NumberInput min={1} 
-                                                    isDisabled={isConfirm} 
+                                                <NumberInput min={1} precision={0} step={1}
+                                                    isDisabled={isConfirm || !item.medicineID} _disabled={{opacity: 0.8}}
+                                                    isInvalid={error && !item.amount && item.medicineID}
                                                     value={item.amount || ''}
                                                     onChange={(e)=>{setAmount(0, e, index)}}
                                                 >
@@ -438,6 +446,7 @@ export default (props) =>
                                                         value={item.name || ''}
                                                         onChange={(e) => setName(1, e.target.value, index)}
                                                         isDisabled={isConfirm} _disabled={{opacity: 0.8}}
+                                                        isInvalid={error && !item.deviceID && item.name}
                                                     />
                                                     <AutoCompleteList>
                                                         { props ?
@@ -458,8 +467,9 @@ export default (props) =>
                                             </FormControl>
                                             <FormControl w='50%'>
                                                 <FormLabel>Price per unit</FormLabel>
-                                                <NumberInput min={1} 
-                                                    isDisabled={isConfirm}
+                                                <NumberInput min={1}
+                                                    isDisabled={isConfirm || !item.deviceID} _disabled={{opacity: 0.8}}
+                                                    isInvalid={error && !item.price && item.deviceID}
                                                     value={item.price || ''} 
                                                     onChange={(e)=>{setPrice(1, e, index)}}
                                                 >
@@ -472,8 +482,9 @@ export default (props) =>
                                             </FormControl>
                                             <FormControl w='50%'>
                                                 <FormLabel>Amount</FormLabel>
-                                                <NumberInput min={1} 
-                                                    isDisabled={isConfirm} 
+                                                <NumberInput min={1}  precision={0} step={1}
+                                                    isDisabled={isConfirm || !item.deviceID} _disabled={{opacity: 0.8}}
+                                                    isInvalid={error && !item.amount && item.deviceID}
                                                     value={item.amount || ''}
                                                     onChange={(e)=>{setAmount(1, e, index)}}
                                                 >
