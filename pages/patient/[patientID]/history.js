@@ -184,6 +184,7 @@ export default (props) => {
           <AppointmentAdd
             isOpen={selected}
             onClose={() => setSelected(false)}
+            patientID={patientID}
             rooms={props.rooms}
             doctors={props.doctors}
           />

@@ -242,9 +242,7 @@ export default () => {
                       </Flex>
                     </Td>
                     <Td>
-                      {item.start_time.substring(0, 10) +
-                        " " +
-                        item.start_time.substring(11, 16)}
+                      {item.end_time ? new Date(item.end_time).toLocaleString() : "-"}
                     </Td>
                     <Td>
                       <Button
