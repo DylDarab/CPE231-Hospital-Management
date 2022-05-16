@@ -241,7 +241,7 @@ export default ()=>{
                         <Text minW='160px' overflow='hidden' whiteSpace='nowrap' textOverflow='ellipsis'>
                             Profile image link
                         </Text>
-                        <FormControl isRequired isInvalid={error && !form.profile_img}>
+                        <FormControl>
                             <FormLabel display='flex'>
                                 <Input value={form.profile_img} w='500px'
                                     onChange={(e)=>{setForm({...form, profile_img: e.target.value})}}
