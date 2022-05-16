@@ -1,19 +1,28 @@
 import {useRouter} from 'next/router'
 import {Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, 
-    InputRightElement, Heading, HStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup} from '@chakra-ui/react'
+    InputRightElement, Heading, HStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup,
+    useToast } from '@chakra-ui/react'
+import phoneFormatter from 'phone-formatter'
+import axios from 'axios'
+import url from '../../url'
+
 
 import Colour from '../../Colour'
 import { useState,useEffect } from 'react'
+import { emptyQuery } from 'pg-protocol/dist/messages'
 
 export default ()=>{
     const router = useRouter()
+    const toast = useToast()
+
     const [file, setFile] = useState(['Profile name', null])
+    const [isSend, setIsSend] = useState(false)
     const [allergyForm, setAllergyForm] = useState(true)
     const [error, setError] = useState(false)
     const [form, setForm] = useState(
-        { firstname: "", lastname: "", gender: "", birthDate: "", citizenID: "",
-        phone_number: "", address: "", insurance: "", EC_name: "", EC_Relationship: "",
-        EC_phone: "", bloodGroup: "", allergy: "", med_history: ""
+        { firstname: "", lastname: "", gender: "", dob: "", citizenID: "",
+        phone: "", address: "", insurance: "", EC_name: "", EC_relationship: "",
+        EC_phone: "", blood: "", allergy: "", med_history: "", profile_img: "",
     })
     const [positionID, setPositionID] = useState(null)
 
@@ -90,9 +99,11 @@ export default ()=>{
     }
 
     const checkCitizen = (e) => {
-        let regExp = /[0-9]/g
+        let regExp = /^[0-9]+$/g
         let result = regExp.test(e.target.value)
         let id = e.target.value
+        console.log('citizen' + result)
+
         if (result && id.length === 13)
         {
             let check = parseInt(id[0]) * 13 + parseInt(id[1]) * 12 + parseInt(id[2]) * 11 + 
@@ -100,25 +111,26 @@ export default ()=>{
                         parseInt(id[6]) * 7 + parseInt(id[7]) * 6 + parseInt(id[8]) * 5 + 
                         parseInt(id[9]) * 4 + parseInt(id[10]) * 3 + parseInt(id[11]) * 2
             let checkDigit = check % 11
-            if (11 - checkDigit === parseInt(id[12]))
+            if (11 - checkDigit === parseInt(id[12])) // Correct 13
             {   
                 setForm({...form, citizenID: id})
             }
-            else
+            else // Incorrect 13
             {
                 setForm({...form, citizenID: ""}) 
             }
         }
-        else
+        else // Incorrect + Wrong format
         {
             setForm({...form, citizenID: ""}) 
         }
     }
 
     const checkECPhone = (e) => {
-        let regExp = /[0-9]/g
+        let regExp = /^[0-9]+$/g
         let result = regExp.test(e.target.value)
         let phone = e.target.value
+
         if (result)
         {
             setForm({...form, EC_phone: phone})
@@ -130,16 +142,18 @@ export default ()=>{
     }
 
     const checkPhone = (e) => {
-        let regExp = /[0-9]/g
+        let regExp = /^[0-9]+$/g
         let result = regExp.test(e.target.value)
         let phone = e.target.value
+        console.log(result)
+
         if (result)
         {
-            setForm({...form, phone_number: phone})
+            setForm({...form, phone: phone})
         }
         else
         {
-            setForm({...form, phone_number: ""}) 
+            setForm({...form, phone: ""}) 
         }
     }
 
@@ -162,16 +176,48 @@ export default ()=>{
 
     const onSummitClick = () => {
         console.log('summit clicked!')
-        if (form.firstname && form.lastname && form.gender && form.birthDate &&
-            form.citizenID && form.phone_number && form.address && form.EC_name &&
-            form.EC_Relationship && form.EC_phone && form.bloodGroup)
+        if (form.firstname && form.lastname && form.gender && form.dob &&
+            form.citizenID && form.phone && form.address && form.EC_name &&
+            form.EC_relationship && form.EC_phone && form.blood)
         {
+            axios.post(`${url}/api/addPatient`, form, {headers: {
+                staffid: sessionStorage.getItem("staffID")
+            }})
+                .then(res => {
+                    console.log(res)
+                    // setRefresh(!refresh)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
             setError(false)
+            setIsSend(true)
+            toast({
+                title: 'Success submit.',
+                description: "We've added your patient for you.",
+                status: 'success',
+                duration: 3000,
+                isClosable: false,
+                
+              })
+            setTimeout(() => {
+                router.push('/patient')
+            }, 3000)
             console.log('form is valid')
         }
         else
         {
             setError(true)
+            toast({
+                title: 'Error submit.',
+                description: 'Some fields are empty.',
+                status: 'error',
+                duration: 3000,
+                isClosable: false,
+                containerStyle: {
+                    maxWidth: '700px',
+                  },
+              })
             console.log('form is not valid')
         }
     }
@@ -189,18 +235,19 @@ export default ()=>{
                 <Flex sx={container3}>
                     <Heading as='h4' size='md'>Personal information</Heading>
                 
-                    <Avatar size='2xl' src='https://bit.ly/broken-link' />
+                    <Avatar size='2xl' src={form.profile_img} />
 
                     <HStack>
-                        <Text maxW='400px' overflow='hidden' whiteSpace='nowrap' textOverflow='ellipsis'>
-                            {file[0]}
+                        <Text minW='160px' overflow='hidden' whiteSpace='nowrap' textOverflow='ellipsis'>
+                            Profile image link
                         </Text>
-                        <FormLabel display='flex'>
-                            <input type="file" hidden accept="image/*" onChange={handleFile}/>
-                            <Box sx={fileButton}>
-                                Choose file
-                            </Box>
-                        </FormLabel>
+                        <FormControl isRequired isInvalid={error && !form.profile_img}>
+                            <FormLabel display='flex'>
+                                <Input value={form.profile_img} w='500px'
+                                    onChange={(e)=>{setForm({...form, profile_img: e.target.value})}}
+                                />
+                            </FormLabel>
+                        </FormControl>
                     </HStack>
 
                     <Box>
@@ -228,10 +275,10 @@ export default ()=>{
                                     <option value='Other'>Other</option>
                                 </Select>
                             </FormControl>
-                            <FormControl isRequired isInvalid={error && !form.birthDate}>
+                            <FormControl isRequired isInvalid={error && !form.dob}>
                                 <FormLabel htmlFor='birth-date'>Birth date</FormLabel>
                                 <Input id='birth-date' type='datetime-local'
-                                    onChange={(e)=>{setForm({...form, birthDate: e.target.value.replace('T', ' ')})}}
+                                    onChange={(e)=>{setForm({...form, dob: e.target.value.replace('T', ' ')})}}
                                 />
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.citizenID}>
@@ -239,12 +286,14 @@ export default ()=>{
                                 <Input id='citizen-id' maxLength={13}
                                     onChange={(e) => checkCitizen(e)}
                                 />
+                                <FormErrorMessage>Wrong format [13-digit number]</FormErrorMessage>
                             </FormControl>
-                            <FormControl isRequired isInvalid={error && !form.phone_number}>
+                            <FormControl isRequired isInvalid={error && !form.phone}>
                                 <FormLabel htmlFor='phone'>Phone number</FormLabel>
                                 <Input id='phone'
                                     onChange={(e)=> checkPhone(e)}
                                 />
+                                <FormErrorMessage>Wrong format [digit number]</FormErrorMessage>
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.address}>
                                 <FormLabel htmlFor='address'>Address</FormLabel>
@@ -272,10 +321,10 @@ export default ()=>{
                                     onChange={(e)=>{setForm({...form, EC_name: e.target.value})}}
                                 />
                             </FormControl>
-                            <FormControl isRequired isInvalid={error && !form.EC_Relationship} w='20%'>
+                            <FormControl isRequired isInvalid={error && !form.EC_relationship} w='20%'>
                                 <FormLabel htmlFor='ec-relationship'>Relationship</FormLabel>
-                                <Input id='ec-relationship' value={form.EC_Relationship}
-                                    onChange={(e)=>{setForm({...form, EC_Relationship: e.target.value})}}
+                                <Input id='ec-relationship' value={form.EC_relationship}
+                                    onChange={(e)=>{setForm({...form, EC_relationship: e.target.value})}}
                                 />
                             </FormControl>
                             <FormControl isRequired isInvalid={error && !form.EC_phone} w='30%'>
@@ -283,6 +332,8 @@ export default ()=>{
                                 <Input id='ec-phone'
                                     onChange={(e)=> checkECPhone(e)}
                                 />
+                                <FormErrorMessage>Wrong format [digit number]</FormErrorMessage>
+
                             </FormControl>
                         </HStack>
                     </Box>  
@@ -291,10 +342,10 @@ export default ()=>{
                 <Flex sx={container3}>
                     <Heading as='h4' size='md'>Medical information</Heading>
                     <HStack spacing={8}>
-                        <FormControl w='296px' isRequired isInvalid={error && !form.bloodGroup}>
+                        <FormControl w='296px' isRequired isInvalid={error && !form.blood}>
                             <FormLabel htmlFor='blood'>Blood</FormLabel>
                             <Select id='blood' placeholder='Select blood type'
-                                onChange={(e)=>{setForm({...form, bloodGroup: e.target.value})}}
+                                onChange={(e)=>{setForm({...form, blood: e.target.value})}}
                             >
                                     <option>O</option>
                                     <option>A</option>
@@ -326,7 +377,9 @@ export default ()=>{
                     </Box>
                 </Flex>
                 <HStack justify='end'>
-                    <Button sx={summitButton} onClick={() => onSummitClick()}>
+                    <Button sx={summitButton} onClick={() => onSummitClick()}
+                        isDisabled={isSend}
+                    >
                         Submit
                     </Button>
                 </HStack>
