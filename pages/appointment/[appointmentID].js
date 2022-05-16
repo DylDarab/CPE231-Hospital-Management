@@ -1,9 +1,9 @@
 import {Avatar, Box, Button, Checkbox, Flex, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, 
-    Menu,MenuButton,MenuList,MenuItem,MenuItemOption,MenuGroup,MenuOptionGroup,MenuDivider,
+    Menu,MenuButton,MenuList,MenuItem,MenuItemOption,MenuGroup,MenuOptionGroup,MenuDivider, IconButton,
     NumberInput,NumberInputField,NumberInputStepper,NumberIncrementStepper,NumberDecrementStepper,
     InputRightElement, Heading, HStack, VStack, Radio, Select, SimpleGrid, Text, Textarea, Stack, RadioGroup, ButtonGroup,
     useToast } from '@chakra-ui/react'
-import { AddIcon, ArrowBackIcon, ArrowForwardIcon, ChevronDownIcon, PlusSquareIcon, SearchIcon, SmallCloseIcon } from '@chakra-ui/icons'
+import { AddIcon, ArrowBackIcon, ArrowForwardIcon, ChevronDownIcon, CloseIcon, PlusSquareIcon, SearchIcon, SmallCloseIcon } from '@chakra-ui/icons'
 
 import {
     AutoComplete,
@@ -40,8 +40,8 @@ export default (props) => {
     
     const [symptom, setSymptom] = useState('' || data[0].symptoms)
     const [summary, setSummary] = useState('')
-    const [disease, setDisease] = useState([{"diseaseID": "",
-                                            "diseaseName": "",     
+    const [disease, setDisease] = useState([{"diseaseID": "1",
+                                            "diseaseName": "No disease",     
                                         }])
     const [medicineList, setMedicineList] = useState([{"medicineID": "",
                                                 "name": "",
@@ -140,16 +140,28 @@ export default (props) => {
     }
 
     const del = (type, i) => {
-        if (type) {
+        if (type === 1) {
             let temp = [...deviceList]
             temp.splice(i, 1)
             setDeviceList(temp)
         }
-        else {
+        else if (type === 0) {
             let temp = [...medicineList]
             temp.splice(i, 1)
             setMedicineList(temp)
         }
+        else if (type === 2)
+        {
+            let temp = [...disease]
+            temp.splice(i, 1)
+            setDisease(temp)
+        }
+    }
+
+    const delDisease = (i) => {
+        let temp = [...disease]
+        temp.splice(i, 1)
+        setDeviceList(temp)
     }
 
     const setCheck = (type, check, i) => {
@@ -170,6 +182,14 @@ export default (props) => {
             setMedicineList(temp)
         }
         // console.log(check, i)
+    }
+
+    const setDiseaseIn = (name, i, id = 0) => {
+            let temp = [...disease]
+            temp[i].diseaseName = name
+            temp[i].diseaseID = id
+            setDisease(temp)
+        
     }
 
     const setName = (type, name, i, amount = '', price = '', id = '') => {
@@ -225,6 +245,7 @@ export default (props) => {
     const onYesClick = () => {
         let medicine = []
         let device = []
+        let dis = []
         let error_m = ['Some fields are empty. ']
         let ch = true
         let ch2 = true
@@ -242,11 +263,11 @@ export default (props) => {
                 ch = false
             }
         })
-        if (!disease.diseaseName)
-        {
-            ch4 = false
-            error_m.push('[Disease] ')
-        }
+        // if (!disease.diseaseName)
+        // {
+        //     ch4 = false
+        //     error_m.push('[Disease] ')
+        // }
         if(!ch)
             error_m.push('[Medicine] ')
         deviceList.forEach(item => {
@@ -267,13 +288,21 @@ export default (props) => {
             ch3 = false
             error_m.push('[Summary] ')
         }
+        if(!ch)
+            error_m.push('[Medicine] ')
+        disease.forEach(item => {
+            if (!(item.diseaseID === '' && item.diseaseName === '')) {
+                dis.push(item)
+            }
+        })
         console.log(medicine)
         console.log(device)
-        if (ch && ch2 && ch3 && ch4) {
+        console.log(dis)
+        if (ch && ch2 && ch3) {
             console.log('can send')
             let data = {
                 "appointmentID": appointmentID,
-                "diseaseID": disease,
+                "diseaseID": dis,
                 "symptom": symptom,
                 "summary": summary,
                 "medicine": medicine,
@@ -310,11 +339,8 @@ export default (props) => {
                 isClosable: false,
               })
             setIsSubmit(false)
+            setError(true)
         }
-        
-        
-        
-        // เดี๋ยวมาทำต่อ
     }
 
     console.log(data)
@@ -359,49 +385,79 @@ export default (props) => {
                                 value={symptom}
                             />
                         </FormControl>
+                        
+                        <Heading as='h4' size='sm'>Disease</Heading>
+                        {   props ?
+                            disease.map((item, i) => {
+                                return (
+                                    <FormControl>
+                                        <FormLabel>Name</FormLabel>
+                                        <HStack>
 
-                        <FormControl>
-                            <FormLabel>Disease</FormLabel>
-                            <AutoComplete openOnFocus>
-                                <AutoCompleteInput variant="outline"
-                                    value={disease.diseaseName || ''}
-                                    onChange={(e) => {
-                                        let id = 0
-                                        diseases.forEach(item => {
-                                            if (item.diseaseName === e.target.value) {
-                                                id = item.DiseaseID
+                                            <AutoComplete openOnFocus>
+                                                <AutoCompleteInput variant="outline"
+                                                    value={item.diseaseName || ''}
+                                                    onChange={(e) => {
+                                                        let id = 0
+                                                        diseases.forEach(item2 => {
+                                                            if (item2.diseaseName === e.target.value) {
+                                                                id = item2.DiseaseID
+                                                            }
+                                                        })
+                                                        setDiseaseIn(e.target.value, i, id)
+                                                        // let temp = { diseaseID: id, diseaseName: e.target.value }
+                                                        // setDisease(temp)
+                                                    }}
+                                                    isDisabled={isSubmit} _disabled={{opacity: 0.8}}
+                                                />
+                                                <AutoCompleteList>
+                                                    { props ?
+                                                        diseases.map((dis, j) => (
+                                                            <AutoCompleteItem
+                                                                key={j}
+                                                                value={dis.diseaseName}
+                                                                textTransform="caitalize"
+                                                                align="center"
+                                                                onClick={() => {
+                                                                    // let temp = { diseaseID: dis.DiseaseID, diseaseName: dis.diseaseName }
+                                                                    // setDisease(temp)
+                                                                    setDiseaseIn(dis.diseaseName, i, dis.DiseaseID)
+                                                                }}
+                                                            >
+                                                                <Text ml="4">{dis.diseaseName}</Text>
+                                                            </AutoCompleteItem>
+                                                        )) : null 
+                                                    }
+                                                </AutoCompleteList>
+                                            </AutoComplete>
+                                            { i !== 0 ?
+                                                <IconButton sx={buttonStyle(Colour.Red, Colour.White)} size='sm' icon={<CloseIcon />} 
+                                                    onClick={() => del(2, i)}
+                                                /> :
+                                                <IconButton sx={buttonStyle(Colour.Red, Colour.White)} size='sm' icon={<CloseIcon />} 
+                                                    visibility='hidden'
+                                                />
                                             }
-                                        })
-                                        let temp = { diseaseID: id, diseaseName: e.target.value }
-                                        setDisease(temp)
-                                    }}
-                                    isDisabled={isSubmit} _disabled={{opacity: 0.8}}
-                                />
-                                <AutoCompleteList>
-                                    { props ?
-                                        diseases.map((dis, i) => (
-                                            <AutoCompleteItem
-                                                key={i}
-                                                value={dis.diseaseName}
-                                                textTransform="caitalize"
-                                                align="center"
-                                                onClick={() => {
-                                                    let temp = { diseaseID: dis.DiseaseID, diseaseName: dis.diseaseName }
-                                                    setDisease(temp)
-                                                }}
-                                            >
-                                                <Text ml="4">{dis.diseaseName}</Text>
-                                            </AutoCompleteItem>
-                                        )) : null 
-                                    }
-                                </AutoCompleteList>
-                            </AutoComplete>
-                        </FormControl>
+                                        </HStack>
+                                    </FormControl>
+                                );
+                            }) : null
+                        }
+                        
+                        <Button sx={buttonStyle(Colour.Green, Colour.White)} size='xs' rightIcon={<AddIcon />}
+                            isDisabled={isSubmit} _disabled={{opacity: 0.8}}
+                            onClick={()=>{setDisease([...disease, 
+                                {"diseaseID": "", "diseaseName": ""}])}}
+                            w='10%'
+                        >
+                            Add
+                        </Button>
 
-                        <FormControl>
+                        <FormControl isRequired>
                             <FormLabel>Summary</FormLabel>
                             <Textarea resize='none' isDisabled={isSubmit} _disabled={{opacity: 0.8}}
                                 value={summary} onChange={e => setSummary(e.target.value)}
+                                isInvalid={error && !summary}
                             />
                         </FormControl> 
 
@@ -444,6 +500,7 @@ export default (props) => {
                                                             value={item.name || ''}
                                                             onChange={(e) => setName(0, e.target.value, index)}
                                                             isDisabled={isSubmit} _disabled={{opacity: 0.8}}
+                                                            isInvalid={error && !item.medicineID && item.name}
                                                         />
                                                         <AutoCompleteList>
                                                             { props ?
@@ -464,6 +521,7 @@ export default (props) => {
                                                     <NumberInput min={1} max={item.m_amount} precision={0} step={1}
                                                         onChange={(e) => setNum(0, e, index)}
                                                         isDisabled={isSubmit || !item.m_amount} _disabled={{opacity: 0.8}}
+                                                        isInvalid={error && !item.amount && item.medicineID}
                                                     >
                                                         <NumberInputField placeHolder={isSubmit || !item.m_amount ? 'amount' : item.m_amount} />
                                                         <NumberInputStepper>
@@ -520,6 +578,7 @@ export default (props) => {
                                                             value={item.name || ''}
                                                             onChange={(e) => setName(1, e.target.value, index)}
                                                             isDisabled={isSubmit} _disabled={{opacity: 0.8}}
+                                                            isInvalid={error && !item.deviceID && item.name}
                                                         />
                                                         <AutoCompleteList>
                                                             { props ?
@@ -540,6 +599,7 @@ export default (props) => {
                                                     <NumberInput min={1} max={item.d_amount} precision={0} step={1}
                                                         onChange={(e) => setNum(1, e, index)}
                                                         isDisabled={isSubmit || !item.d_amount} _disabled={{opacity: 0.8}}
+                                                        isInvalid={error && !item.amount && item.deviceID}
                                                     >
                                                         <NumberInputField placeHolder={isSubmit || !item.d_amount ? 'amount' : item.d_amount}/>
                                                         <NumberInputStepper>
